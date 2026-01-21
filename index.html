@@ -13,7 +13,6 @@
 
     <!-- Folha de Estilos -->
     <link rel="stylesheet" href="styles.css"> 
-    <!-- Obs: Certifique-se que o styles.css tem o bloco .laudo-pdf que te mandei antes -->
 </head>
 <body>
 
@@ -29,7 +28,8 @@
             <p id="subtitulo-oficina">SISTEMA DE GESTÃO E CHECKLIST</p>
             
             <div class="contato-info">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon">
+                <!-- Ícone WhatsApp Seguro (Emoji ou Texto) -->
+                <span style="font-size: 18px;">📱</span>
                 <span id="telefone-oficina">(00) 00000-0000</span>
             </div>
             <div class="endereco-oficina" id="endereco-oficina">
@@ -158,16 +158,6 @@
                     </div>
 
                     <div class="equip-section">
-                        <div class="equip-section-title">🔊 ELETRÔNICOS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="radio" name="equipamentos" value="RÁDIO / MULTIMÍDIA"><label for="radio">RÁDIO / MULTIMÍDIA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="alarme_corta" name="equipamentos" value="ALARME / CORTA CORRENTE"><label for="alarme_corta">ALARME / CORTA CORRENTE</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="antena" name="equipamentos" value="ANTENA"><label for="antena">ANTENA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="acendedor" name="equipamentos" value="ACENDEDOR/TOMADA 12V"><label for="acendedor">ACENDEDOR/TOMADA 12V</label></div>
-                        </div>
-                    </div>
-
-                    <div class="equip-section">
                         <div class="equip-section-title">⚡ ELÉTRICOS</div>
                         <div class="checkbox-group">
                             <div class="checkbox-item"><input type="checkbox" id="vidro_eletrico" name="equipamentos" value="VIDRO ELÉTRICO"><label for="vidro_eletrico">VIDRO ELÉTRICO</label></div>
@@ -178,21 +168,9 @@
                     </div>
 
                     <div class="equip-section">
-                        <div class="equip-section-title">🛞 RODAS & PÁRA-BRISAS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="calotas" name="equipamentos" value="CALOTAS"><label for="calotas">CALOTAS</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="rodas_liga" name="equipamentos" value="RODAS DE LIGA"><label for="rodas_liga">RODAS DE LIGA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="roda_ferro" name="equipamentos" value="RODA DE FERRO"><label for="roda_ferro">RODA DE FERRO</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="para_brisa" name="equipamentos" value="PARABRISA TRINCADO"><label for="para_brisa">PÁRA BRISA TRINCADO</label></div>
-                        </div>
-                    </div>
-
-                    <div class="equip-section">
                         <div class="equip-section-title">📦 DEMAIS ACESSÓRIOS</div>
                         <div class="checkbox-group">
                             <div class="checkbox-item"><input type="checkbox" id="extintor" name="equipamentos" value="EXTINTOR"><label for="extintor">EXTINTOR</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="protetor_carter" name="equipamentos" value="PROTETOR DE CARTER"><label for="protetor_carter">PROTETOR DE CARTER</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="chave_secreta" name="equipamentos" value="CHAVE SEGREDO (RODA)"><label for="chave_secreta">CHAVE SEGREDO (RODA)</label></div>
                             <div class="checkbox-item"><input type="checkbox" id="tapetes" name="equipamentos" value="TAPETES"><label for="tapetes">TAPETES</label></div>
                         </div>
                     </div>
@@ -209,13 +187,51 @@
                     <!-- Botões Navegação -->
                     <div class="action-buttons" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
                         <button type="button" class="btn-secondary" onclick="irParaPasso(1)">⬅️ Voltar: Veículo</button>
-                        <button type="button" class="btn-primary" onclick="irParaPasso(3)">Próximo: Cliente ➡️</button>
+                        <button type="button" class="btn-primary" onclick="irParaPasso(3)">Próximo: Orçamento e Cliente ➡️</button>
                     </div>
                 </div>
 
-                <!-- PASSO 3: CLIENTE E FINALIZAÇÃO -->
+                <!-- PASSO 3: ORÇAMENTO E FINALIZAÇÃO -->
                 <div id="step-3" class="wizard-step" style="display: none;">
                     
+                    <div class="section-title">💰 ORÇAMENTO E PEÇAS</div>
+
+                    <!-- TABELA DE PEÇAS E SERVIÇOS -->
+                    <div class="table-responsive">
+                        <table id="tabela-orcamento" style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                            <thead>
+                                <tr style="background: #eee; text-align: left;">
+                                    <th style="padding: 8px; border: 1px solid #ddd; font-size:12px;">Descrição (Peça/Serviço)</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd; width: 60px; font-size:12px;">Qtd</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd; width: 90px; font-size:12px;">Valor Un.</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd; width: 100px; font-size:12px;">Total</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd; width: 30px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-pecas">
+                                <!-- Itens via JS -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" style="padding: 10px; text-align: center;">
+                                        <button type="button" class="btn-secondary btn-small" onclick="adicionarLinhaPeca()" style="padding: 5px 10px;">+ Adicionar Item</button>
+                                    </td>
+                                </tr>
+                                <tr style="background: #333; color: #fff; font-weight: bold;">
+                                    <td colspan="3" style="padding: 10px; text-align: right;">TOTAL GERAL:</td>
+                                    <td colspan="2" style="padding: 10px;" id="total-orcamento">R$ 0,00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="obs_finais">Observações do Orçamento / Pagamento</label>
+                            <textarea id="obs_finais" name="obs_finais" placeholder="Ex: Pagamento em 3x sem juros, validade 5 dias..."></textarea>
+                        </div>
+                    </div>
+
                     <div class="section-title">👤 DADOS DO CLIENTE</div>
 
                     <div class="form-row">
@@ -229,13 +245,6 @@
                         </div>
                     </div>
 
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label for="endereco_cliente">Endereço Completo</label>
-                            <textarea id="endereco_cliente" name="endereco_cliente" placeholder="Rua, número, bairro, cidade - UF, CEP" style="height: 60px; min-height: 60px;"></textarea>
-                        </div>
-                    </div>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label for="celular_cliente">Celular / WhatsApp *</label>
@@ -243,20 +252,11 @@
                         </div>
                     </div>
 
-                    <div class="section-title">🔧 SERVIÇOS/SOLICITADOS</div>
-
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label for="servicos">Descreva os serviços solicitados:</label>
-                            <textarea id="servicos" name="servicos" placeholder="Ex: Troca de óleo e filtro, alinhamento e balanceamento..."></textarea>
-                        </div>
-                    </div>
-
                     <!-- Botões Finais -->
                     <div class="action-buttons" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
                         <button type="button" class="btn-secondary" onclick="irParaPasso(2)">⬅️ Voltar: Inspeção</button>
                         <button type="button" class="btn-success" onclick="gerarPDF()">📄 Finalizar e Gerar Laudo</button>
-                        <button type="button" class="btn-warning" onclick="limparFormulario()" style="max-width: 100px;">🗑️</button>
+                        <button type="button" class="btn-warning" onclick="limparFormulario()" style="max-width: 50px;">🗑️</button>
                     </div>
                 </div>
 
@@ -279,10 +279,6 @@
                     <div class="stat-number" id="totalChecklists">0</div>
                     <div class="stat-label">Total Cadastrado</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="checklistsMes">0</div>
-                    <div class="stat-label">Neste Mês</div>
-                </div>
             </div>
 
             <div id="historicoLista">
@@ -298,7 +294,7 @@
         <div class="content">
             <div class="section-title">📷 Galeria de Fotos</div>
             <p style="font-size: 13px; color: #666; margin-bottom: 15px;">
-                Tire fotos do veículo para anexar ao histórico. Máximo de 16 fotos.
+                Tire fotos do veículo. Máximo de 16 fotos.
             </p>
 
             <div class="action-buttons" style="margin-bottom: 20px; border:none; padding:0;">
@@ -307,7 +303,7 @@
                 </label>
                 <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple style="display: none;" onchange="processarFotos(this)">
                 
-                <button class="btn-success" onclick="gerarPDFFotos()">📄 Gerar PDF Só das Fotos</button>
+                <button class="btn-success" onclick="gerarPDFFotos()">📄 PDF Só das Fotos</button>
             </div>
 
             <div id="galeriaFotos" class="fotos-grid">
@@ -326,7 +322,7 @@
         <!-- CABEÇALHO -->
         <div class="pdf-header">
             <div class="pdf-logo">
-                <img src="logo.png" alt="Logo" id="pdf-logo-img" style="max-height: 80px;">
+                <img src="logo.png" alt="Logo" id="pdf-logo-img" style="max-height: 70px;">
             </div>
             <div class="pdf-info-oficina">
                 <h2 id="pdf-nome-oficina">NOME DA OFICINA</h2>
@@ -346,7 +342,7 @@
         </div>
 
         <!-- TÍTULO -->
-        <div class="pdf-title-bar">CHECKLIST DE ENTRADA E INSPEÇÃO VEICULAR</div>
+        <div class="pdf-title-bar">CHECKLIST DE ENTRADA E ORÇAMENTO</div>
 
         <!-- DADOS VEICULO E CLIENTE -->
         <table class="pdf-table-dados">
@@ -373,13 +369,22 @@
             <!-- JS INJETA AQUI -->
         </div>
 
+        <!-- ORÇAMENTO -->
+        <div class="pdf-section-title">ORÇAMENTO DE PEÇAS E SERVIÇOS</div>
+        <table class="pdf-table-dados" id="pdf-tabela-pecas" style="width:100%; font-size:10px;">
+            <!-- JS INJETA AQUI -->
+        </table>
+        <div style="text-align: right; font-weight: bold; margin-bottom: 20px; font-size:12px; padding: 5px; border:1px solid #000;">
+            TOTAL GERAL: <span id="pdf-total-geral">R$ 0,00</span>
+        </div>
+
         <!-- OBSERVAÇÕES -->
-        <div class="pdf-section-title">SERVIÇOS SOLICITADOS / OBSERVAÇÕES</div>
+        <div class="pdf-section-title">OBSERVAÇÕES E CONDIÇÕES</div>
         <div class="pdf-box-obs" id="pdf-obs-texto"></div>
 
         <!-- ASSINATURAS -->
         <div class="pdf-footer-legal">
-            <p>Declaro que deixei o veículo acima nas condições descritas para realização de serviços. A oficina não se responsabiliza por objetos de valor deixados no interior do veículo.</p>
+            <p>Declaro que aprovo o orçamento acima e autorizo a execução dos serviços. Estou ciente das condições de pagamento e garantia.</p>
         </div>
 
         <div class="pdf-assinaturas">
@@ -418,14 +423,46 @@
         window.scrollTo(0, 0);
     }
 
-    // 3. GERADOR DE ID (Placa + Data)
+    // 3. TABELA DE PEÇAS (ORÇAMENTO)
+    function adicionarLinhaPeca() {
+        const tbody = document.getElementById('lista-pecas');
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+            <td style="padding: 5px; border: 1px solid #ddd;"><input type="text" class="input-desc" placeholder="Item..." style="width:100%; border:none; outline:none;"></td>
+            <td style="padding: 5px; border: 1px solid #ddd;"><input type="number" class="input-qtd" value="1" onchange="calcularTotal()" style="width:100%; border:none; outline:none;"></td>
+            <td style="padding: 5px; border: 1px solid #ddd;"><input type="number" class="input-val" placeholder="0.00" onchange="calcularTotal()" style="width:100%; border:none; outline:none;"></td>
+            <td style="padding: 5px; border: 1px solid #ddd; background:#f9f9f9;" class="col-total">R$ 0,00</td>
+            <td style="padding: 5px; border: 1px solid #ddd; text-align:center; cursor:pointer; color:red;" onclick="this.parentElement.remove(); calcularTotal()">X</td>
+        `;
+        tbody.appendChild(row);
+    }
+
+    function calcularTotal() {
+        let totalGeral = 0;
+        document.querySelectorAll('#lista-pecas tr').forEach(row => {
+            const qtd = parseFloat(row.querySelector('.input-qtd').value) || 0;
+            const val = parseFloat(row.querySelector('.input-val').value) || 0;
+            const totalLinha = qtd * val;
+            
+            row.querySelector('.col-total').innerText = totalLinha.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+            totalGeral += totalLinha;
+        });
+        
+        document.getElementById('total-orcamento').innerText = totalGeral.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+    }
+
+    // 4. GERADOR DE ID (Placa + Data)
     document.addEventListener('DOMContentLoaded', function() {
         const inputPlaca = document.getElementById('placa');
         
-        // Define data/hora atual ao carregar
+        // Define data/hora atual
         const agora = new Date();
         document.getElementById('data').valueAsDate = agora;
         document.getElementById('hora').value = agora.toTimeString().substring(0,5);
+
+        // Adiciona linha inicial no orçamento
+        adicionarLinhaPeca();
 
         if(inputPlaca) {
             inputPlaca.addEventListener('blur', function() {
@@ -451,10 +488,9 @@
         }
     });
 
-    // 4. ATUALIZAR RESUMO VISUAL (Conforme digita)
+    // 5. ATUALIZAR RESUMO VISUAL
     ['placa', 'modelo', 'km_entrada', 'data'].forEach(id => {
         document.getElementById(id).addEventListener('input', function() {
-            // Atualiza o resumo lá no topo
             const targetId = 'resumo' + id.charAt(0).toUpperCase() + id.slice(1);
             const target = document.getElementById(targetId);
             if(target) target.innerText = this.value || '-';
@@ -466,7 +502,7 @@
         document.getElementById('resumoCombustivel').innerText = txt !== 'Selecione...' ? txt : '-';
     });
 
-    // 5. GERAR PDF PROFISSIONAL (LAUDO)
+    // 6. GERAR PDF PROFISSIONAL (LAUDO)
     function gerarPDF() {
         // --- Popula o Modelo Oculto ---
         document.getElementById('pdf-nome-oficina').innerText = document.getElementById('nome-oficina').innerText;
@@ -511,8 +547,24 @@
             });
         }
 
-        // Observações
-        document.getElementById('pdf-obs-texto').innerText = document.getElementById('servicos').value || '';
+        // Tabela de Peças no PDF
+        const tabelaPDF = document.getElementById('pdf-tabela-pecas');
+        tabelaPDF.innerHTML = '<tr style="background:#eee; font-weight:bold;"><td width="55%">Item</td><td width="10%">Qtd</td><td width="15%">Unit.</td><td width="20%">Total</td></tr>';
+
+        document.querySelectorAll('#lista-pecas tr').forEach(row => {
+            const desc = row.querySelector('.input-desc').value;
+            const qtd = row.querySelector('.input-qtd').value;
+            const valInput = parseFloat(row.querySelector('.input-val').value);
+            const val = isNaN(valInput) ? '0,00' : valInput.toLocaleString('pt-BR',{style:'currency', currency:'BRL'});
+            const tot = row.querySelector('.col-total').innerText;
+            
+            if(desc) {
+                tabelaPDF.innerHTML += `<tr><td>${desc}</td><td>${qtd}</td><td>${val}</td><td>${tot}</td></tr>`;
+            }
+        });
+
+        document.getElementById('pdf-total-geral').innerText = document.getElementById('total-orcamento').innerText;
+        document.getElementById('pdf-obs-texto').innerText = document.getElementById('obs_finais').value || '';
 
         // --- Gera o Arquivo ---
         const elemento = document.querySelector('.laudo-pdf');
@@ -531,11 +583,13 @@
         });
     }
 
-    // 6. LIMPAR FORMULÁRIO
+    // 7. LIMPAR FORMULÁRIO
     function limparFormulario() {
         if(confirm('Tem certeza que deseja limpar tudo?')) {
             document.getElementById('checklistForm').reset();
             document.getElementById('codigo-checklist-display').innerText = 'AGUARDANDO...';
+            document.getElementById('lista-pecas').innerHTML = '';
+            adicionarLinhaPeca();
             irParaPasso(1);
         }
     }
