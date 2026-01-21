@@ -3,16 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Checklist de Oficina v3.0 PRO</title>
+    <title>Checklist de Oficina v4.0 PRO</title>
     
     <!-- Ícone (Favicon) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔧</text></svg>">
     
-    <!-- Bibliotecas Externas -->
+    <!-- Biblioteca PDF (Versão Estável) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    <!-- Folha de Estilos -->
+    <!-- Seu Arquivo de Estilos -->
     <link rel="stylesheet" href="styles.css"> 
+
+    <!-- CSS Específico para a Barra de Progresso (Stepper) -->
+    <style>
+        .stepper-wrapper {
+            display: flex; justify-content: space-between; margin: 20px 0 40px; position: relative;
+            padding: 0 20px;
+        }
+        .stepper-wrapper::before {
+            content: ""; position: absolute; top: 15px; left: 0; width: 100%; height: 2px;
+            background: #eee; z-index: 0;
+        }
+        .stepper-item {
+            position: relative; z-index: 1; text-align: center; width: 33%;
+        }
+        .step-counter {
+            width: 30px; height: 30px; background: #fff; border: 2px solid #ddd; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 14px; color: #999; margin: 0 auto 5px;
+            transition: all 0.3s;
+        }
+        .step-name { font-size: 11px; font-weight: bold; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Estado Ativo */
+        .stepper-item.active .step-counter { 
+            background: #e41616; border-color: #e41616; color: white; transform: scale(1.1); box-shadow: 0 0 10px rgba(228,22,22,0.3); 
+        }
+        .stepper-item.active .step-name { color: #e41616; }
+        
+        /* Estado Concluído (Opcional) */
+        .stepper-item.completed .step-counter { background: #27ae60; border-color: #27ae60; color: white; }
+    </style>
 </head>
 <body>
 
@@ -21,64 +52,69 @@
     <!-- CABEÇALHO DA PÁGINA -->
     <header class="header">
         <div class="logo-container">
-            <img id="logo-oficina" src="logo.png" alt="Logo da Oficina" onerror="this.style.display='none'">
+            <!-- Coloque sua logo.png na pasta ou vai aparecer um quadrado vazio -->
+            <img id="logo-oficina" src="logo.png" alt="Logo" onerror="this.style.opacity='0.3'">
         </div>
         <div class="header-content">
-            <h1 id="nome-oficina">NOME DA SUA OFICINA</h1>
-            <p id="subtitulo-oficina">SISTEMA DE GESTÃO E CHECKLIST</p>
+            <h1 id="nome-oficina">NOME DA OFICINA</h1>
+            <p id="subtitulo-oficina">SISTEMA INTEGRADO DE GESTÃO</p>
             
             <div class="contato-info">
-                <!-- Ícone WhatsApp Seguro (Emoji ou Texto) -->
-                <span style="font-size: 18px;">📱</span>
-                <span id="telefone-oficina">(00) 00000-0000</span>
-            </div>
-            <div class="endereco-oficina" id="endereco-oficina">
-                Endereço da Oficina
+                <span style="font-size: 18px;">📱</span> <!-- Emoji de celular (não quebra) -->
+                <span id="telefone-oficina" style="font-weight:bold;">(00) 00000-0000</span>
             </div>
             
             <div class="status-sync">
-                <div class="sync-dot"></div> Sistema Online
+                <div class="sync-dot"></div> Online
             </div>
         </div>
-        <div class="header-badge">v3.0 PRO</div>
+        <div class="header-badge">v4.0</div>
     </header>
 
-    <!-- NAVEGAÇÃO DE ABAS (TOPO) -->
+    <!-- NAVEGAÇÃO DE ABAS -->
     <div class="tabs">
-        <button class="tab-button active" onclick="abrirAba('novo-checklist')">📝 Novo Checklist</button>
-        <button class="tab-button" onclick="abrirAba('historico')">📂 Histórico</button>
-        <button class="tab-button" onclick="abrirAba('fotos')">📷 Fotos</button>
+        <button class="tab-button active" onclick="abrirAba('novo-checklist')">Novo Checklist</button>
+        <button class="tab-button" onclick="abrirAba('historico')">Histórico</button>
+        <button class="tab-button" onclick="abrirAba('fotos')">Fotos</button>
     </div>
 
     <!-- =================================================================== -->
-    <!-- ABA 1: NOVO CHECKLIST (WIZARD) -->
+    <!-- ABA 1: NOVO CHECKLIST (COM WIZARD) -->
     <!-- =================================================================== -->
     <div id="novo-checklist" class="tab-content active">
         <div class="content">
             
-            <!-- Alertas -->
-            <div id="successMessage" class="alert alert-success"></div>
-            <div id="errorMessage" class="alert alert-error"></div>
+            <!-- BARRA DE PROGRESSO (NOVIDADE) -->
+            <div class="stepper-wrapper">
+                <div class="stepper-item active" id="step-indicador-1">
+                    <div class="step-counter">1</div>
+                    <div class="step-name">Veículo</div>
+                </div>
+                <div class="stepper-item" id="step-indicador-2">
+                    <div class="step-counter">2</div>
+                    <div class="step-name">Inspeção</div>
+                </div>
+                <div class="stepper-item" id="step-indicador-3">
+                    <div class="step-counter">3</div>
+                    <div class="step-name">Orçamento</div>
+                </div>
+            </div>
 
             <form id="checklistForm">
     
-                <!-- CABEÇALHO FIXO DO VEÍCULO (SEMPRE VISÍVEL) -->
-                <div class="section-title">📋 INFORMAÇÕES DO VEÍCULO</div>
-
+                <!-- RESUMO FIXO DO VEÍCULO (SEMPRE VISÍVEL) -->
                 <div class="veiculo-resumo" id="resumoVeiculoPrincipal">
-                    <!-- ID GERADO AUTOMATICAMENTE -->
-                    <div class="veiculo-resumo-pill" style="background: #e3f2fd; border: 1px solid #2196f3; color: #0d47a1;">
-                        ID: <strong id="codigo-checklist-display">AGUARDANDO...</strong>
+                    <div class="veiculo-resumo-pill" style="border: 1px solid #2196f3; color: #0d47a1;">
+                        ID: <strong id="codigo-checklist-display">...</strong>
                     </div>
-
                     <div class="veiculo-resumo-pill">Placa: <strong id="resumoPlaca">-</strong></div>
                     <div class="veiculo-resumo-pill">Modelo: <strong id="resumoModelo">-</strong></div>
                     <div class="veiculo-resumo-pill">Data: <strong id="resumoData">-</strong></div>
-                    <div class="veiculo-resumo-pill">Combustível: <strong id="resumoCombustivel">-</strong></div>
                 </div>
 
                 <!-- PASSO 1: IDENTIFICAÇÃO -->
                 <div id="step-1" class="wizard-step">
+                    <div class="section-title">Dados do Veículo</div>
                     
                     <div class="form-row">
                         <div class="form-group">
@@ -87,7 +123,7 @@
                         </div>
                         <div class="form-group">
                             <label for="chassi">Chassi</label>
-                            <input type="text" id="chassi" name="chassi" placeholder="17 dígitos" maxlength="17">
+                            <input type="text" id="chassi" name="chassi" placeholder="Últimos dígitos">
                         </div>
                     </div>
 
@@ -97,166 +133,137 @@
                             <input type="text" id="modelo" name="modelo" placeholder="Ex: Fiat Uno">
                         </div>
                         <div class="form-group">
-                            <label for="km_entrada">KM Entrada</label>
+                            <label for="km_entrada">KM Atual</label>
                             <input type="text" id="km_entrada" name="km_entrada" placeholder="150.000">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="data">Data Entrada</label>
+                            <label for="data">Data</label>
                             <input type="date" id="data" name="data">
                         </div>
                         <div class="form-group">
-                            <label for="hora">Hora Entrada</label>
+                            <label for="hora">Hora</label>
                             <input type="time" id="hora" name="hora">
                         </div>
                     </div>
 
-                    <div class="form-row">
+                    <div class="form-row full">
                         <div class="form-group">
-                            <label for="combustivel">Nível Combustível (Entrada)</label>
+                            <label for="combustivel">Nível de Combustível</label>
                             <select id="combustivel" name="combustivel">
                                 <option value="">Selecione...</option>
-                                <option value="cheio">Cheio</option>
-                                <option value="meio">Meio</option>
+                                <option value="reserva">Reserva</option>
                                 <option value="1/4">1/4</option>
-                                <option value="vazio">Vazio</option>
+                                <option value="meio">Meio Tanque</option>
+                                <option value="3/4">3/4</option>
+                                <option value="cheio">Cheio</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Botão Avançar -->
-                    <div class="action-buttons" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-                        <button type="button" class="btn-primary" onclick="irParaPasso(2)">Próximo: Inspeção do Carro ➡️</button>
+                    <div class="action-buttons">
+                        <button type="button" class="btn-primary" onclick="irParaPasso(2)">Avançar ➡️</button>
                     </div>
                 </div>
 
-                <!-- PASSO 2: CHECKLIST E INSPEÇÃO -->
+                <!-- PASSO 2: CHECKLIST -->
                 <div id="step-2" class="wizard-step" style="display: none;">
                     
-                    <div class="section-title">🚗 CARACTERÍSTICAS E INSPEÇÃO</div>
+                    <div class="section-title">Inspeção Visual</div>
 
-                    <div class="equip-section">
-                        <div class="equip-section-title">🔧 ACESSÓRIOS OBRIGATÓRIOS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="estepe" name="equipamentos" value="ESTEPE"><label for="estepe">ESTEPE</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="macaco" name="equipamentos" value="MACACO"><label for="macaco">MACACO</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="chave_roda" name="equipamentos" value="CHAVE DE RODA"><label for="chave_roda">CHAVE DE RODA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="triangulo" name="equipamentos" value="TRIÂNGULO"><label for="triangulo">TRIÂNGULO</label></div>
-                        </div>
+                    <div class="equip-section-title">ITENS OBRIGATÓRIOS</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="estepe" value="ESTEPE"><label for="estepe">Estepe</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="macaco" value="MACACO"><label for="macaco">Macaco</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="chave_roda" value="CHAVE DE RODA"><label for="chave_roda">Chave Roda</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="triangulo" value="TRIÂNGULO"><label for="triangulo">Triângulo</label></div>
                     </div>
 
-                    <div class="equip-section">
-                        <div class="equip-section-title">⛽ TIPO COMBUSTÍVEL</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="gasolina" name="equipamentos" value="GASOLINA"><label for="gasolina">GASOLINA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="etanol" name="equipamentos" value="ETANOL"><label for="etanol">ETANOL</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="gnv" name="equipamentos" value="GNV"><label for="gnv">GNV</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="diesel" name="equipamentos" value="DIESEL"><label for="diesel">DIESEL</label></div>
-                        </div>
+                    <br>
+                    <div class="equip-section-title">ELÉTRICA E PAINEL</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="luz_painel" value="LUZES PAINEL"><label for="luz_painel">Luzes Painel</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="buzina" value="BUZINA"><label for="buzina">Buzina</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="vidros" value="VIDROS ELÉTRICOS"><label for="vidros">Vidros</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="ar" value="AR CONDICIONADO"><label for="ar">Ar Cond.</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="som" value="RÁDIO/SOM"><label for="som">Rádio/Som</label></div>
                     </div>
 
-                    <div class="equip-section">
-                        <div class="equip-section-title">⚡ ELÉTRICOS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="vidro_eletrico" name="equipamentos" value="VIDRO ELÉTRICO"><label for="vidro_eletrico">VIDRO ELÉTRICO</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="trava_eletrica" name="equipamentos" value="TRAVA ELÉTRICA"><label for="trava_eletrica">TRAVA ELÉTRICA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="buzina" name="equipamentos" value="BUZINA"><label for="buzina">BUZINA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="bateria" name="equipamentos" value="BATERIA"><label for="bateria">BATERIA</label></div>
-                        </div>
+                    <br>
+                    <div class="equip-section-title">ESTADO GERAL</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="pneus" value="PNEUS GASTOS"><label for="pneus">Pneus Gastos</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="arranhoes" value="ARRANHÕES LATARIA"><label for="arranhoes">Arranhões</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="amassados" value="AMASSADOS LATARIA"><label for="amassados">Amassados</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="trinca" value="PARA-BRISA TRINCADO"><label for="trinca">Vidro Trincado</label></div>
                     </div>
 
-                    <div class="equip-section">
-                        <div class="equip-section-title">📦 DEMAIS ACESSÓRIOS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="extintor" name="equipamentos" value="EXTINTOR"><label for="extintor">EXTINTOR</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="tapetes" name="equipamentos" value="TAPETES"><label for="tapetes">TAPETES</label></div>
-                        </div>
-                    </div>
-
-                    <div class="equip-section">
-                        <div class="equip-section-title">⭐ EQUIPAMENTOS PRINCIPAIS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="ar" name="caracteristicas" value="AR"><label for="ar">AR</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="abs" name="caracteristicas" value="ABS"><label for="abs">ABS</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="airbag" name="caracteristicas" value="Air Bag"><label for="airbag">Air Bag</label></div>
-                        </div>
-                    </div>
-
-                    <!-- Botões Navegação -->
-                    <div class="action-buttons" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-                        <button type="button" class="btn-secondary" onclick="irParaPasso(1)">⬅️ Voltar: Veículo</button>
-                        <button type="button" class="btn-primary" onclick="irParaPasso(3)">Próximo: Orçamento e Cliente ➡️</button>
+                    <div class="action-buttons">
+                        <button type="button" class="btn-secondary" onclick="irParaPasso(1)">⬅️ Voltar</button>
+                        <button type="button" class="btn-primary" onclick="irParaPasso(3)">Avançar ➡️</button>
                     </div>
                 </div>
 
                 <!-- PASSO 3: ORÇAMENTO E FINALIZAÇÃO -->
                 <div id="step-3" class="wizard-step" style="display: none;">
                     
-                    <div class="section-title">💰 ORÇAMENTO E PEÇAS</div>
+                    <div class="section-title">Orçamento de Peças e Serviços</div>
 
-                    <!-- TABELA DE PEÇAS E SERVIÇOS -->
+                    <!-- TABELA ORÇAMENTO -->
                     <div class="table-responsive">
-                        <table id="tabela-orcamento" style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                        <table id="tabela-orcamento" style="width: 100%;">
                             <thead>
-                                <tr style="background: #eee; text-align: left;">
-                                    <th style="padding: 8px; border: 1px solid #ddd; font-size:12px;">Descrição (Peça/Serviço)</th>
-                                    <th style="padding: 8px; border: 1px solid #ddd; width: 60px; font-size:12px;">Qtd</th>
-                                    <th style="padding: 8px; border: 1px solid #ddd; width: 90px; font-size:12px;">Valor Un.</th>
-                                    <th style="padding: 8px; border: 1px solid #ddd; width: 100px; font-size:12px;">Total</th>
-                                    <th style="padding: 8px; border: 1px solid #ddd; width: 30px;"></th>
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th style="width: 60px;">Qtd</th>
+                                    <th style="width: 90px;">R$ Unit.</th>
+                                    <th style="width: 100px;">Total</th>
+                                    <th style="width: 30px;"></th>
                                 </tr>
                             </thead>
                             <tbody id="lista-pecas">
-                                <!-- Itens via JS -->
+                                <!-- JS vai preencher aqui -->
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="5" style="padding: 10px; text-align: center;">
-                                        <button type="button" class="btn-secondary btn-small" onclick="adicionarLinhaPeca()" style="padding: 5px 10px;">+ Adicionar Item</button>
+                                        <button type="button" class="btn-secondary" onclick="adicionarLinhaPeca()" style="padding: 8px 15px; font-size: 11px;">+ Adicionar Item</button>
                                     </td>
                                 </tr>
-                                <tr style="background: #333; color: #fff; font-weight: bold;">
-                                    <td colspan="3" style="padding: 10px; text-align: right;">TOTAL GERAL:</td>
-                                    <td colspan="2" style="padding: 10px;" id="total-orcamento">R$ 0,00</td>
+                                <tr style="background: #333; color: white;">
+                                    <td colspan="3" style="text-align: right; padding: 10px;">TOTAL:</td>
+                                    <td colspan="2" style="font-weight: bold; padding: 10px;" id="total-orcamento">R$ 0,00</td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
 
+                    <div class="section-title">Dados do Cliente</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nome do Cliente</label>
+                            <input type="text" id="nome_cliente" placeholder="Nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefone / WhatsApp</label>
+                            <input type="tel" id="celular_cliente" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+
                     <div class="form-row full">
                         <div class="form-group">
-                            <label for="obs_finais">Observações do Orçamento / Pagamento</label>
-                            <textarea id="obs_finais" name="obs_finais" placeholder="Ex: Pagamento em 3x sem juros, validade 5 dias..."></textarea>
+                            <label>Observações Finais</label>
+                            <textarea id="obs_finais" placeholder="Detalhes do pagamento, garantia, defeitos relatados..."></textarea>
                         </div>
                     </div>
 
-                    <div class="section-title">👤 DADOS DO CLIENTE</div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="nome_cliente">Nome *</label>
-                            <input type="text" id="nome_cliente" name="nome_cliente" placeholder="Nome completo do cliente">
-                        </div>
-                        <div class="form-group">
-                            <label for="cpf_cnpj">CPF / CNPJ</label>
-                            <input type="text" id="cpf_cnpj" name="cpf_cnpj" placeholder="000.000.000-00" maxlength="18">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="celular_cliente">Celular / WhatsApp *</label>
-                            <input type="tel" id="celular_cliente" name="celular_cliente" placeholder="(31) 99999-9999">
-                        </div>
-                    </div>
-
-                    <!-- Botões Finais -->
-                    <div class="action-buttons" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-                        <button type="button" class="btn-secondary" onclick="irParaPasso(2)">⬅️ Voltar: Inspeção</button>
-                        <button type="button" class="btn-success" onclick="gerarPDF()">📄 Finalizar e Gerar Laudo</button>
-                        <button type="button" class="btn-warning" onclick="limparFormulario()" style="max-width: 50px;">🗑️</button>
+                    <div class="action-buttons">
+                        <button type="button" class="btn-secondary" onclick="irParaPasso(2)">⬅️ Voltar</button>
+                        <button type="button" class="btn-success" onclick="gerarPDF()">📄 Finalizar e Gerar PDF</button>
+                        <button type="button" class="btn-warning" onclick="location.reload()" style="max-width: 50px;">🗑️</button>
                     </div>
                 </div>
 
@@ -264,74 +271,36 @@
         </div>
     </div>
 
-    <!-- =================================================================== -->
-    <!-- ABA 2: HISTÓRICO -->
-    <!-- =================================================================== -->
+    <!-- ABA HISTÓRICO (Simples) -->
     <div id="historico" class="tab-content">
-        <div class="content">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="🔍 Buscar por placa, modelo ou cliente..." onkeyup="filtrarChecklists()">
-                <button class="btn-secondary btn-small" onclick="ordenarChecklists()">📊 Ordenar</button>
-            </div>
-            
-            <div class="stats-box">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalChecklists">0</div>
-                    <div class="stat-label">Total Cadastrado</div>
-                </div>
-            </div>
-
-            <div id="historicoLista">
-                <p style="text-align:center; color:#666; padding: 20px;">Nenhum checklist salvo ainda.</p>
-            </div>
-        </div>
+        <div class="content"><p>Histórico em desenvolvimento...</p></div>
     </div>
-
-    <!-- =================================================================== -->
-    <!-- ABA 3: FOTOS -->
-    <!-- =================================================================== -->
+    
+    <!-- ABA FOTOS (Simples) -->
     <div id="fotos" class="tab-content">
-        <div class="content">
-            <div class="section-title">📷 Galeria de Fotos</div>
-            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">
-                Tire fotos do veículo. Máximo de 16 fotos.
-            </p>
-
-            <div class="action-buttons" style="margin-bottom: 20px; border:none; padding:0;">
-                <label for="cameraInput" class="btn-primary" style="text-align:center; display:block; cursor:pointer;">
-                    📸 Tirar Foto / Abrir Galeria
-                </label>
-                <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple style="display: none;" onchange="processarFotos(this)">
-                
-                <button class="btn-success" onclick="gerarPDFFotos()">📄 PDF Só das Fotos</button>
-            </div>
-
-            <div id="galeriaFotos" class="fotos-grid">
-                <!-- Fotos aparecem aqui -->
-            </div>
-        </div>
+        <div class="content"><p>Galeria em desenvolvimento...</p></div>
     </div>
 
-</div> <!-- Fim Container -->
+</div>
 
 <!-- =================================================================== -->
-<!-- MODELO OCULTO PARA IMPRESSÃO (LAUDO TÉCNICO) -->
+<!-- MODELO OCULTO DO PDF (LAYOUT DE IMPRESSÃO) -->
 <!-- =================================================================== -->
 <div id="modelo-pdf-container" style="display: none;">
     <div class="laudo-pdf">
-        <!-- CABEÇALHO -->
         <div class="pdf-header">
             <div class="pdf-logo">
-                <img src="logo.png" alt="Logo" id="pdf-logo-img" style="max-height: 70px;">
+                <!-- A mesma logo do topo, ou deixe vazio se não tiver -->
+                <img src="logo.png" style="max-height: 60px;" onerror="this.style.display='none'">
             </div>
             <div class="pdf-info-oficina">
                 <h2 id="pdf-nome-oficina">NOME DA OFICINA</h2>
-                <p id="pdf-endereco">Endereço completo da oficina</p>
+                <p id="pdf-endereco">Endereço Completo</p>
                 <p id="pdf-contato">Tel: (00) 0000-0000</p>
             </div>
             <div class="pdf-meta">
                 <div class="pdf-box">
-                    <span>Nº CONTROLE</span>
+                    <span>Nº ID</span>
                     <strong id="pdf-id-checklist">---</strong>
                 </div>
                 <div class="pdf-box">
@@ -341,21 +310,18 @@
             </div>
         </div>
 
-        <!-- TÍTULO -->
         <div class="pdf-title-bar">CHECKLIST DE ENTRADA E ORÇAMENTO</div>
 
-        <!-- DADOS VEICULO E CLIENTE -->
         <table class="pdf-table-dados">
             <tr>
                 <td width="50%">
-                    <h3>DADOS DO CLIENTE</h3>
+                    <h3>CLIENTE</h3>
                     <p><strong>Nome:</strong> <span id="pdf-cliente-nome"></span></p>
-                    <p><strong>CPF/CNPJ:</strong> <span id="pdf-cliente-doc"></span></p>
                     <p><strong>Tel:</strong> <span id="pdf-cliente-tel"></span></p>
                 </td>
                 <td width="50%">
-                    <h3>DADOS DO VEÍCULO</h3>
-                    <p><strong>Veículo:</strong> <span id="pdf-veiculo-modelo"></span></p>
+                    <h3>VEÍCULO</h3>
+                    <p><strong>Modelo:</strong> <span id="pdf-veiculo-modelo"></span></p>
                     <p><strong>Placa:</strong> <span id="pdf-veiculo-placa"></span></p>
                     <p><strong>KM:</strong> <span id="pdf-veiculo-km"></span></p>
                     <p><strong>Combustível:</strong> <span id="pdf-veiculo-combustivel"></span></p>
@@ -363,241 +329,183 @@
             </tr>
         </table>
 
-        <!-- INSPEÇÃO -->
-        <div class="pdf-section-title">ITENS INSPECIONADOS / AVARIAS</div>
+        <div class="pdf-section-title">INSPEÇÃO VISUAL</div>
         <div class="pdf-checklist-grid" id="pdf-lista-itens">
-            <!-- JS INJETA AQUI -->
+            <!-- Itens marcados aparecem aqui -->
         </div>
 
-        <!-- ORÇAMENTO -->
-        <div class="pdf-section-title">ORÇAMENTO DE PEÇAS E SERVIÇOS</div>
-        <table class="pdf-table-dados" id="pdf-tabela-pecas" style="width:100%; font-size:10px;">
-            <!-- JS INJETA AQUI -->
+        <div class="pdf-section-title">ORÇAMENTO APROVADO</div>
+        <table class="pdf-table-dados" id="pdf-tabela-pecas" style="width:100%; font-size: 10px;">
+            <!-- Linhas do orçamento aparecem aqui -->
         </table>
-        <div style="text-align: right; font-weight: bold; margin-bottom: 20px; font-size:12px; padding: 5px; border:1px solid #000;">
+        <div style="text-align: right; font-weight: bold; padding: 5px; border: 1px solid #000; margin-top: -1px;">
             TOTAL GERAL: <span id="pdf-total-geral">R$ 0,00</span>
         </div>
 
-        <!-- OBSERVAÇÕES -->
-        <div class="pdf-section-title">OBSERVAÇÕES E CONDIÇÕES</div>
+        <div class="pdf-section-title">OBSERVAÇÕES</div>
         <div class="pdf-box-obs" id="pdf-obs-texto"></div>
 
-        <!-- ASSINATURAS -->
         <div class="pdf-footer-legal">
-            <p>Declaro que aprovo o orçamento acima e autorizo a execução dos serviços. Estou ciente das condições de pagamento e garantia.</p>
+            <p>Declaro estar ciente das condições do veículo e autorizo os serviços descritos acima.</p>
         </div>
 
         <div class="pdf-assinaturas">
-            <div class="assinatura-box">
-                <div class="linha"></div>
-                <span>Técnico Responsável</span>
-            </div>
-            <div class="assinatura-box">
-                <div class="linha"></div>
-                <span>Assinatura do Cliente</span>
-            </div>
+            <div class="assinatura-box"><div class="linha"></div><span>Oficina</span></div>
+            <div class="assinatura-box"><div class="linha"></div><span>Cliente</span></div>
         </div>
     </div>
 </div>
 
 <!-- =================================================================== -->
-<!-- SCRIPTS DE FUNCIONAMENTO -->
+<!-- LÓGICA DO SISTEMA (JAVASCRIPT) -->
 <!-- =================================================================== -->
 <script>
-    // 1. GERENCIAMENTO DE ABAS
+    // 1. NAVEGAÇÃO ENTRE PASSOS (STEPPER)
+    function irParaPasso(passo) {
+        // Esconde todos
+        document.querySelectorAll('.wizard-step').forEach(el => el.style.display = 'none');
+        // Mostra o atual
+        document.getElementById('step-' + passo).style.display = 'block';
+        
+        // Atualiza barra de progresso
+        document.querySelectorAll('.stepper-item').forEach(el => el.classList.remove('active'));
+        document.getElementById('step-indicador-' + passo).classList.add('active');
+        
+        window.scrollTo(0, 0);
+    }
+
+    // 2. NAVEGAÇÃO DE ABAS
     function abrirAba(abaId) {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-        
         document.getElementById(abaId).classList.add('active');
         event.currentTarget.classList.add('active');
-    }
-
-    // 2. WIZARD (PASSOS)
-    function irParaPasso(passo) {
-        document.getElementById('step-1').style.display = 'none';
-        document.getElementById('step-2').style.display = 'none';
-        document.getElementById('step-3').style.display = 'none';
-        
-        document.getElementById('step-' + passo).style.display = 'block';
-        window.scrollTo(0, 0);
     }
 
     // 3. TABELA DE PEÇAS (ORÇAMENTO)
     function adicionarLinhaPeca() {
         const tbody = document.getElementById('lista-pecas');
         const row = document.createElement('tr');
-        
         row.innerHTML = `
-            <td style="padding: 5px; border: 1px solid #ddd;"><input type="text" class="input-desc" placeholder="Item..." style="width:100%; border:none; outline:none;"></td>
-            <td style="padding: 5px; border: 1px solid #ddd;"><input type="number" class="input-qtd" value="1" onchange="calcularTotal()" style="width:100%; border:none; outline:none;"></td>
-            <td style="padding: 5px; border: 1px solid #ddd;"><input type="number" class="input-val" placeholder="0.00" onchange="calcularTotal()" style="width:100%; border:none; outline:none;"></td>
-            <td style="padding: 5px; border: 1px solid #ddd; background:#f9f9f9;" class="col-total">R$ 0,00</td>
-            <td style="padding: 5px; border: 1px solid #ddd; text-align:center; cursor:pointer; color:red;" onclick="this.parentElement.remove(); calcularTotal()">X</td>
+            <td style="padding:0;"><input type="text" class="input-desc" placeholder="Item..." style="border:none; width:100%; padding:8px;"></td>
+            <td style="padding:0;"><input type="number" class="input-qtd" value="1" onchange="calcularTotal()" style="border:none; width:100%; text-align:center;"></td>
+            <td style="padding:0;"><input type="number" class="input-val" placeholder="0.00" onchange="calcularTotal()" style="border:none; width:100%; text-align:center;"></td>
+            <td style="padding:8px; text-align:right;" class="col-total">R$ 0,00</td>
+            <td style="padding:0; text-align:center; cursor:pointer; color:red; font-weight:bold;" onclick="this.parentElement.remove(); calcularTotal()">×</td>
         `;
         tbody.appendChild(row);
     }
 
     function calcularTotal() {
-        let totalGeral = 0;
+        let total = 0;
         document.querySelectorAll('#lista-pecas tr').forEach(row => {
             const qtd = parseFloat(row.querySelector('.input-qtd').value) || 0;
             const val = parseFloat(row.querySelector('.input-val').value) || 0;
-            const totalLinha = qtd * val;
-            
-            row.querySelector('.col-total').innerText = totalLinha.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
-            totalGeral += totalLinha;
+            const sub = qtd * val;
+            row.querySelector('.col-total').innerText = sub.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+            total += sub;
         });
-        
-        document.getElementById('total-orcamento').innerText = totalGeral.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+        document.getElementById('total-orcamento').innerText = total.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
     }
 
-    // 4. GERADOR DE ID (Placa + Data)
-    document.addEventListener('DOMContentLoaded', function() {
-        const inputPlaca = document.getElementById('placa');
-        
-        // Define data/hora atual
-        const agora = new Date();
-        document.getElementById('data').valueAsDate = agora;
-        document.getElementById('hora').value = agora.toTimeString().substring(0,5);
-
-        // Adiciona linha inicial no orçamento
-        adicionarLinhaPeca();
-
-        if(inputPlaca) {
-            inputPlaca.addEventListener('blur', function() {
-                const valorPlaca = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-                
-                if (valorPlaca.length >= 7) {
-                    const agora = new Date();
-                    const idGerado = `${valorPlaca}-${agora.getFullYear()}${(agora.getMonth()+1).toString().padStart(2,'0')}${agora.getDate().toString().padStart(2,'0')}-${agora.getHours()}${agora.getMinutes()}`;
-
-                    const display = document.getElementById('codigo-checklist-display');
-                    if(display) display.innerText = idGerado;
-
-                    let campoOculto = document.getElementById('id_oculto_pdf');
-                    if (!campoOculto) {
-                        campoOculto = document.createElement('input');
-                        campoOculto.type = 'hidden';
-                        campoOculto.id = 'id_oculto_pdf';
-                        document.getElementById('checklistForm').appendChild(campoOculto);
-                    }
-                    campoOculto.value = idGerado;
-                }
-            });
-        }
-    });
-
-    // 5. ATUALIZAR RESUMO VISUAL
-    ['placa', 'modelo', 'km_entrada', 'data'].forEach(id => {
-        document.getElementById(id).addEventListener('input', function() {
-            const targetId = 'resumo' + id.charAt(0).toUpperCase() + id.slice(1);
-            const target = document.getElementById(targetId);
-            if(target) target.innerText = this.value || '-';
-        });
-    });
-    
-    document.getElementById('combustivel').addEventListener('change', function() {
-        const txt = this.options[this.selectedIndex].text;
-        document.getElementById('resumoCombustivel').innerText = txt !== 'Selecione...' ? txt : '-';
-    });
-
-    // 6. GERAR PDF PROFISSIONAL (LAUDO)
+    // 4. GERAÇÃO DO PDF (CORRIGIDO)
     function gerarPDF() {
-        // --- Popula o Modelo Oculto ---
+        // A. Preenche Cabeçalho
         document.getElementById('pdf-nome-oficina').innerText = document.getElementById('nome-oficina').innerText;
-        document.getElementById('pdf-endereco').innerText = document.getElementById('endereco-oficina').innerText;
-        document.getElementById('pdf-contato').innerText = document.getElementById('telefone-oficina').innerText;
+        document.getElementById('pdf-id-checklist').innerText = document.getElementById('codigo-checklist-display').innerText;
+        document.getElementById('pdf-data').innerText = new Date().toLocaleDateString('pt-BR');
 
-        const idChecklist = document.getElementById('id_oculto_pdf')?.value || 'SEM-ID';
-        document.getElementById('pdf-id-checklist').innerText = idChecklist;
-        
-        const dataInput = document.getElementById('data').value;
-        if(dataInput) {
-            const [ano, mes, dia] = dataInput.split('-');
-            document.getElementById('pdf-data').innerText = `${dia}/${mes}/${ano}`;
-        }
-
-        // Dados Cliente/Veiculo
+        // B. Preenche Cliente/Veiculo
         document.getElementById('pdf-cliente-nome').innerText = document.getElementById('nome_cliente').value || '-';
-        document.getElementById('pdf-cliente-doc').innerText = document.getElementById('cpf_cnpj').value || '-';
         document.getElementById('pdf-cliente-tel').innerText = document.getElementById('celular_cliente').value || '-';
-        
         document.getElementById('pdf-veiculo-modelo').innerText = document.getElementById('modelo').value || '-';
         document.getElementById('pdf-veiculo-placa').innerText = document.getElementById('placa').value || '-';
-        document.getElementById('pdf-veiculo-km').innerText = document.getElementById('km_entrada').value + ' Km';
+        document.getElementById('pdf-veiculo-km').innerText = document.getElementById('km_entrada').value || '-';
         
-        const selComb = document.getElementById('combustivel');
-        document.getElementById('pdf-veiculo-combustivel').innerText = selComb.options[selComb.selectedIndex]?.text || '-';
+        const comb = document.getElementById('combustivel');
+        document.getElementById('pdf-veiculo-combustivel').innerText = comb.options[comb.selectedIndex]?.text || '-';
 
-        // Itens Marcados
-        const containerItens = document.getElementById('pdf-lista-itens');
-        containerItens.innerHTML = ''; 
+        // C. Preenche Inspeção (Checkboxes)
+        const listaItens = document.getElementById('pdf-lista-itens');
+        listaItens.innerHTML = '';
         const checks = document.querySelectorAll('#step-2 input[type="checkbox"]:checked');
-        
-        if (checks.length === 0) {
-            containerItens.innerHTML = '<div style="font-size:10px; padding:5px;">Nenhuma avaria ou item específico assinalado.</div>';
+        if(checks.length === 0) {
+            listaItens.innerHTML = '<div style="font-size:10px; padding:5px;">Nenhum item marcado na inspeção.</div>';
         } else {
             checks.forEach(chk => {
-                const label = document.querySelector(`label[for="${chk.id}"]`)?.innerText || chk.value;
+                const label = document.querySelector(`label[for="${chk.id}"]`).innerText;
                 const div = document.createElement('div');
                 div.className = 'pdf-item-check';
                 div.innerText = `☑ ${label}`;
-                containerItens.appendChild(div);
+                listaItens.appendChild(div);
             });
         }
 
-        // Tabela de Peças no PDF
-        const tabelaPDF = document.getElementById('pdf-tabela-pecas');
-        tabelaPDF.innerHTML = '<tr style="background:#eee; font-weight:bold;"><td width="55%">Item</td><td width="10%">Qtd</td><td width="15%">Unit.</td><td width="20%">Total</td></tr>';
-
+        // D. Preenche Tabela de Orçamento no PDF
+        const tabPdf = document.getElementById('pdf-tabela-pecas');
+        tabPdf.innerHTML = '<tr style="background:#eee; font-weight:bold;"><td width="50%">DESCRIÇÃO</td><td width="10%">QTD</td><td width="20%">UNIT</td><td width="20%">TOTAL</td></tr>';
+        
         document.querySelectorAll('#lista-pecas tr').forEach(row => {
             const desc = row.querySelector('.input-desc').value;
-            const qtd = row.querySelector('.input-qtd').value;
-            const valInput = parseFloat(row.querySelector('.input-val').value);
-            const val = isNaN(valInput) ? '0,00' : valInput.toLocaleString('pt-BR',{style:'currency', currency:'BRL'});
-            const tot = row.querySelector('.col-total').innerText;
-            
             if(desc) {
-                tabelaPDF.innerHTML += `<tr><td>${desc}</td><td>${qtd}</td><td>${val}</td><td>${tot}</td></tr>`;
+                const qtd = row.querySelector('.input-qtd').value;
+                const val = parseFloat(row.querySelector('.input-val').value).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+                const tot = row.querySelector('.col-total').innerText;
+                tabPdf.innerHTML += `<tr><td>${desc}</td><td>${qtd}</td><td>${val}</td><td>${tot}</td></tr>`;
             }
         });
-
         document.getElementById('pdf-total-geral').innerText = document.getElementById('total-orcamento').innerText;
-        document.getElementById('pdf-obs-texto').innerText = document.getElementById('obs_finais').value || '';
+        document.getElementById('pdf-obs-texto').innerText = document.getElementById('obs_finais').value;
 
-        // --- Gera o Arquivo ---
-        const elemento = document.querySelector('.laudo-pdf');
+        // E. Gera o Arquivo
+        const element = document.querySelector('.laudo-pdf');
         const btn = document.querySelector('.btn-success');
-        const txtOriginal = btn.innerText;
-        btn.innerText = '⏳ Gerando...';
-
+        btn.innerText = 'Gerando...';
+        
         html2pdf().set({
             margin: 0,
-            filename: `Laudo-${document.getElementById('placa').value}.pdf`,
+            filename: `Checklist-${document.getElementById('placa').value}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        }).from(elemento).save().then(() => {
-            btn.innerText = txtOriginal;
+        }).from(element).save().then(() => {
+            btn.innerText = '📄 Finalizar e Gerar PDF';
         });
     }
 
-    // 7. LIMPAR FORMULÁRIO
-    function limparFormulario() {
-        if(confirm('Tem certeza que deseja limpar tudo?')) {
-            document.getElementById('checklistForm').reset();
-            document.getElementById('codigo-checklist-display').innerText = 'AGUARDANDO...';
-            document.getElementById('lista-pecas').innerHTML = '';
-            adicionarLinhaPeca();
-            irParaPasso(1);
-        }
-    }
+    // 5. INICIALIZAÇÃO E ID AUTOMÁTICO
+    document.addEventListener('DOMContentLoaded', () => {
+        // Adiciona linha inicial no orçamento
+        adicionarLinhaPeca();
+
+        // Data de hoje
+        document.getElementById('data').valueAsDate = new Date();
+        document.getElementById('hora').value = new Date().toTimeString().substring(0,5);
+
+        // Gerador de ID
+        document.getElementById('placa').addEventListener('blur', function() {
+            const val = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if(val.length >= 7) {
+                const now = new Date();
+                const id = `${val}-${now.getDate()}${now.getMonth()+1}-${now.getHours()}${now.getMinutes()}`;
+                document.getElementById('codigo-checklist-display').innerText = id;
+                
+                // Atualiza resumo
+                document.getElementById('resumoPlaca').innerText = val;
+            }
+        });
+
+        // Resumo dinâmico
+        document.getElementById('modelo').addEventListener('input', function() { document.getElementById('resumoModelo').innerText = this.value; });
+        document.getElementById('data').addEventListener('change', function() { 
+            const d = this.value.split('-'); 
+            document.getElementById('resumoData').innerText = `${d[2]}/${d[1]}`; 
+        });
+    });
 </script>
 
-<!-- Carrega Configurações Externas (Se houver) -->
+<!-- Carrega Configurações Externas (Se tiver) -->
 <script src="config.js"></script>
-<script src="app.js"></script>
 
 </body>
 </html>
