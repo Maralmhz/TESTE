@@ -270,6 +270,81 @@
     </div>
 
 </form>
+<!-- === MODELO OCULTO PARA IMPRESSÃO (LAUDO TÉCNICO) === -->
+<div id="modelo-pdf-container" style="display: none;">
+    <div class="laudo-pdf">
+        <!-- CABEÇALHO -->
+        <div class="pdf-header">
+            <div class="pdf-logo">
+                <img src="logo.png" alt="Logo Oficina" id="pdf-logo-img">
+            </div>
+            <div class="pdf-info-oficina">
+                <h2 id="pdf-nome-oficina">NOME DA OFICINA</h2>
+                <p id="pdf-endereco">Endereço completo da oficina</p>
+                <p id="pdf-contato">Tel: (00) 0000-0000</p>
+            </div>
+            <div class="pdf-meta">
+                <div class="pdf-box">
+                    <span>Nº CONTROLE</span>
+                    <strong id="pdf-id-checklist">---</strong>
+                </div>
+                <div class="pdf-box">
+                    <span>DATA</span>
+                    <strong id="pdf-data">--/--/--</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- TÍTULO -->
+        <div class="pdf-title-bar">CHECKLIST DE ENTRADA E INSPEÇÃO VEICULAR</div>
+
+        <!-- DADOS VEICULO E CLIENTE (Lado a Lado) -->
+        <table class="pdf-table-dados">
+            <tr>
+                <td width="50%">
+                    <h3>DADOS DO CLIENTE</h3>
+                    <p><strong>Nome:</strong> <span id="pdf-cliente-nome"></span></p>
+                    <p><strong>CPF/CNPJ:</strong> <span id="pdf-cliente-doc"></span></p>
+                    <p><strong>Tel:</strong> <span id="pdf-cliente-tel"></span></p>
+                </td>
+                <td width="50%">
+                    <h3>DADOS DO VEÍCULO</h3>
+                    <p><strong>Veículo:</strong> <span id="pdf-veiculo-modelo"></span></p>
+                    <p><strong>Placa:</strong> <span id="pdf-veiculo-placa"></span></p>
+                    <p><strong>KM:</strong> <span id="pdf-veiculo-km"></span></p>
+                    <p><strong>Combustível:</strong> <span id="pdf-veiculo-combustivel"></span></p>
+                </td>
+            </tr>
+        </table>
+
+        <!-- INSPEÇÃO (GRID) -->
+        <div class="pdf-section-title">ITENS INSPECIONADOS</div>
+        <div class="pdf-checklist-grid" id="pdf-lista-itens">
+            <!-- AQUI O JAVASCRIPT VAI INJETAR OS ITENS MARCADOS -->
+        </div>
+
+        <!-- OBSERVAÇÕES E SERVIÇOS -->
+        <div class="pdf-section-title">SERVIÇOS SOLICITADOS / OBSERVAÇÕES</div>
+        <div class="pdf-box-obs" id="pdf-obs-texto"></div>
+
+        <!-- ASSINATURAS -->
+        <div class="pdf-footer-legal">
+            <p>Declaro que deixei o veículo acima nas condições descritas para realização de serviços. A oficina não se responsabiliza por objetos de valor deixados no interior do veículo.</p>
+        </div>
+
+        <div class="pdf-assinaturas">
+            <div class="assinatura-box">
+                <div class="linha"></div>
+                <span>Técnico Responsável</span>
+            </div>
+            <div class="assinatura-box">
+                <div class="linha"></div>
+                <span>Assinatura do Cliente</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- SCRIPT NECESSÁRIO NO FINAL DA PÁGINA -->
 <script>
