@@ -46,213 +46,286 @@
 </div>
 
 
-        <!-- ABA PRINCIPAL - CHECKLIST -->
-        <div id="novo-checklist" class="tab-content active">
-            <div class="content">
-                <div id="successMessage" class="alert alert-success"></div>
-                <div id="errorMessage" class="alert alert-error"></div>
-                <div id="infoMessage" class="alert alert-info"></div>
+          <form id="checklistForm">
+    
+    <!-- === CABEÇALHO FIXO (SEMPRE VISÍVEL) === -->
+    <div class="section-title">📋 INFORMAÇÕES DO VEÍCULO</div>
 
-                <form id="checklistForm">
-                    <div class="section-title">📋 INFORMAÇÕES DO VEÍCULO</div>
-
-                    <!-- RESUMO FIXO DO VEÍCULO (VISUAL) -->
-                    <div class="veiculo-resumo" id="resumoVeiculoPrincipal">
-                        <div class="veiculo-resumo-pill">Placa: <strong id="resumoPlaca">-</strong></div>
-                        <div class="veiculo-resumo-pill">Modelo: <strong id="resumoModelo">-</strong></div>
-                        <div class="veiculo-resumo-pill">Chassi: <strong id="resumoChassi">-</strong></div>
-                        <div class="veiculo-resumo-pill">KM Entrada: <strong id="resumoKmEntrada">-</strong></div>
-                        <div class="veiculo-resumo-pill">Data Entrada: <strong id="resumoData">-</strong></div>
-                        <div class="veiculo-resumo-pill">Hora Entrada: <strong id="resumoHora">-</strong></div>
-                        <div class="veiculo-resumo-pill">Combustível: <strong id="resumoCombustivel">-</strong></div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="placa">Placa *</label>
-                            <input type="text" id="placa" name="placa" placeholder="ABC-1234" maxlength="8" style="text-transform: uppercase;">
-                        </div>
-                        <div class="form-group">
-                            <label for="chassi">Chassi</label>
-                            <input type="text" id="chassi" name="chassi" placeholder="17 dígitos" maxlength="17">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="modelo">Modelo</label>
-                            <input type="text" id="modelo" name="modelo" placeholder="Ex: Fiat Uno">
-                        </div>
-                        <div class="form-group">
-                            <label for="km_entrada">KM Entrada</label>
-                            <input type="text" id="km_entrada" name="km_entrada" placeholder="150.000">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="data">Data Entrada</label>
-                            <input type="date" id="data" name="data">
-                        </div>
-                        <div class="form-group">
-                            <label for="hora">Hora Entrada</label>
-                            <input type="time" id="hora" name="hora">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="combustivel">Nível Combustível</label>
-                            <select id="combustivel" name="combustivel">
-                                <option value="">Selecione...</option>
-                                <option value="cheio">Cheio</option>
-                                <option value="meio">Meio</option>
-                                <option value="1/4">1/4</option>
-                                <option value="vazio">Vazio</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="km_saida">KM Saída</label>
-                            <input type="text" id="km_saida" name="km_saida" placeholder="150.500">
-                        </div>
-                    </div>
-
-                    <div class="section-title">🚗 CARACTERÍSTICAS DO VEÍCULO</div>
-
-                    <div class="equip-section">
-                        <div class="equip-section-title">🔧 ACESSÓRIOS OBRIGATÓRIOS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="estepe" name="equipamentos" value="ESTEPE"><label for="estepe">ESTEPE</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="macaco" name="equipamentos" value="MACACO"><label for="macaco">MACACO</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="chave_roda" name="equipamentos" value="CHAVE DE RODA"><label for="chave_roda">CHAVE DE RODA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="triangulo" name="equipamentos" value="TRIÂNGULO"><label for="triangulo">TRIÂNGULO</label></div>
-                        </div>
-                    </div>
-
-<div class="equip-section">
-    <div class="equip-section-title">⛽ TIPO COMBUSTÍVEL</div>
-    <div class="checkbox-group">
-        <div class="checkbox-item"><input type="checkbox" id="gasolina" name="equipamentos" value="GASOLINA"><label for="gasolina">GASOLINA</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="etanol" name="equipamentos" value="ETANOL"><label for="etanol">ETANOL</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="gnv" name="equipamentos" value="GNV"><label for="gnv">GNV</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="diesel" name="equipamentos" value="DIESEL"><label for="diesel">DIESEL</label></div>
+    <div class="veiculo-resumo" id="resumoVeiculoPrincipal">
+        <div class="veiculo-resumo-pill">Placa: <strong id="resumoPlaca">-</strong></div>
+        <div class="veiculo-resumo-pill">Modelo: <strong id="resumoModelo">-</strong></div>
+        <div class="veiculo-resumo-pill">Chassi: <strong id="resumoChassi">-</strong></div>
+        <div class="veiculo-resumo-pill">KM Entrada: <strong id="resumoKmEntrada">-</strong></div>
+        <div class="veiculo-resumo-pill">Data: <strong id="resumoData">-</strong></div>
+        <div class="veiculo-resumo-pill">Combustível: <strong id="resumoCombustivel">-</strong></div>
     </div>
-</div>
+    <!-- ======================================== -->
 
 
+    <!-- ================================================== -->
+    <!-- PASSO 1: IDENTIFICAÇÃO E ENTRADA -->
+    <!-- ================================================== -->
+    <div id="step-1" class="wizard-step">
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="placa">Placa *</label>
+                <input type="text" id="placa" name="placa" placeholder="ABC-1234" maxlength="8" style="text-transform: uppercase;">
+            </div>
+            <div class="form-group">
+                <label for="chassi">Chassi</label>
+                <input type="text" id="chassi" name="chassi" placeholder="17 dígitos" maxlength="17">
+            </div>
+        </div>
 
-                    <div class="equip-section">
-                        <div class="equip-section-title">🔊 ELETRÔNICOS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="radio" name="equipamentos" value="RÁDIO / MULTIMÍDIA"><label for="radio">RÁDIO / MULTIMÍDIA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="alarme_corta" name="equipamentos" value="ALARME / CORTA CORRENTE"><label for="alarme_corta">ALARME / CORTA CORRENTE</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="antena" name="equipamentos" value="ANTENA"><label for="antena">ANTENA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="acendedor" name="equipamentos" value="ACENDEDOR/TOMADA 12V"><label for="acendedor">ACENDEDOR/TOMADA 12V</label></div>
-                        </div>
-                    </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="modelo">Modelo</label>
+                <input type="text" id="modelo" name="modelo" placeholder="Ex: Fiat Uno">
+            </div>
+            <div class="form-group">
+                <label for="km_entrada">KM Entrada</label>
+                <input type="text" id="km_entrada" name="km_entrada" placeholder="150.000">
+            </div>
+        </div>
 
-                    <div class="equip-section">
-                        <div class="equip-section-title">⚡ ELÉTRICOS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="vidro_eletrico" name="equipamentos" value="VIDRO ELÉTRICO"><label for="vidro_eletrico">VIDRO ELÉTRICO</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="trava_eletrica" name="equipamentos" value="TRAVA ELÉTRICA"><label for="trava_eletrica">TRAVA ELÉTRICA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="buzina" name="equipamentos" value="BUZINA"><label for="buzina">BUZINA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="bateria" name="equipamentos" value="BATERIA"><label for="bateria">BATERIA</label></div>
-                        </div>
-                    </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="data">Data Entrada</label>
+                <input type="date" id="data" name="data">
+            </div>
+            <div class="form-group">
+                <label for="hora">Hora Entrada</label>
+                <input type="time" id="hora" name="hora">
+            </div>
+        </div>
 
-                    <div class="equip-section">
-                        <div class="equip-section-title">🛞 RODAS & PÁRA-BRISAS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="calotas" name="equipamentos" value="CALOTAS"><label for="calotas">CALOTAS</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="rodas_liga" name="equipamentos" value="RODAS DE LIGA"><label for="rodas_liga">RODAS DE LIGA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="roda_ferro" name="equipamentos" value="RODA DE FERRO"><label for="roda_ferro">RODA DE FERRO</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="para_brisa" name="equipamentos" value="PARABRISA TRINCADO"><label for="para_brisa">PÁRA BRISA TRICADO</label></div>
-                        </div>
-                    </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="combustivel">Nível Combustível (Entrada)</label>
+                <select id="combustivel" name="combustivel">
+                    <option value="">Selecione...</option>
+                    <option value="cheio">Cheio</option>
+                    <option value="meio">Meio</option>
+                    <option value="1/4">1/4</option>
+                    <option value="vazio">Vazio</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="km_saida">KM Saída (Preencher no final)</label>
+                <input type="text" id="km_saida" name="km_saida" placeholder="150.500">
+            </div>
+        </div>
 
-                    <div class="equip-section">
-    <div class="equip-section-title">📦 DEMAIS ACESSÓRIOS</div>
-    <div class="checkbox-group">
-        <div class="checkbox-item"><input type="checkbox" id="extintor" name="equipamentos" value="EXTINTOR"><label for="extintor">EXTINTOR</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="protetor_carter" name="equipamentos" value="PROTETOR DE CARTER"><label for="protetor_carter">PROTETOR DE CARTER</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="chave_secreta" name="equipamentos" value="CHAVE SEGREDO (RODA)"><label for="chave_secreta">CHAVE SEGREDO (RODA)</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="tapetes" name="equipamentos" value="TAPETES"><label for="tapetes">TAPETES</label></div>
+        <!-- BOTÃO AVANÇAR -->
+        <div class="action-buttons" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            <button type="button" class="btn-primary" onclick="irParaPasso(2)">Próximo: Inspeção do Carro ➡️</button>
+        </div>
     </div>
-</div>
 
 
-                    <div class="equip-section">
-                        <div class="equip-section-title">⭐ EQUIPAMENTOS PRINCIPAIS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="ar" name="caracteristicas" value="AR"><label for="ar">AR</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="abs" name="caracteristicas" value="ABS"><label for="abs">ABS</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="airbag" name="caracteristicas" value="Air Bag"><label for="airbag">Air Bag</label></div>
-                        </div>
-                    </div>
+    <!-- ================================================== -->
+    <!-- PASSO 2: CHECKLIST E INSPEÇÃO -->
+    <!-- ================================================== -->
+    <div id="step-2" class="wizard-step" style="display: none;">
+        
+        <div class="section-title">🚗 CARACTERÍSTICAS E INSPEÇÃO</div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Câmbio</label>
-                            <div class="checkbox-group" style="margin-top: 5px;">
-                                <div class="checkbox-item"><input type="checkbox" id="cambio_auto" name="cambio" value="Automático"><label for="cambio_auto">Automático</label></div>
-                                <div class="checkbox-item"><input type="checkbox" id="cambio_manual" name="cambio" value="Manual"><label for="cambio_manual">Manual</label></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Tração</label>
-                            <div class="checkbox-group" style="margin-top: 5px;">
-                                <div class="checkbox-item"><input type="checkbox" id="tracao_4x2" name="tracao" value="4x2"><label for="tracao_4x2">4x2</label></div>
-                                <div class="checkbox-item"><input type="checkbox" id="tracao_4x4" name="tracao" value="4x4"><label for="tracao_4x4">4x4</label></div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="equip-section">
+            <div class="equip-section-title">🔧 ACESSÓRIOS OBRIGATÓRIOS</div>
+            <div class="checkbox-group">
+                <div class="checkbox-item"><input type="checkbox" id="estepe" name="equipamentos" value="ESTEPE"><label for="estepe">ESTEPE</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="macaco" name="equipamentos" value="MACACO"><label for="macaco">MACACO</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="chave_roda" name="equipamentos" value="CHAVE DE RODA"><label for="chave_roda">CHAVE DE RODA</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="triangulo" name="equipamentos" value="TRIÂNGULO"><label for="triangulo">TRIÂNGULO</label></div>
+            </div>
+        </div>
 
-                    <div class="section-title">👤 DADOS DO CLIENTE</div>
+        <div class="equip-section">
+            <div class="equip-section-title">⛽ TIPO COMBUSTÍVEL</div>
+            <div class="checkbox-group">
+                <div class="checkbox-item"><input type="checkbox" id="gasolina" name="equipamentos" value="GASOLINA"><label for="gasolina">GASOLINA</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="etanol" name="equipamentos" value="ETANOL"><label for="etanol">ETANOL</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="gnv" name="equipamentos" value="GNV"><label for="gnv">GNV</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="diesel" name="equipamentos" value="DIESEL"><label for="diesel">DIESEL</label></div>
+            </div>
+        </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="nome_cliente">Nome *</label>
-                            <input type="text" id="nome_cliente" name="nome_cliente" placeholder="Nome completo do cliente">
-                        </div>
-                        <div class="form-group">
-                            <label for="cpf_cnpj">CPF / CNPJ</label>
-                            <input type="text" id="cpf_cnpj" name="cpf_cnpj" placeholder="000.000.000-00" maxlength="18">
-                        </div>
-                    </div>
+        <div class="equip-section">
+            <div class="equip-section-title">🔊 ELETRÔNICOS</div>
+            <div class="checkbox-group">
+                <div class="checkbox-item"><input type="checkbox" id="radio" name="equipamentos" value="RÁDIO / MULTIMÍDIA"><label for="radio">RÁDIO / MULTIMÍDIA</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="alarme_corta" name="equipamentos" value="ALARME / CORTA CORRENTE"><label for="alarme_corta">ALARME / CORTA CORRENTE</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="antena" name="equipamentos" value="ANTENA"><label for="antena">ANTENA</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="acendedor" name="equipamentos" value="ACENDEDOR/TOMADA 12V"><label for="acendedor">ACENDEDOR/TOMADA 12V</label></div>
+            </div>
+        </div>
 
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label for="endereco_cliente">Endereço Completo</label>
-                            <textarea id="endereco_cliente" name="endereco_cliente" placeholder="Rua, número, bairro, cidade - UF, CEP" style="height: 60px; min-height: 60px;"></textarea>
-                        </div>
-                    </div>
+        <div class="equip-section">
+            <div class="equip-section-title">⚡ ELÉTRICOS</div>
+            <div class="checkbox-group">
+                <div class="checkbox-item"><input type="checkbox" id="vidro_eletrico" name="equipamentos" value="VIDRO ELÉTRICO"><label for="vidro_eletrico">VIDRO ELÉTRICO</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="trava_eletrica" name="equipamentos" value="TRAVA ELÉTRICA"><label for="trava_eletrica">TRAVA ELÉTRICA</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="buzina" name="equipamentos" value="BUZINA"><label for="buzina">BUZINA</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="bateria" name="equipamentos" value="BATERIA"><label for="bateria">BATERIA</label></div>
+            </div>
+        </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="celular_cliente">Celular / WhatsApp *</label>
-                            <input type="tel" id="celular_cliente" name="celular_cliente" placeholder="(31) 99999-9999">
-                        </div>
-                        <div class="form-group">
-                            <label for="telefone2">Telefone 2 (opcional)</label>
-                            <input type="tel" id="telefone2" name="telefone2" placeholder="(31) 9999-9999">
-                        </div>
-                    </div>
+        <div class="equip-section">
+            <div class="equip-section-title">🛞 RODAS & PÁRA-BRISAS</div>
+            <div class="checkbox-group">
+                <div class="checkbox-item"><input type="checkbox" id="calotas" name="equipamentos" value="CALOTAS"><label for="calotas">CALOTAS</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="rodas_liga" name="equipamentos" value="RODAS DE LIGA"><label for="rodas_liga">RODAS DE LIGA</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="roda_ferro" name="equipamentos" value="RODA DE FERRO"><label for="roda_ferro">RODA DE FERRO</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="para_brisa" name="equipamentos" value="PARABRISA TRINCADO"><label for="para_brisa">PÁRA BRISA TRICADO</label></div>
+            </div>
+        </div>
 
-                    <div class="section-title">🔧 SERVIÇOS/SOLICITADOS</div>
+        <div class="equip-section">
+            <div class="equip-section-title">📦 DEMAIS ACESSÓRIOS</div>
+            <div class="checkbox-group">
+                <div class="checkbox-item"><input type="checkbox" id="extintor" name="equipamentos" value="EXTINTOR"><label for="extintor">EXTINTOR</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="protetor_carter" name="equipamentos" value="PROTETOR DE CARTER"><label for="protetor_carter">PROTETOR DE CARTER</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="chave_secreta" name="equipamentos" value="CHAVE SEGREDO (RODA)"><label for="chave_secreta">CHAVE SEGREDO (RODA)</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="tapetes" name="equipamentos" value="TAPETES"><label for="tapetes">TAPETES</label></div>
+            </div>
+        </div>
 
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label for="servicos">Descreva os serviços solicitados:</label>
-                            <textarea id="servicos" name="servicos" placeholder="Ex: Troca de óleo e filtro, alinhamento e balanceamento..."></textarea>
-                        </div>
-                    </div>
+        <div class="equip-section">
+            <div class="equip-section-title">⭐ EQUIPAMENTOS PRINCIPAIS</div>
+            <div class="checkbox-group">
+                <div class="checkbox-item"><input type="checkbox" id="ar" name="caracteristicas" value="AR"><label for="ar">AR</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="abs" name="caracteristicas" value="ABS"><label for="abs">ABS</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="airbag" name="caracteristicas" value="Air Bag"><label for="airbag">Air Bag</label></div>
+            </div>
+        </div>
 
-                    <div class="action-buttons">
-                        <button type="button" class="btn-success" onclick="gerarPDF()">📄 Gerar PDF</button>
-                        <button type="button" class="btn-secondary" onclick="limparFormulario()">🗑️ Limpar</button>
-                    </div>
-                </form>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Câmbio</label>
+                <div class="checkbox-group" style="margin-top: 5px;">
+                    <div class="checkbox-item"><input type="checkbox" id="cambio_auto" name="cambio" value="Automático"><label for="cambio_auto">Automático</label></div>
+                    <div class="checkbox-item"><input type="checkbox" id="cambio_manual" name="cambio" value="Manual"><label for="cambio_manual">Manual</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Tração</label>
+                <div class="checkbox-group" style="margin-top: 5px;">
+                    <div class="checkbox-item"><input type="checkbox" id="tracao_4x2" name="tracao" value="4x2"><label for="tracao_4x2">4x2</label></div>
+                    <div class="checkbox-item"><input type="checkbox" id="tracao_4x4" name="tracao" value="4x4"><label for="tracao_4x4">4x4</label></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTÕES NAVEGAÇÃO -->
+        <div class="action-buttons" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            <button type="button" class="btn-secondary" onclick="irParaPasso(1)">⬅️ Voltar: Veículo</button>
+            <button type="button" class="btn-primary" onclick="irParaPasso(3)">Próximo: Cliente ➡️</button>
+        </div>
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- PASSO 3: CLIENTE E FINALIZAÇÃO -->
+    <!-- ================================================== -->
+    <div id="step-3" class="wizard-step" style="display: none;">
+        
+        <div class="section-title">👤 DADOS DO CLIENTE</div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="nome_cliente">Nome *</label>
+                <input type="text" id="nome_cliente" name="nome_cliente" placeholder="Nome completo do cliente">
+            </div>
+            <div class="form-group">
+                <label for="cpf_cnpj">CPF / CNPJ</label>
+                <input type="text" id="cpf_cnpj" name="cpf_cnpj" placeholder="000.000.000-00" maxlength="18">
+            </div>
+        </div>
+
+        <div class="form-row full">
+            <div class="form-group">
+                <label for="endereco_cliente">Endereço Completo</label>
+                <textarea id="endereco_cliente" name="endereco_cliente" placeholder="Rua, número, bairro, cidade - UF, CEP" style="height: 60px; min-height: 60px;"></textarea>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="celular_cliente">Celular / WhatsApp *</label>
+                <input type="tel" id="celular_cliente" name="celular_cliente" placeholder="(31) 99999-9999">
+            </div>
+            <div class="form-group">
+                <label for="telefone2">Telefone 2 (opcional)</label>
+                <input type="tel" id="telefone2" name="telefone2" placeholder="(31) 9999-9999">
+            </div>
+        </div>
+
+        <!-- BOTÕES FINAIS -->
+        <div class="action-buttons" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            <button type="button" class="btn-secondary" onclick="irParaPasso(2)">⬅️ Voltar: Inspeção</button>
+            <button type="button" class="btn-success" onclick="gerarPDF()">📄 Finalizar e Gerar PDF</button>
+            <button type="button" class="btn-warning" onclick="limparFormulario()" style="max-width: 100px;">🗑️</button>
+        </div>
+    </div>
+
+</form>
+
+<!-- SCRIPT NECESSÁRIO NO FINAL DA PÁGINA -->
+<script>
+    // 1. Função de Navegação entre Passos
+    function irParaPasso(passo) {
+        // Esconde todos
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('step-2').style.display = 'none';
+        document.getElementById('step-3').style.display = 'none';
+        
+        // Mostra o desejado
+        document.getElementById('step-' + passo).style.display = 'block';
+        
+        // Sobe a tela
+        window.scrollTo(0, 0);
+    }
+
+    // 2. Função que Gera o ID Automático (Placa + Data)
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputPlaca = document.getElementById('placa');
+        
+        if(inputPlaca) {
+            inputPlaca.addEventListener('blur', function() {
+                // Limpa a placa (tira traços e espaços, deixa maiusculo)
+                const valorPlaca = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                
+                // Só gera se tiver a placa completa (7 digitos ou mais)
+                if (valorPlaca.length >= 7) {
+                    const agora = new Date();
+                    const ano = agora.getFullYear();
+                    const mes = String(agora.getMonth() + 1).padStart(2, '0');
+                    const dia = String(agora.getDate()).padStart(2, '0');
+                    const hora = String(agora.getHours()).padStart(2, '0');
+                    const min = String(agora.getMinutes()).padStart(2, '0');
+
+                    // Monta o ID: PLACA-20260121-1715
+                    const idGerado = `${valorPlaca}-${ano}${mes}${dia}-${hora}${min}`;
+
+                    // Mostra na tela (lá no topo onde criamos o campo azul)
+                    const display = document.getElementById('codigo-checklist-display');
+                    if(display) display.innerText = idGerado;
+
+                    // Salva num campo oculto (para o PDF usar depois)
+                    let campoOculto = document.getElementById('id_oculto_pdf');
+                    if (!campoOculto) {
+                        campoOculto = document.createElement('input');
+                        campoOculto.type = 'hidden';
+                        campoOculto.id = 'id_oculto_pdf';
+                        document.getElementById('checklistForm').appendChild(campoOculto);
+                    }
+                    campoOculto.value = idGerado;
+                }
+            });
+        }
+    });
+</script>
             </div>
         </div>
 
@@ -1148,8 +1221,6 @@ document.addEventListener('DOMContentLoaded', () => {
 </button>
 <script src="config.js"></script>
 <script src="app.js"></script>
-</body>
-</html>
 
 </body>
 </html>
