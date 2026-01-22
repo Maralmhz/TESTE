@@ -3,1229 +3,491 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="description" content="Checklist de Oficina - App Offline com PDF">
+    <title>Checklist Pro SaaS</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="icon" type="image/png" href="logo.png">
-   <title id="titulo-pagina">Checklist de Entrada – Oficina</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="config.js"></script>
 </head>
 <body>
+
+    <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="logo.jpg" alt="Logo" id="nav-logo">
+            <div class="nav-info">
+                <h1 id="nome-oficina">Oficina Premium</h1>
+                <span class="badge-pro">SISTEMA PRO v5.0</span>
+            </div>
+        </div>
+        <div class="nav-id-box">
+            <small>ID DO ATENDIMENTO</small>
+            <div id="display-id-unico">AGUARDANDO PLACA...</div>
+        </div>
+    </nav>
+
+    <!-- WIZARD PROGRESS BAR -->
+    <div class="wizard-progress">
+        <div class="step-indicator active" id="ind-1">
+            <div class="step-number">1</div>
+            <span>Veículo</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-indicator" id="ind-2">
+            <div class="step-number">2</div>
+            <span>Inspeção Completa</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-indicator" id="ind-3">
+            <div class="step-number">3</div>
+            <span>Cliente & Orçamento</span>
+        </div>
+    </div>
+
+    <!-- ÁREA PRINCIPAL DO FORMULÁRIO -->
     <div class="container">
-       <div class="header">
-    <div class="logo-container">
-        <img id="logo-oficina" src="logo.png" alt="Logo da Oficina">
-    </div>
-    <div class="header-content">
-        <!-- ✅ NEUTRO - PREENCHER NO CONFIG.JS -->
-        <h1 id="nome-oficina">OFICINA</h1>
-        <p id="subtitulo-oficina">Checklist de entrada e inspeção veicular</p>
-        <div class="contato-info">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon">
-            <span id="telefone-oficina">(00) 00000-0000</span>
-        </div>
-        <div class="endereco-oficina" id="endereco-oficina">
-            ENDEREÇO DA OFICINA
-        </div>
-
-                <div class="status-sync">
-                    <div class="sync-dot" id="syncStatus"></div>
-                    <span id="syncText">Online</span>
-                </div>
-            </div>
-            <div class="header-badge">v3.0 PRO</div>
-        </div>
-<div class="tabs">
-    <button class="tab-button active" onclick="switchTab('novo-checklist')">➕ Novo Checklist</button>
-    <button class="tab-button" onclick="switchTab('orcamento')">💰 Peças & Serviços</button>
-    <button class="tab-button" onclick="switchTab('fotos')">📸 Fotos</button>
-    <button class="tab-button" onclick="switchTab('historico')">📋 Histórico</button>
-    <button class="tab-button" onclick="switchTab('relatorios')">📊 Relatórios</button>
-</div>
-
-
-        <!-- ABA PRINCIPAL - CHECKLIST -->
-        <div id="novo-checklist" class="tab-content active">
-            <div class="content">
-                <div id="successMessage" class="alert alert-success"></div>
-                <div id="errorMessage" class="alert alert-error"></div>
-                <div id="infoMessage" class="alert alert-info"></div>
-
-                <form id="checklistForm">
-                    <div class="section-title">📋 INFORMAÇÕES DO VEÍCULO</div>
-
-                    <!-- RESUMO FIXO DO VEÍCULO (VISUAL) -->
-                    <div class="veiculo-resumo" id="resumoVeiculoPrincipal">
-                        <div class="veiculo-resumo-pill">Placa: <strong id="resumoPlaca">-</strong></div>
-                        <div class="veiculo-resumo-pill">Modelo: <strong id="resumoModelo">-</strong></div>
-                        <div class="veiculo-resumo-pill">Chassi: <strong id="resumoChassi">-</strong></div>
-                        <div class="veiculo-resumo-pill">KM Entrada: <strong id="resumoKmEntrada">-</strong></div>
-                        <div class="veiculo-resumo-pill">Data Entrada: <strong id="resumoData">-</strong></div>
-                        <div class="veiculo-resumo-pill">Hora Entrada: <strong id="resumoHora">-</strong></div>
-                        <div class="veiculo-resumo-pill">Combustível: <strong id="resumoCombustivel">-</strong></div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="placa">Placa *</label>
-                            <input type="text" id="placa" name="placa" placeholder="ABC-1234" maxlength="8" style="text-transform: uppercase;">
-                        </div>
-                        <div class="form-group">
-                            <label for="chassi">Chassi</label>
-                            <input type="text" id="chassi" name="chassi" placeholder="17 dígitos" maxlength="17">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="modelo">Modelo</label>
-                            <input type="text" id="modelo" name="modelo" placeholder="Ex: Fiat Uno">
-                        </div>
-                        <div class="form-group">
-                            <label for="km_entrada">KM Entrada</label>
-                            <input type="text" id="km_entrada" name="km_entrada" placeholder="150.000">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="data">Data Entrada</label>
-                            <input type="date" id="data" name="data">
-                        </div>
-                        <div class="form-group">
-                            <label for="hora">Hora Entrada</label>
-                            <input type="time" id="hora" name="hora">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="combustivel">Nível Combustível</label>
-                            <select id="combustivel" name="combustivel">
-                                <option value="">Selecione...</option>
-                                <option value="cheio">Cheio</option>
-                                <option value="meio">Meio</option>
-                                <option value="1/4">1/4</option>
-                                <option value="vazio">Vazio</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="km_saida">KM Saída</label>
-                            <input type="text" id="km_saida" name="km_saida" placeholder="150.500">
-                        </div>
-                    </div>
-
-                    <div class="section-title">🚗 CARACTERÍSTICAS DO VEÍCULO</div>
-
-                    <div class="equip-section">
-                        <div class="equip-section-title">🔧 ACESSÓRIOS OBRIGATÓRIOS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="estepe" name="equipamentos" value="ESTEPE"><label for="estepe">ESTEPE</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="macaco" name="equipamentos" value="MACACO"><label for="macaco">MACACO</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="chave_roda" name="equipamentos" value="CHAVE DE RODA"><label for="chave_roda">CHAVE DE RODA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="triangulo" name="equipamentos" value="TRIÂNGULO"><label for="triangulo">TRIÂNGULO</label></div>
-                        </div>
-                    </div>
-
-<div class="equip-section">
-    <div class="equip-section-title">⛽ TIPO COMBUSTÍVEL</div>
-    <div class="checkbox-group">
-        <div class="checkbox-item"><input type="checkbox" id="gasolina" name="equipamentos" value="GASOLINA"><label for="gasolina">GASOLINA</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="etanol" name="equipamentos" value="ETANOL"><label for="etanol">ETANOL</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="gnv" name="equipamentos" value="GNV"><label for="gnv">GNV</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="diesel" name="equipamentos" value="DIESEL"><label for="diesel">DIESEL</label></div>
-    </div>
-</div>
-
-
-
-                    <div class="equip-section">
-                        <div class="equip-section-title">🔊 ELETRÔNICOS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="radio" name="equipamentos" value="RÁDIO / MULTIMÍDIA"><label for="radio">RÁDIO / MULTIMÍDIA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="alarme_corta" name="equipamentos" value="ALARME / CORTA CORRENTE"><label for="alarme_corta">ALARME / CORTA CORRENTE</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="antena" name="equipamentos" value="ANTENA"><label for="antena">ANTENA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="acendedor" name="equipamentos" value="ACENDEDOR/TOMADA 12V"><label for="acendedor">ACENDEDOR/TOMADA 12V</label></div>
-                        </div>
-                    </div>
-
-                    <div class="equip-section">
-                        <div class="equip-section-title">⚡ ELÉTRICOS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="vidro_eletrico" name="equipamentos" value="VIDRO ELÉTRICO"><label for="vidro_eletrico">VIDRO ELÉTRICO</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="trava_eletrica" name="equipamentos" value="TRAVA ELÉTRICA"><label for="trava_eletrica">TRAVA ELÉTRICA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="buzina" name="equipamentos" value="BUZINA"><label for="buzina">BUZINA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="bateria" name="equipamentos" value="BATERIA"><label for="bateria">BATERIA</label></div>
-                        </div>
-                    </div>
-
-                    <div class="equip-section">
-                        <div class="equip-section-title">🛞 RODAS & PÁRA-BRISAS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="calotas" name="equipamentos" value="CALOTAS"><label for="calotas">CALOTAS</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="rodas_liga" name="equipamentos" value="RODAS DE LIGA"><label for="rodas_liga">RODAS DE LIGA</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="roda_ferro" name="equipamentos" value="RODA DE FERRO"><label for="roda_ferro">RODA DE FERRO</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="para_brisa" name="equipamentos" value="PARABRISA TRINCADO"><label for="para_brisa">PÁRA BRISA TRICADO</label></div>
-                        </div>
-                    </div>
-
-                    <div class="equip-section">
-    <div class="equip-section-title">📦 DEMAIS ACESSÓRIOS</div>
-    <div class="checkbox-group">
-        <div class="checkbox-item"><input type="checkbox" id="extintor" name="equipamentos" value="EXTINTOR"><label for="extintor">EXTINTOR</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="protetor_carter" name="equipamentos" value="PROTETOR DE CARTER"><label for="protetor_carter">PROTETOR DE CARTER</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="chave_secreta" name="equipamentos" value="CHAVE SEGREDO (RODA)"><label for="chave_secreta">CHAVE SEGREDO (RODA)</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="tapetes" name="equipamentos" value="TAPETES"><label for="tapetes">TAPETES</label></div>
-    </div>
-</div>
-
-
-                    <div class="equip-section">
-                        <div class="equip-section-title">⭐ EQUIPAMENTOS PRINCIPAIS</div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item"><input type="checkbox" id="ar" name="caracteristicas" value="AR"><label for="ar">AR</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="abs" name="caracteristicas" value="ABS"><label for="abs">ABS</label></div>
-                            <div class="checkbox-item"><input type="checkbox" id="airbag" name="caracteristicas" value="Air Bag"><label for="airbag">Air Bag</label></div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Câmbio</label>
-                            <div class="checkbox-group" style="margin-top: 5px;">
-                                <div class="checkbox-item"><input type="checkbox" id="cambio_auto" name="cambio" value="Automático"><label for="cambio_auto">Automático</label></div>
-                                <div class="checkbox-item"><input type="checkbox" id="cambio_manual" name="cambio" value="Manual"><label for="cambio_manual">Manual</label></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Tração</label>
-                            <div class="checkbox-group" style="margin-top: 5px;">
-                                <div class="checkbox-item"><input type="checkbox" id="tracao_4x2" name="tracao" value="4x2"><label for="tracao_4x2">4x2</label></div>
-                                <div class="checkbox-item"><input type="checkbox" id="tracao_4x4" name="tracao" value="4x4"><label for="tracao_4x4">4x4</label></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="section-title">👤 DADOS DO CLIENTE</div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="nome_cliente">Nome *</label>
-                            <input type="text" id="nome_cliente" name="nome_cliente" placeholder="Nome completo do cliente">
-                        </div>
-                        <div class="form-group">
-                            <label for="cpf_cnpj">CPF / CNPJ</label>
-                            <input type="text" id="cpf_cnpj" name="cpf_cnpj" placeholder="000.000.000-00" maxlength="18">
-                        </div>
-                    </div>
-
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label for="endereco_cliente">Endereço Completo</label>
-                            <textarea id="endereco_cliente" name="endereco_cliente" placeholder="Rua, número, bairro, cidade - UF, CEP" style="height: 60px; min-height: 60px;"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="celular_cliente">Celular / WhatsApp *</label>
-                            <input type="tel" id="celular_cliente" name="celular_cliente" placeholder="(31) 99999-9999">
-                        </div>
-                        <div class="form-group">
-                            <label for="telefone2">Telefone 2 (opcional)</label>
-                            <input type="tel" id="telefone2" name="telefone2" placeholder="(31) 9999-9999">
-                        </div>
-                    </div>
-
-                    <div class="section-title">🔧 SERVIÇOS/SOLICITADOS</div>
-
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label for="servicos">Descreva os serviços solicitados:</label>
-                            <textarea id="servicos" name="servicos" placeholder="Ex: Troca de óleo e filtro, alinhamento e balanceamento..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button type="button" class="btn-success" onclick="gerarPDF()">📄 Gerar PDF</button>
-                        <button type="button" class="btn-secondary" onclick="limparFormulario()">🗑️ Limpar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- ABA HISTÓRICO -->
-        <div id="historico" class="tab-content">
-            <div class="content">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="🔍 Buscar por placa, modelo ou cliente..." onkeyup="filtrarChecklists()">
-                    <button class="btn-secondary btn-small" onclick="ordenarChecklists()">📊 Ordenar</button>
+        <form id="checklistForm">
+            
+            <!-- PASSO 1: DADOS DO VEÍCULO -->
+            <div class="wizard-step active" id="step-1">
+                <div class="section-header">
+                    <h2>📋 INFORMAÇÕES DO VEÍCULO</h2>
+                    <p>Dados de entrada</p>
                 </div>
 
-                <div id="checklistsList"></div>
-                <div id="emptyMessage" style="text-align: center; padding: 40px; color: #999;">
-                    <p style="font-size: 40px; margin-bottom: 10px;">📭</p>
-                    <p>Nenhum checklist salvo ainda. Crie um novo para começar!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ABA RELATÓRIOS -->
-        <div id="relatorios" class="tab-content">
-            <div class="content">
-                <div class="section-title">📊 ESTATÍSTICAS GERAIS</div>
-                <div class="stats-box">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalChecklists">0</div>
-                        <div class="stat-label">Checklists Salvos</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="checklistsMes">0</div>
-                        <div class="stat-label">Checklists Mês Atual</div>
-                    </div>
-                </div>
-
-                <div class="section-title">🚗 MARCAS MAIS ATENDIDAS</div>
-                <div id="graficoMarcas" style="margin-top: 20px;"></div>
-
-                <div class="action-buttons">
-                    <button class="btn-primary" onclick="exportarDados()">💾 Exportar Todos (JSON)</button>
-                    <button class="btn-danger" onclick="limparTodosDados()">🗑️ Limpar Histórico</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ABA ORÇAMENTO – PLANILHA DE PEÇAS & SERVIÇOS -->
-        <div id="orcamento" class="tab-content">
-            <div class="content">
-                <div class="section-title">💰 PEÇAS & SERVIÇOS</div>
-
-                <!-- RESUMO FIXO DO VEÍCULO TAMBÉM NA ABA DE PEÇAS -->
-                <div class="veiculo-resumo" id="resumoVeiculoOrcamento">
-                    <div class="veiculo-resumo-pill">Placa: <strong id="resumoPlaca2">-</strong></div>
-                    <div class="veiculo-resumo-pill">Modelo: <strong id="resumoModelo2">-</strong></div>
-                    <div class="veiculo-resumo-pill">Chassi: <strong id="resumoChassi2">-</strong></div>
-                    <div class="veiculo-resumo-pill">KM Entrada: <strong id="resumoKmEntrada2">-</strong></div>
-                    <div class="veiculo-resumo-pill">Complexidade: <strong id="resumoComplexidade">-</strong></div>
-                </div>
-
-                <!-- COMPLEXIDADE -->
-                <div class="form-row">
+                <div class="grid-row four">
                     <div class="form-group">
-                        <label for="complexidade">Complexidade do evento</label>
-                        <select id="complexidade" name="complexidade">
+                        <label>Placa *</label>
+                        <input type="text" id="placa" name="placa" class="input-lg" placeholder="ABC-1234" oninput="gerarIDUnico()" style="text-transform: uppercase;" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Modelo</label>
+                        <input type="text" id="modelo" name="modelo" placeholder="Ex: Fiat Uno">
+                    </div>
+                    <div class="form-group">
+                        <label>Chassi</label>
+                        <input type="text" id="chassi" name="chassi" placeholder="Final Chassi">
+                    </div>
+                    <div class="form-group">
+                        <label>KM Entrada</label>
+                        <input type="number" id="km_entrada" name="km_entrada" placeholder="00000">
+                    </div>
+                </div>
+
+                <div class="grid-row four">
+                    <div class="form-group">
+                        <label>Data Entrada</label>
+                        <input type="date" id="data_entrada">
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Entrada</label>
+                        <input type="time" id="hora_entrada">
+                    </div>
+                    <div class="form-group">
+                        <label>Nível Combustível</label>
+                        <select id="combustivel_nivel" name="combustivel_nivel">
                             <option value="">Selecione...</option>
-                            <option value="pequena monta">Pequena monta</option>
-                            <option value="meia monta">Meia monta</option>
-                            <option value="grande monta">Grande monta</option>
+                            <option value="Cheio">Cheio</option>
+                            <option value="Meio">Meio</option>
+                            <option value="1/4">1/4</option>
+                            <option value="Reserva">Reserva</option>
+                            <option value="Vazio">Vazio</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>KM Saída (Prevista)</label>
+                        <input type="number" id="km_saida" name="km_saida" placeholder="---">
+                    </div>
                 </div>
 
-              <!-- DENTRO DA DIV #orcamento -->
-
-<!-- 1. Adicione a seleção de Tipo (Peça ou Serviço) no formulário -->
-<div class="form-row">
-    <div class="form-group">
-        <label>Tipo do Item:</label>
-        <div class="checkbox-group" style="margin-top: 5px;">
-            <div class="checkbox-item">
-                <input type="radio" id="tipoPeca" name="tipoItem" value="peca" checked>
-                <label for="tipoPeca">Peça</label>
-            </div>
-            <div class="checkbox-item">
-                <input type="radio" id="tipoServico" name="tipoItem" value="servico">
-                <label for="tipoServico">Serviço</label>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="form-row two">
-    <div class="form-group">
-        <label for="descricaoItem">Descrição</label>
-        <input type="text" id="descricaoItem" placeholder="Ex: Pastilha de Freio / Mão de obra">
-    </div>
-    <div class="form-group">
-        <label for="valorItem">Valor (R$)</label>
-        <input type="number" id="valorItem" step="0.01" min="0" placeholder="0,00">
-    </div>
-</div>
-
-<div class="form-row">
-    <div class="form-group">
-        <button type="button" class="btn-primary" onclick="adicionarItemManual()">➕ Adicionar</button>
-    </div>
-</div>
-
-<!-- 2. Substitua a tabela antiga por DUAS tabelas novas -->
-<div style="margin-top:20px;">
-    
-    <!-- SEÇÃO DE PEÇAS -->
-    <h4 style="border-bottom: 2px solid #e41616; padding-bottom: 5px; color: #333;">🔩 Peças</h4>
-    <table style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom: 10px;">
-        <thead>
-            <tr style="background:#f7f7f7;">
-                <th style="border:1px solid #ddd; padding:6px; text-align:left;">Descrição</th>
-                <th style="border:1px solid #ddd; padding:6px; text-align:right; width: 100px;">Valor</th>
-                <th style="border:1px solid #ddd; padding:6px; text-align:center; width: 50px;">Ações</th>
-            </tr>
-        </thead>
-        <tbody id="tabelaPecas"></tbody>
-        <tfoot>
-            <tr>
-                <td style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold;">Total Peças:</td>
-                <td id="totalPecas" style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold; color: #e41616;">R$ 0,00</td>
-                <td></td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <!-- SEÇÃO DE SERVIÇOS -->
-    <h4 style="border-bottom: 2px solid #0056b3; padding-bottom: 5px; color: #333; margin-top: 25px;">🔧 Serviços</h4>
-    <table style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom: 10px;">
-        <thead>
-            <tr style="background:#f7f7f7;">
-                <th style="border:1px solid #ddd; padding:6px; text-align:left;">Descrição</th>
-                <th style="border:1px solid #ddd; padding:6px; text-align:right; width: 100px;">Valor</th>
-                <th style="border:1px solid #ddd; padding:6px; text-align:center; width: 50px;">Ações</th>
-            </tr>
-        </thead>
-        <tbody id="tabelaServicos"></tbody>
-        <tfoot>
-            <tr>
-                <td style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold;">Total Serviços:</td>
-                <td id="totalServicos" style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold; color: #0056b3;">R$ 0,00</td>
-                <td></td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <!-- TOTAL GERAL (SOMA DOS DOIS) -->
-    <div style="background: #eee; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: right;">
-        <span style="font-size: 14px; font-weight: bold; color: #555;">TOTAL GERAL (Peças + Serviços):</span>
-        <div id="totalGeralFinal" style="font-size: 24px; font-weight: bold; color: #28a745;">R$ 0,00</div>
-    </div>
-
-</div>
-                <div class="action-buttons">
-                    <button type="button" class="btn-success" onclick="gerarPDF()">📄 Gerar PDF</button>
+                <div class="step-footer">
+                    <button type="button" class="btn btn-next" onclick="nextStep(2)">Próximo Passo ➝</button>
                 </div>
             </div>
-        </div>
-<!-- ABA FOTOS ✅ PERFEITA -->
-<div id="fotos" class="tab-content">
-    <div class="content">
-        <div class="section-title">📸 FOTOS DO VEÍCULO</div>
-        
-        <!-- RESUMO VEÍCULO -->
-        <div class="veiculo-resumo" id="resumoVeiculoFotos">
-            <div class="veiculo-resumo-pill">Placa: <strong id="resumoPlaca3">-</strong></div>
-            <div class="veiculo-resumo-pill">Modelo: <strong id="resumoModelo3">-</strong></div>
-            <div class="veiculo-resumo-pill">Chassi: <strong id="resumoChassi3">-</strong></div>
-            <div class="veiculo-resumo-pill">KM: <strong id="resumoKmFotos">-</strong></div>
-        </div>
 
-        <!-- BOTÕES -->
-        <div class="form-row">
-            <div class="form-group">
-                <button type="button" class="btn-primary" onclick="iniciarCamera()">📷 Tirar Foto</button>
+            <!-- PASSO 2: CHECKLIST DETALHADO -->
+            <div class="wizard-step" id="step-2">
+                <div class="section-header">
+                    <h2>🚗 CARACTERÍSTICAS E INSPEÇÃO</h2>
+                    <p>Marque os itens presentes ou avariados</p>
+                </div>
+
+                <div class="checklist-grid">
+                    <!-- Grupo: Acessórios Obrigatórios -->
+                    <div class="check-card">
+                        <h3>🔧 ACESSÓRIOS OBRIGATÓRIOS</h3>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Estepe"> Estepe</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Macaco"> Macaco</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Chave de Roda"> Chave de Roda</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Triângulo"> Triângulo</label>
+                    </div>
+
+                    <!-- Grupo: Tipo Combustível -->
+                    <div class="check-card">
+                        <h3>⛽ TIPO COMBUSTÍVEL</h3>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Gasolina"> Gasolina</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Etanol"> Etanol</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="GNV"> GNV</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Diesel"> Diesel</label>
+                    </div>
+
+                    <!-- Grupo: Eletrônicos -->
+                    <div class="check-card">
+                        <h3>🔊 ELETRÔNICOS</h3>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Rádio / Multimídia"> Rádio / Multimídia</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Alarme / Corta Corrente"> Alarme / Corta Corrente</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Antena"> Antena</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Acendedor/Tomada 12V"> Tomada 12V</label>
+                    </div>
+
+                    <!-- Grupo: Elétricos -->
+                    <div class="check-card">
+                        <h3>⚡ ELÉTRICOS</h3>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Vidro Elétrico"> Vidro Elétrico</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Trava Elétrica"> Trava Elétrica</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Buzina"> Buzina</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Bateria"> Bateria</label>
+                    </div>
+
+                    <!-- Grupo: Rodas e Pára-Brisas -->
+                    <div class="check-card">
+                        <h3>🛞 RODAS & PÁRA-BRISAS</h3>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Calotas"> Calotas</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Rodas de Liga"> Rodas de Liga</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Roda de Ferro"> Roda de Ferro</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Pára-brisa Trincado" style="color:red; font-weight:bold;"> Pára-brisa Trincado</label>
+                    </div>
+
+                    <!-- Grupo: Demais Acessórios -->
+                    <div class="check-card">
+                        <h3>📦 DEMAIS ACESSÓRIOS</h3>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Extintor"> Extintor</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Protetor de Carter"> Protetor de Carter</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Chave Segredo (Roda)"> Chave Segredo (Roda)</label>
+                        <label class="check-item"><input type="checkbox" name="check_item" value="Tapetes"> Tapetes</label>
+                    </div>
+
+                    <!-- Grupo: Equipamentos Principais (AR, ABS, Câmbio) -->
+                    <div class="check-card full-width-card">
+                        <h3>⭐ EQUIPAMENTOS PRINCIPAIS</h3>
+                        <div class="equip-options">
+                            <label class="check-pill"><input type="checkbox" name="check_item" value="AR Condicionado"> AR</label>
+                            <label class="check-pill"><input type="checkbox" name="check_item" value="Freios ABS"> ABS</label>
+                            <label class="check-pill"><input type="checkbox" name="check_item" value="Air Bag"> Air Bag</label>
+                        </div>
+                        
+                        <div class="equip-group" style="margin-top:15px;">
+                            <strong>Câmbio:</strong>
+                            <label class="radio-inline"><input type="radio" name="cambio" value="Automático"> Automático</label>
+                            <label class="radio-inline"><input type="radio" name="cambio" value="Manual"> Manual</label>
+                        </div>
+
+                        <div class="equip-group" style="margin-top:10px;">
+                            <strong>Tração:</strong>
+                            <label class="radio-inline"><input type="radio" name="tracao" value="4x2"> 4x2</label>
+                            <label class="radio-inline"><input type="radio" name="tracao" value="4x4"> 4x4</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-footer">
+                    <button type="button" class="btn btn-outline" onclick="prevStep(1)">⬅ Voltar</button>
+                    <button type="button" class="btn btn-next" onclick="nextStep(3)">Próximo Passo ➝</button>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="file" id="uploadFotos" multiple accept="image/*" onchange="adicionarFotos(event)">
-                <label for="uploadFotos" class="btn-secondary" style="cursor:pointer; padding:12px 24px; display:block; text-align:center;">📁 Galeria</label>
+
+            <!-- PASSO 3: CLIENTE, SERVIÇOS E ORÇAMENTO -->
+            <div class="wizard-step" id="step-3">
+                <div class="section-header">
+                    <h2>👤 DADOS DO CLIENTE & SERVIÇOS</h2>
+                    <p>Detalhes finais e fechamento</p>
+                </div>
+
+                <!-- Dados do Cliente -->
+                <div class="grid-row two">
+                    <div class="form-group">
+                        <label>Nome *</label>
+                        <input type="text" id="nome_cliente" placeholder="Nome Completo">
+                    </div>
+                    <div class="form-group">
+                        <label>CPF / CNPJ</label>
+                        <input type="text" id="cpf_cnpj" placeholder="000.000.000-00">
+                    </div>
+                </div>
+                <div class="grid-row full">
+                    <div class="form-group">
+                        <label>Endereço Completo</label>
+                        <input type="text" id="endereco_cliente" placeholder="Rua, Número, Bairro, Cidade - UF">
+                    </div>
+                </div>
+                <div class="grid-row two">
+                    <div class="form-group">
+                        <label>Celular / WhatsApp *</label>
+                        <input type="tel" id="celular_cliente" placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone 2 (Opcional)</label>
+                        <input type="tel" id="telefone2" placeholder="(00) 0000-0000">
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- Serviços Solicitados -->
+                <div class="section-header" style="border:none; margin-bottom:10px;">
+                    <h2>🔧 SERVIÇOS SOLICITADOS</h2>
+                </div>
+                <div class="form-group full">
+                    <textarea id="servicos_solicitados" rows="4" placeholder="Descreva os serviços solicitados pelo cliente..."></textarea>
+                </div>
+
+                <hr class="divider">
+
+                <!-- Orçamento (Extra) -->
+                <div class="section-header" style="border:none; margin-bottom:10px;">
+                    <h2>💰 PRÉ-ORÇAMENTO (Opcional)</h2>
+                </div>
+                <div class="budget-panel">
+                    <div class="budget-inputs">
+                        <input type="text" id="item_desc" placeholder="Peça ou Serviço" style="flex: 2;">
+                        <input type="number" id="item_qtd" placeholder="Qtd" style="width: 70px;" value="1">
+                        <input type="number" id="item_valor" placeholder="Valor Unit." style="width: 100px;">
+                        <button type="button" class="btn btn-add" onclick="adicionarItem()">+ Add</button>
+                    </div>
+
+                    <table class="budget-table">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th width="50">Qtd</th>
+                                <th width="90">Total</th>
+                                <th width="40"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-itens"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" style="text-align: right;"><strong>TOTAL:</strong></td>
+                                <td colspan="2" class="total-final" id="total-geral">R$ 0,00</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Assinatura -->
+                <div class="signature-section">
+                    <label>✍️ Assinatura do Cliente</label>
+                    <div class="signature-pad-wrapper">
+                        <canvas id="signature-pad" width="500" height="150"></canvas>
+                    </div>
+                    <button type="button" class="btn-link" onclick="limparAssinatura()">Limpar Assinatura</button>
+                </div>
+
+                <div class="step-footer">
+                    <button type="button" class="btn btn-outline" onclick="prevStep(2)">⬅ Voltar</button>
+                    <button type="button" class="btn btn-success" onclick="gerarPDF()">📄 IMPRIMIR ORDEM DE SERVIÇO</button>
+                </div>
             </div>
-        </div>
 
-        <!-- CÂMERA -->
-        <div class="camera-container" style="display:none;">
-            <video id="cameraPreview" autoplay playsinline style="width:100%; max-width:400px; height:300px; border-radius:12px; border:3px solid #e41616; background:#000;"></video>
-            <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
-                <button class="btn-success btn-small" onclick="tirarFoto()" id="btnTirarFoto" style="display:none;">📸 Capturar</button>
-                <button class="btn-secondary btn-small" onclick="pararCamera()">❌ Cancelar</button>
-            </div>
-        </div>
-
-        <!-- GALERIA -->
-        <div class="section-title">Galeria de Fotos (Máx 15)</div>
-        <div id="galeriaFotos" class="fotos-grid"></div>
-
-        <div class="action-buttons">
-            <button type="button" class="btn-success" onclick="gerarPDFFotos()">📄 PDF Fotos</button>
-            <button type="button" class="btn-danger" onclick="limparFotos()">🗑️ Limpar Fotos</button>
-        </div>
+        </form>
     </div>
-</div>
 
-    </div>
-
+    <!-- SCRIPT LÓGICO COMPLETO -->
     <script>
-function salvarChecklist() {
-
-    const dados = {};
-
-    document.querySelectorAll('input, select, textarea').forEach(el => {
-
-        if (!el.name && !el.id) return;
-
-        const chave = el.name || el.id;
-
-        if (el.type === 'checkbox') {
-            dados[chave] = el.checked;
-        } else if (el.type === 'radio') {
-            if (el.checked) dados[chave] = el.value;
-        } else {
-            dados[chave] = el.value;
-        }
-    });
-
-    // peças adicionadas dinamicamente
-    dados.pecas = [];
-    document.querySelectorAll('.linha-peca').forEach(linha => {
-        const peca = {};
-        linha.querySelectorAll('input, select').forEach(campo => {
-            peca[campo.name || campo.className] = campo.value;
+        document.addEventListener("DOMContentLoaded", () => {
+            const now = new Date();
+            document.getElementById('data_entrada').valueAsDate = now;
+            document.getElementById('hora_entrada').value = now.toTimeString().slice(0,5);
+            
+            if(typeof OFICINA_CONFIG !== 'undefined') {
+                document.getElementById('nome-oficina').innerText = OFICINA_CONFIG.nome || "Centro Automotivo";
+            }
+            initSignature();
         });
-        dados.pecas.push(peca);
-    });
 
-    // fotos
-    dados.fotos = [];
-    document.querySelectorAll('#previewFotos img').forEach(img => {
-        dados.fotos.push(img.src);
-    });
-
-    // salvar local
-    localStorage.setItem('checklistSalvo', JSON.stringify(dados));
-
-    alert('Checklist salvo com sucesso.');
-}
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                if (btn.getAttribute('onclick').includes(tabId)) btn.classList.add('active');
-            });
-
-            if (tabId === 'historico') carregarHistorico();
-            if (tabId === 'relatorios') atualizarRelatorios();
-            if (tabId === 'orcamento') atualizarResumoVeiculo(); // garante resumo atualizado ao abrir Peças
-        }
-
-        function salvarChecklist() {
-            const placa = document.getElementById('placa').value;
-            if (!placa) {
-                alert("Por favor, preencha pelo menos a PLACA para salvar.");
+        // --- NAVEGAÇÃO WIZARD ---
+        function nextStep(step) {
+            if(step === 2 && document.getElementById('placa').value === '') {
+                alert("Por favor, preencha a PLACA antes de continuar.");
                 return;
             }
-
-            const formData = {};
-            const elements = document.getElementById('checklistForm').elements;
-
-            for (let i = 0; i < elements.length; i++) {
-                const item = elements[i];
-                if (item.name) {
-                    if (item.type === 'checkbox') {
-                        if (item.checked) {
-                            if (!formData[item.name]) formData[item.name] = [];
-                            formData[item.name].push(item.value);
-                        }
-                    } else if (item.type !== 'button') {
-                        formData[item.name] = item.value;
-                    }
-                }
-            }
-
-            const checklist = {
-                id: Date.now(),
-                data_criacao: new Date().toISOString(),
-                ...formData
-            };
-
-            let checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-            checklists.push(checklist);
-            localStorage.setItem('checklists', JSON.stringify(checklists));
-
-            alert("✅ Checklist salvo com sucesso no Histórico!");
-            document.getElementById('checklistForm').reset();
-            atualizarResumoVeiculo();
-            switchTab('historico');
+            document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.step-indicator').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step-${step}`).classList.add('active');
+            for(let i=1; i<=step; i++) document.getElementById(`ind-${i}`).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        function carregarHistorico() {
-            const listaDiv = document.getElementById('checklistsList');
-            const emptyMsg = document.getElementById('emptyMessage');
-            const checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
+        function prevStep(step) {
+            document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step-${step}`).classList.add('active');
+            for(let i=step+1; i<=3; i++) document.getElementById(`ind-${i}`).classList.remove('active');
+            window.scrollTo(0,0);
+        }
 
-            listaDiv.innerHTML = '';
-
-            if (checklists.length === 0) {
-                emptyMsg.style.display = 'block';
-                return;
-            } else {
-                emptyMsg.style.display = 'none';
+        // --- ID ÚNICO ---
+        function gerarIDUnico() {
+            const placa = document.getElementById('placa').value.toUpperCase();
+            if(placa.length > 3) {
+                const now = new Date();
+                const id = `${placa}-${now.getDate()}${now.getMonth()+1}${now.getFullYear().toString().substr(-2)}`;
+                document.getElementById('display-id-unico').innerText = id;
             }
+        }
 
-            checklists.slice().reverse().forEach(item => {
-                const dataFormatada = new Date(item.data_criacao).toLocaleDateString('pt-BR');
-                const horaFormatada = new Date(item.data_criacao).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+        // --- ORÇAMENTO ---
+        let itensOrcamento = [];
+        function adicionarItem() {
+            const desc = document.getElementById('item_desc').value;
+            const qtd = parseFloat(document.getElementById('item_qtd').value) || 1;
+            const val = parseFloat(document.getElementById('item_valor').value) || 0;
 
-                const card = document.createElement('div');
-                card.className = 'checklist-item';
-                card.innerHTML = `
-                    <div class="checklist-info">
-                        <h4>${(item.placa || '').toUpperCase()} - ${item.modelo || 'Modelo não inf.'}</h4>
-                        <p>📅 ${dataFormatada} às ${horaFormatada} | 👤 ${item.nome_cliente || 'Cliente não inf.'}</p>
-                    </div>
-                    <div class="checklist-actions">
-                        <button class="btn-small btn-secondary" onclick="carregarChecklist(${item.id})">✏️ Editar</button>
-                        <button class="btn-small btn-danger" onclick="excluirChecklist(${item.id})">🗑️</button>
-                    </div>
-                `;
-                listaDiv.appendChild(card);
+            if(!desc) { alert("Digite a descrição"); return; }
+            itensOrcamento.push({ desc, qtd, val, total: qtd * val });
+            document.getElementById('item_desc').value = '';
+            document.getElementById('item_valor').value = '';
+            renderizarTabela();
+        }
+
+        function renderizarTabela() {
+            const tbody = document.getElementById('lista-itens');
+            tbody.innerHTML = '';
+            let total = 0;
+            itensOrcamento.forEach((i, idx) => {
+                total += i.total;
+                tbody.innerHTML += `<tr><td>${i.desc}</td><td>${i.qtd}</td><td>R$ ${i.total.toFixed(2)}</td><td><span class="btn-remove" onclick="removerItem(${idx})">×</span></td></tr>`;
             });
+            document.getElementById('total-geral').innerText = `R$ ${total.toFixed(2)}`;
         }
+        function removerItem(idx) { itensOrcamento.splice(idx, 1); renderizarTabela(); }
 
-        function carregarChecklist(id) {
-            const checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-            const item = checklists.find(c => c.id === id);
-
-            if (item) {
-                switchTab('novo-checklist');
-
-                for (const key in item) {
-                    const el = document.getElementsByName(key)[0];
-                    if (el && el.type !== 'checkbox' && el.type !== 'file') {
-                        el.value = item[key];
-                    }
-                }
-
-                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-
-                if (item.equipamentos) item.equipamentos.forEach(val => marcarCheckbox('equipamentos', val));
-                if (item.caracteristicas) item.caracteristicas.forEach(val => marcarCheckbox('caracteristicas', val));
-                if (item.cambio) item.cambio.forEach(val => marcarCheckbox('cambio', val));
-                if (item.tracao) item.tracao.forEach(val => marcarCheckbox('tracao', val));
-
-                atualizarResumoVeiculo();
-            }
+        // --- ASSINATURA ---
+        let canvas, ctx, isDrawing=false;
+        function initSignature() {
+            canvas = document.getElementById('signature-pad');
+            ctx = canvas.getContext('2d');
+            ctx.strokeStyle = "#00008B";
+            ctx.lineWidth = 2;
+            
+            // Eventos Mouse e Touch
+            ['mousedown', 'touchstart'].forEach(evt => 
+                canvas.addEventListener(evt, (e) => { 
+                    isDrawing=true; 
+                    const p = getPos(e); 
+                    ctx.beginPath(); 
+                    ctx.moveTo(p.x, p.y); 
+                    e.preventDefault();
+                }, {passive:false})
+            );
+            ['mousemove', 'touchmove'].forEach(evt => 
+                canvas.addEventListener(evt, (e) => { 
+                    if(!isDrawing) return; 
+                    const p = getPos(e); 
+                    ctx.lineTo(p.x, p.y); 
+                    ctx.stroke(); 
+                    e.preventDefault();
+                }, {passive:false})
+            );
+            ['mouseup', 'touchend'].forEach(evt => canvas.addEventListener(evt, () => isDrawing=false));
         }
-
-        function marcarCheckbox(name, value) {
-            const els = document.getElementsByName(name);
-            els.forEach(el => { if (el.value === value) el.checked = true; });
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
         }
+        function limparAssinatura() { ctx.clearRect(0,0,canvas.width,canvas.height); }
 
-        function excluirChecklist(id) {
-            if (confirm("Tem certeza que deseja excluir este checklist?")) {
-                let checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-                checklists = checklists.filter(c => c.id !== id);
-                localStorage.setItem('checklists', JSON.stringify(checklists));
-                carregarHistorico();
-            }
-        }
-
-        function filtrarChecklists() {
-            const termo = document.getElementById('searchInput').value.toLowerCase();
-            const checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-            const listaDiv = document.getElementById('checklistsList');
-            const emptyMsg = document.getElementById('emptyMessage');
-
-            listaDiv.innerHTML = '';
-
-            const filtrados = checklists.filter(item => {
-                const texto = ((item.placa || '') + ' ' + (item.modelo || '') + ' ' + (item.nome_cliente || '')).toLowerCase();
-                return texto.includes(termo);
-            });
-
-            if (!filtrados.length) {
-                emptyMsg.style.display = 'block';
-                return;
-            } else {
-                emptyMsg.style.display = 'none';
-            }
-
-            filtrados.slice().reverse().forEach(item => {
-                const dataFormatada = new Date(item.data_criacao).toLocaleDateString('pt-BR');
-                const horaFormatada = new Date(item.data_criacao).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-
-                const card = document.createElement('div');
-                card.className = 'checklist-item';
-                card.innerHTML = `
-                    <div class="checklist-info">
-                        <h4>${(item.placa || '').toUpperCase()} - ${item.modelo || 'Modelo não inf.'}</h4>
-                        <p>📅 ${dataFormatada} às ${horaFormatada} | 👤 ${item.nome_cliente || 'Cliente não inf.'}</p>
-                    </div>
-                    <div class="checklist-actions">
-                        <button class="btn-small btn-secondary" onclick="carregarChecklist(${item.id})">✏️ Editar</button>
-                        <button class="btn-small btn-danger" onclick="excluirChecklist(${item.id})">🗑️</button>
-                    </div>
-                `;
-                listaDiv.appendChild(card);
-            });
-        }
-
-        function ordenarChecklists() {
-            const checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-            checklists.sort((a, b) => {
-                const placaA = (a.placa || '').toUpperCase();
-                const placaB = (b.placa || '').toUpperCase();
-                if (placaA < placaB) return -1;
-                if (placaA > placaB) return 1;
-                return 0;
-            });
-            localStorage.setItem('checklists', JSON.stringify(checklists));
-            carregarHistorico();
-        }
-
+        // --- GERAÇÃO PDF ---
         function gerarPDF() {
-            const elemento = document.querySelector('.container');
+            // Coleta Dados
+            const id = document.getElementById('display-id-unico').innerText;
+            const placa = document.getElementById('placa').value.toUpperCase();
+            const modelo = document.getElementById('modelo').value;
+            const cliente = document.getElementById('nome_cliente').value;
+            const servicos = document.getElementById('servicos_solicitados').value;
+            
+            // Itens Marcados
+            let checks = "";
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(c => checks += `<li>${c.value}</li>`);
+            
+            // Câmbio/Tração
+            const cambio = document.querySelector('input[name="cambio"]:checked')?.value || "-";
+            const tracao = document.querySelector('input[name="tracao"]:checked')?.value || "-";
 
-            const originalBodyOverflow = document.body.style.overflow;
-            const originalBodyPadding = document.body.style.padding;
-            const originalContainerMargin = elemento.style.margin;
-            const originalContainerBoxShadow = elemento.style.boxShadow;
+            // Tabela Orçamento
+            let linhasTab = itensOrcamento.map(i => `<tr><td>${i.desc}</td><td>${i.qtd}</td><td>R$ ${i.total.toFixed(2)}</td></tr>`).join('');
 
-            window.scrollTo(0, 0);
-            document.body.style.overflow = 'visible';
-            document.body.style.padding = '0';
-            elemento.style.margin = '0 auto';
-            elemento.style.boxShadow = 'none';
+            // Assinatura
+            const signImg = canvas.toDataURL();
 
-            const botoes = document.querySelectorAll('button, .tabs, .header-badge, .action-buttons');
-            botoes.forEach(btn => btn.style.display = 'none');
-
-            const opt = {
-                margin:       [0, 0, 0, 0],
-                filename:     'Checklist-' + document.getElementById('placa').value + '.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  {
-                    scale: 2,
-                    useCORS: true,
-                    scrollY: 0,
-windowWidth: document.documentElement.offsetWidth
-},
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(elemento).save().then(() => {
-                botoes.forEach(btn => btn.style.display = '');
-                document.querySelector('.tabs').style.display = 'flex';
-                document.querySelector('.header-badge').style.display = 'block';
-                document.querySelectorAll('.action-buttons').forEach(ab => ab.style.display = 'flex');
-
-                document.body.style.overflow = originalBodyOverflow;
-                document.body.style.padding = originalBodyPadding;
-                elemento.style.margin = originalContainerMargin;
-                elemento.style.boxShadow = originalContainerBoxShadow;
-            }).catch(err => {
-                console.error(err);
-                alert("Erro ao gerar PDF.");
-                botoes.forEach(btn => btn.style.display = '');
-                document.querySelector('.tabs').style.display = 'flex';
-                document.querySelector('.header-badge').style.display = 'block';
-                document.querySelectorAll('.action-buttons').forEach(ab => ab.style.display = 'flex');
-                document.body.style.overflow = originalBodyOverflow;
-                document.body.style.padding = originalBodyPadding;
-            });
-        }
-
-        function limparFormulario() {
-            if (confirm("Limpar todos os campos do formulário?")) {
-                document.getElementById('checklistForm').reset();
-                atualizarResumoVeiculo();
-            }
-        }
-
-        function exportarDados() {
-            const db = JSON.parse(localStorage.getItem('checklists') || '[]');
-            if (!db.length) {
-                alert("Não há dados para exportar.");
-                return;
-            }
-            const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'checklists.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function limparTodosDados() {
-            if (confirm("Deseja apagar TODO o histórico?")) {
-                localStorage.removeItem('checklists');
-                carregarHistorico();
-                alert("Histórico limpo.");
-            }
-        }
-
-        function atualizarRelatorios() {
-            const db = JSON.parse(localStorage.getItem('checklists') || '[]');
-
-            document.getElementById('totalChecklists').textContent = db.length;
-
-            const hoje = new Date();
-            const mesAtual = hoje.getMonth();
-            const anoAtual = hoje.getFullYear();
-
-            const doMes = db.filter(item => {
-                if (!item.data_criacao) return false;
-                const dataItem = new Date(item.data_criacao);
-                return dataItem.getMonth() === mesAtual && dataItem.getFullYear() === anoAtual;
-            });
-            document.getElementById('checklistsMes').textContent = doMes.length;
-
-            const marcas = {};
-            db.forEach(item => {
-                const modeloTexto = item.modelo || 'Não Informado';
-                const m = modeloTexto.split(' ')[0].toUpperCase();
-                marcas[m] = (marcas[m] || 0) + 1;
-            });
-
-            const sortedMarcas = Object.entries(marcas).sort((a,b) => b[1] - a[1]).slice(0, 5);
-            let htmlGrafico = '';
-            sortedMarcas.forEach(([marca, qtd]) => {
-                const pct = (qtd / db.length) * 100;
-                htmlGrafico += `
-                    <div style="margin-bottom: 10px;">
-                        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:2px;">
-                            <strong>${marca}</strong>
-                            <span>${qtd}</span>
-                        </div>
-                        <div style="background:#eee; height:8px; border-radius:4px; overflow:hidden;">
-                            <div style="background:var(--color-primary); width:${pct}%; height:100%;"></div>
-                        </div>
+            const html = `
+            <div style="font-family:Arial; padding:20px;">
+                <div style="border-bottom:2px solid #000; padding-bottom:10px; display:flex; justify-content:space-between;">
+                    <div>
+                        <h2>${document.getElementById('nome-oficina').innerText}</h2>
+                        <small>Ordem de Serviço / Checklist</small>
                     </div>
-                `;
-            });
-
-            if (!sortedMarcas.length) {
-                htmlGrafico = '<p style="text-align:center; color:#999; font-size:12px;">Sem dados suficientes.</p>';
-            }
-
-            document.getElementById('graficoMarcas').innerHTML = htmlGrafico;
-        }
-
-// ORÇAMENTO - PEÇAS & SERVIÇOS - SEPARADOS
-let itensOrcamento = [];
-
-function adicionarItemManual() {
-    const descricaoInput = document.getElementById('descricaoItem');
-    const valorInput = document.getElementById('valorItem');
-    
-    // Captura qual tipo foi selecionado (radio button)
-    const tipo = document.querySelector('input[name="tipoItem"]:checked').value; 
-
-    const descricao = descricaoInput.value.trim();
-    const valor = parseFloat(valorInput.value || '0');
-
-    if (!descricao) {
-        alert('Informe a descrição do item.');
-        descricaoInput.focus();
-        return;
-    }
-    if (isNaN(valor) || valor < 0) {
-        alert('Informe um valor válido.');
-        valorInput.focus();
-        return;
-    }
-
-    const item = {
-        id: Date.now(),
-        descricao,
-        valor,
-        tipo // salva 'peca' ou 'servico'
-    };
-
-    itensOrcamento.push(item);
-    renderizarTabela();
-    
-    descricaoInput.value = '';
-    valorInput.value = '';
-    descricaoInput.focus();
-}
-
-function removerItem(id) {
-    itensOrcamento = itensOrcamento.filter(i => i.id !== id);
-    renderizarTabela();
-}
-
-function renderizarTabela() {
-    const tbodyPecas = document.getElementById('tabelaPecas');
-    const tbodyServicos = document.getElementById('tabelaServicos');
-    
-    const elTotalPecas = document.getElementById('totalPecas');
-    const elTotalServicos = document.getElementById('totalServicos');
-    const elTotalGeral = document.getElementById('totalGeralFinal');
-
-    // Limpa tabelas
-    if(tbodyPecas) tbodyPecas.innerHTML = '';
-    if(tbodyServicos) tbodyServicos.innerHTML = '';
-
-    let somaPecas = 0;
-    let somaServicos = 0;
-
-    itensOrcamento.forEach(item => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="border:1px solid #ddd; padding:6px;">${item.descricao}</td>
-          <td style="border:1px solid #ddd; padding:6px; text-align:right;">R$ ${item.valor.toFixed(2)}</td>
-          <td style="border:1px solid #ddd; padding:6px; text-align:center;">
-            <button class="btn-small btn-danger" onclick="removerItem(${item.id})">🗑️</button>
-          </td>
-        `;
-
-        if (item.tipo === 'servico') {
-            somaServicos += item.valor;
-            if(tbodyServicos) tbodyServicos.appendChild(tr);
-        } else {
-            // Default é peça
-            somaPecas += item.valor;
-            if(tbodyPecas) tbodyPecas.appendChild(tr);
-        }
-    });
-
-    // Atualiza totais na tela
-    if(elTotalPecas) elTotalPecas.textContent = 'R$ ' + somaPecas.toFixed(2);
-    if(elTotalServicos) elTotalServicos.textContent = 'R$ ' + somaServicos.toFixed(2);
-    
-    const somaTotal = somaPecas + somaServicos;
-    if(elTotalGeral) elTotalGeral.textContent = 'R$ ' + somaTotal.toFixed(2);
-}
-
-        // ENTER nos campos de Peças & Serviços adiciona linha
-        document.addEventListener('DOMContentLoaded', () => {
-            carregarHistorico();
-            atualizarResumoVeiculo();
-
-            const descricaoItem = document.getElementById('descricaoItem');
-            const valorItem = document.getElementById('valorItem');
-
-            descricaoItem.addEventListener('keydown', function (event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    adicionarItemManual();
-                }
-            });
-
-            valorItem.addEventListener('keydown', function (event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    adicionarItemManual();
-                }
-            });
-
-            const camposResumo = ['placa','modelo','chassi','km_entrada','data','hora','combustivel','complexidade'];
-            camposResumo.forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                const tipo = (el.tagName === 'SELECT' || el.type === 'date' || el.type === 'time') ? 'change' : 'input';
-                el.addEventListener(tipo, atualizarResumoVeiculo);
-            });
-        });
-
-        function atualizarResumoVeiculo() {
-            const placa = document.getElementById('placa').value || '-';
-            const modelo = document.getElementById('modelo').value || '-';
-            const chassi = document.getElementById('chassi').value || '-';
-            const kmEntrada = document.getElementById('km_entrada').value || '-';
-            const data = document.getElementById('data').value || '-';
-            const hora = document.getElementById('hora').value || '-';
-            const combustivel = document.getElementById('combustivel').value || '-';
-            const complexidade = document.getElementById('complexidade').value || '-';
-
-            document.getElementById('resumoPlaca').textContent = placa;
-            document.getElementById('resumoModelo').textContent = modelo;
-            document.getElementById('resumoChassi').textContent = chassi;
-            document.getElementById('resumoKmEntrada').textContent = kmEntrada;
-            document.getElementById('resumoData').textContent = data;
-            document.getElementById('resumoHora').textContent = hora;
-            document.getElementById('resumoCombustivel').textContent = combustivel;
-
-            document.getElementById('resumoPlaca2').textContent = placa;
-            document.getElementById('resumoModelo2').textContent = modelo;
-            document.getElementById('resumoChassi2').textContent = chassi;
-            document.getElementById('resumoKmEntrada2').textContent = kmEntrada;
-            document.getElementById('resumoComplexidade').textContent = complexidade || '-';
-// FOTOS
-const resumoPlaca3 = document.getElementById('resumoPlaca3');
-const resumoModelo3 = document.getElementById('resumoModelo3');
-const resumoChassi3 = document.getElementById('resumoChassi3');
-const resumoKmFotos = document.getElementById('resumoKmFotos');
-if (resumoPlaca3) resumoPlaca3.textContent = placa;
-if (resumoModelo3) resumoModelo3.textContent = modelo;
-if (resumoChassi3) resumoChassi3.textContent = chassi;
-if (resumoKmFotos) resumoKmFotos.textContent = kmEntrada;
-
-        }
-// ========================================
-// FOTOS - 100% FUNCIONAL
-// ========================================
-let streamCamera = null;
-let fotosVeiculo = JSON.parse(localStorage.getItem('fotosVeiculo') || '[]');
-
-function iniciarCamera() {
-    const video = document.getElementById('cameraPreview');
-    const btnTirar = document.getElementById('btnTirarFoto');
-    const container = document.querySelector('.camera-container');
-    
-    navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
-    }).then(stream => {
-        streamCamera = stream;
-        video.srcObject = stream;
-        container.style.display = 'block';
-        btnTirar.style.display = 'inline-block';
-        video.play();
-    }).catch(err => {
-        alert('Erro câmera: ' + err.message + '\nUse "Galeria"');
-    });
-}
-
-function tirarFoto() {
-    const video = document.getElementById('cameraPreview');
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0);
-    
-    const foto = {
-        id: Date.now(),
-        dataURL: canvas.toDataURL('image/jpeg', 0.8),
-        data: new Date().toLocaleString('pt-BR')
-    };
-    
-    fotosVeiculo.unshift(foto);
-    if (fotosVeiculo.length > 15) fotosVeiculo = fotosVeiculo.slice(0, 15);
-    localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
-    renderizarGaleria();
-    pararCamera();
-}
-
-function pararCamera() {
-    if (streamCamera) {
-        streamCamera.getTracks().forEach(track => track.stop());
-        streamCamera = null;
-    }
-    document.querySelector('.camera-container').style.display = 'none';
-    document.getElementById('btnTirarFoto').style.display = 'none';
-}
-
-function adicionarFotos(event) {
-    const files = Array.from(event.target.files);
-    files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-            fotosVeiculo.unshift({
-                id: Date.now() + Math.random(),
-                dataURL: e.target.result,
-                data: new Date().toLocaleString('pt-BR')
-            });
-            if (fotosVeiculo.length > 15) fotosVeiculo = fotosVeiculo.slice(0, 15);
-            localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
-            renderizarGaleria();
-        };
-        reader.readAsDataURL(file);
-    });
-    event.target.value = '';
-}
-
-function renderizarGaleria() {
-    const galeria = document.getElementById('galeriaFotos');
-    if (!galeria) return;
-    galeria.innerHTML = '';
-    
-    if (fotosVeiculo.length === 0) {
-        galeria.innerHTML = '<p style="text-align:center;color:#999;padding:40px">📭 Nenhuma foto</p>';
-        return;
-    }
-    
-    fotosVeiculo.slice(0, 15).forEach((foto, index) => {
-        const div = document.createElement('div');
-        div.className = 'foto-item';
-        div.innerHTML = `
-            <img src="${foto.dataURL}" alt="Foto ${index + 1}" loading="lazy">
-            <div class="foto-overlay"><span style="color:white;font-size:11px">${foto.data}</span></div>
-            <div class="foto-actions">
-                <button class="btn-foto btn-warning foto-zoom" data-url="${foto.dataURL}">🔍</button>
-                <button class="btn-foto btn-danger foto-delete" data-id="${foto.id}">🗑️</button>
-            </div>
-        `;
-        galeria.appendChild(div);
-    });
-    
-    // EVENTOS DELEGADOS
-    galeria.querySelectorAll('.foto-zoom').forEach(btn => {
-        btn.addEventListener('click', () => abrirFotoGrande(btn.dataset.url));
-    });
-    galeria.querySelectorAll('.foto-delete').forEach(btn => {
-        btn.addEventListener('click', () => removerFoto(parseInt(btn.dataset.id)));
-    });
-}
-
-function removerFoto(id) {
-    fotosVeiculo = fotosVeiculo.filter(f => f.id !== id);
-    localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
-    renderizarGaleria();
-    mostrarAlerta('success', '✅ Foto removida!');
-}
-
-function limparFotos() {
-    if (confirm('🗑️ Limpar TODAS as fotos?')) {
-        fotosVeiculo = [];
-        localStorage.removeItem('fotosVeiculo');
-        renderizarGaleria();
-        mostrarAlerta('success', '✅ Fotos limpas!');
-    }
-}
-
-function abrirFotoGrande(dataURL) {
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        position:fixed; top:0; left:0; width:100vw; height:100vh; 
-        background:rgba(0,0,0,0.95); z-index:9999; display:flex; 
-        align-items:center; justify-content:center; padding:20px;
-    `;
-    modal.innerHTML = `
-        <img src="${dataURL}" style="max-width:95%; max-height:95%; border-radius:8px; box-shadow:0 0 50px rgba(255,255,255,0.3);">
-        <button onclick="this.parentElement.remove()" style="
-            position:absolute; top:20px; right:20px; background:#e41616; 
-            color:white; border:none; border-radius:50%; width:50px; 
-            height:50px; font-size:20px; cursor:pointer;
-        ">✕</button>
-    `;
-    document.body.appendChild(modal);
-    modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-}
-
-function gerarPDFFotos() {
-    if (!fotosVeiculo || fotosVeiculo.length === 0) {
-        alert('📭 Sem fotos para gerar PDF');
-        return;
-    }
-
-    const placa  = document.getElementById('placa')?.value  || 'SEM_PLACA';
-    const modelo = document.getElementById('modelo')?.value || 'SEM_MODELO';
-    const chassi = document.getElementById('chassi')?.value || 'SEM_CHASSI';
-
-    const MAXFOTOS = 16;
-    const fotosUsar = fotosVeiculo.slice(0, MAXFOTOS);
-
-    let html = '';
-
-    // Cada grupo de 4 fotos = 1 página (2x2)
-    for (let i = 0; i < fotosUsar.length; i += 4) {
-        const isLastGroup = i + 4 >= fotosUsar.length;
-
-        html += `
-            <div style="
-                width: 100%;
-                min-height: 100vh;
-                box-sizing: border-box;
-                padding: 20px;
-                font-family: Arial, sans-serif;
-                ${isLastGroup ? '' : 'page-break-after: always;'}
-            ">
-                <!-- CABEÇALHO COM DADOS DO CARRO -->
-                <div style="
-                    background: #f5f5f5;
-                    border: 2px solid #e41616;
-                    border-radius: 6px;
-                    padding: 10px 15px;
-                    margin-bottom: 15px;
-                    font-size: 11px;
-                    line-height: 1.5;
-                ">
-                    <div style="font-weight: bold; color: #e41616; font-size: 12px; margin-bottom: 5px;">- INSPEÇÃO DE FOTOS</div>
-                    <div><strong>Placa:</strong> ${placa}</div>
-                    <div><strong>Modelo:</strong> ${modelo}</div>
-                    <div><strong>Chassi:</strong> ${chassi}</div>
-                </div>
-
-                <!-- GRADE DE 4 FOTOS 2x2 -->
-                <div style="
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 15px;
-                ">
-        `;
-
-        for (let j = 0; j < 4 && (i + j) < fotosUsar.length; j++) {
-            const foto = fotosUsar[i + j];
-            const num = i + j + 1;
-
-            html += `
-                <div style="text-align: center;">
-                    <img src="${foto.dataURL}"
-                         style="
-                             width: 100%;
-                             max-width: 260px;
-                             max-height: 260px;
-                             height: auto;
-                             border-radius: 6px;
-                             border: 1px solid #e41616;
-                         ">
-                    <div style="
-                        font-size: 9px;
-                        margin-top: 5px;
-                        color: #555;
-                    ">
-                        Foto ${num} - ${foto.data || ''}
+                    <div style="text-align:right;">
+                        <h3>${id}</h3>
+                        <small>${new Date().toLocaleString()}</small>
                     </div>
                 </div>
-            `;
-        }
 
-        html += `
+                <div style="margin-top:20px; display:flex; gap:20px;">
+                    <div style="flex:1; border:1px solid #ccc; padding:10px;">
+                        <strong>VEÍCULO</strong><br>
+                        Placa: ${placa}<br>
+                        Modelo: ${modelo}<br>
+                        KM: ${document.getElementById('km_entrada').value} | Comb: ${document.getElementById('combustivel_nivel').value}
+                    </div>
+                    <div style="flex:1; border:1px solid #ccc; padding:10px;">
+                        <strong>CLIENTE</strong><br>
+                        Nome: ${cliente}<br>
+                        Tel: ${document.getElementById('celular_cliente').value}<br>
+                        End: ${document.getElementById('endereco_cliente').value}
+                    </div>
                 </div>
-            </div>
-        `;
-    }
 
-    html2pdf().set({
-        filename: `Fotos-${placa}.pdf`,
-        margin: 0,
-        image: { type: 'jpeg', quality: 0.9 },
-        html2canvas: {
-            scale: 2,
-            useCORS: true,
-            scrollY: 0
-        },
-        jsPDF: {
-            format: 'a4',
-            orientation: 'portrait',
-            unit: 'pt'
-        }
-    }).from(html).save();
+                <div style="margin-top:20px;">
+                    <h4 style="background:#eee; padding:5px;">SERVIÇOS SOLICITADOS</h4>
+                    <p style="border:1px solid #ccc; padding:10px; min-height:50px;">${servicos || 'Nenhum serviço descrito.'}</p>
+                </div>
 
-    mostrarAlerta('success', `✅ PDF gerado com ${fotosUsar.length} fotos (máximo 16)`);
-}
+                <div style="margin-top:20px;">
+                    <h4 style="background:#eee; padding:5px;">INSPEÇÃO & ACESSÓRIOS</h4>
+                    <div style="font-size:12px; columns:3;">
+                        <ul>${checks || '<li>Nenhum item marcado.</li>'}</ul>
+                    </div>
+                    <p style="font-size:12px; margin-top:5px;"><strong>Câmbio:</strong> ${cambio} | <strong>Tração:</strong> ${tracao}</p>
+                </div>
 
-// INICIALIZAR FOTOS
-document.addEventListener('DOMContentLoaded', () => {
-    renderizarGaleria();
-});
+                ${itensOrcamento.length > 0 ? `
+                <div style="margin-top:20px;">
+                    <h4 style="background:#eee; padding:5px;">ORÇAMENTO</h4>
+                    <table style="width:100%; border-collapse:collapse; font-size:12px;">
+                        <tr style="background:#f9f9f9; text-align:left;"><th>Descrição</th><th>Qtd</th><th>Total</th></tr>
+                        ${linhasTab}
+                        <tr><td colspan="2" align="right"><strong>TOTAL:</strong></td><td><strong>${document.getElementById('total-geral').innerText}</strong></td></tr>
+                    </table>
+                </div>` : ''}
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:application/javascript;base64,CmNvbnN0IENBQ0hFX05BTUUgPSAnY2hlY2tsaXN0LXYzLWNhY2hlJzsKY29uc3QgVVJMU19UT19DQUNIRSA9IFsKICAnLycsCiAgJy9pbmRleC5odG1sJwpdOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgKGV2ZW50KSA9PiB7CiAgY29uc3QgY2FjaGVPcGVuID0gY2FjaGVzLm9wZW4oQ0FDSEVfTkFNRSkudGhlbigY2xpZW50KSA9PiB7CiAgICByZXR1cm4gY2xpZW50LmFkZEFsbChVUkxzX1RPX0NBQ0hFKTsKICB9KTsKICBldmVudC53YWl0VW50aWwoKGNhY2hlT3Blbik7Cn0pOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIChldmVudCkgPT4gewogIGV2ZW50LnJlc3BvbmRXaXRoKAogICAgY2FjaGVzLm1hdGNoKGV2ZW50LnJlcXVlc3QpLnRoZW4oKHJlc3BvbnNlKSA9PiB7CiAgICAgIGlmIChyZXNwb25zZSkgewogICAgICAgIHJldHVybiByZXNwb25zZTsKICAgICAgfQogICAgICByZXR1cm4gZmV0Y2goZXZlbnQucmVxdWVzdCk7CiAgICB9KQogICk7Cn0pOwo=');
+                <div style="margin-top:50px; display:flex; justify-content:space-between; text-align:center;">
+                    <div style="width:40%;">
+                        <img src="${signImg}" style="height:40px; display:block; margin:0 auto;">
+                        <hr> Assinatura Cliente
+                    </div>
+                    <div style="width:40%;">
+                        <br><br><hr> Responsável Técnico
+                    </div>
+                </div>
+            </div>`;
+
+            const win = window.open('', '', 'width=800,height=600');
+            win.document.write(html);
+            win.document.close();
+            win.focus();
+            setTimeout(() => { win.print(); win.close(); }, 500);
         }
     </script>
-<button id="btnSalvarChecklist" onclick="salvarChecklist()">
-    💾 Salvar Checklist
-</button>
-<script src="config.js"></script>
-<script src="app.js"></script>
 </body>
 </html>
-
-</body>
-</html>
-
-
-
-
