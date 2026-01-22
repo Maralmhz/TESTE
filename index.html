@@ -3,490 +3,434 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checklist Pro SaaS</title>
+    <meta name="description" content="Fast Car - Sistema Profissional de Checklist Veicular">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    
+    <title>Fast Car - Checklist Veicular Profissional</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-512.png">
+    
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="config.js"></script>
 </head>
 <body>
-
-    <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
+    <!-- NAVBAR PREMIUM -->
     <nav class="navbar">
-        <div class="nav-brand">
-            <img src="logo.jpg" alt="Logo" id="nav-logo">
-            <div class="nav-info">
-                <h1 id="nome-oficina">Oficina Premium</h1>
-                <span class="badge-pro">SISTEMA PRO v5.0</span>
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <img id="navbar-logo" src="logo.png" alt="Fast Car Logo" class="logo-img">
             </div>
-        </div>
-        <div class="nav-id-box">
-            <small>ID DO ATENDIMENTO</small>
-            <div id="display-id-unico">AGUARDANDO PLACA...</div>
+            <div class="navbar-info">
+                <h1>⚡ FAST CAR</h1>
+                <p class="navbar-subtitle">Centro Automotivo Profissional</p>
+            </div>
+            <div class="navbar-status">
+                <span class="status-dot"></span>
+                <span id="status-text">Online</span>
+            </div>
         </div>
     </nav>
-
-    <!-- WIZARD PROGRESS BAR -->
+    
+    <!-- WIZARD PROGRESS -->
     <div class="wizard-progress">
-        <div class="step-indicator active" id="ind-1">
+        <div class="step-indicator active" onclick="goToStep(1)" data-step="1">
             <div class="step-number">1</div>
-            <span>Veículo</span>
+            <div class="step-name">Veículo</div>
         </div>
-        <div class="step-line"></div>
-        <div class="step-indicator" id="ind-2">
+        <div class="step-indicator" onclick="goToStep(2)" data-step="2">
             <div class="step-number">2</div>
-            <span>Inspeção Completa</span>
+            <div class="step-name">Inspeção</div>
         </div>
-        <div class="step-line"></div>
-        <div class="step-indicator" id="ind-3">
+        <div class="step-indicator" onclick="goToStep(3)" data-step="3">
             <div class="step-number">3</div>
-            <span>Cliente & Orçamento</span>
+            <div class="step-name">Orçamento</div>
+        </div>
+        <div class="step-indicator" onclick="goToStep(4)" data-step="4">
+            <div class="step-number">4</div>
+            <div class="step-name">Documento</div>
         </div>
     </div>
-
-    <!-- ÁREA PRINCIPAL DO FORMULÁRIO -->
+    
+    <!-- CONTAINER PRINCIPAL -->
     <div class="container">
-        <form id="checklistForm">
+        
+        <!-- STEP 1: DADOS DO VEÍCULO -->
+        <div class="wizard-step active" id="step-1">
+            <div class="section-header">
+                <h2>📋 Dados de Entrada do Veículo</h2>
+                <p>Preencha as informações básicas do veículo para iniciar a inspeção</p>
+            </div>
             
-            <!-- PASSO 1: DADOS DO VEÍCULO -->
-            <div class="wizard-step active" id="step-1">
-                <div class="section-header">
-                    <h2>📋 INFORMAÇÕES DO VEÍCULO</h2>
-                    <p>Dados de entrada</p>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Placa do Veículo *</label>
+                    <input type="text" id="placa" placeholder="ABC-1234" maxlength="8" class="input-placa">
                 </div>
-
-                <div class="grid-row four">
-                    <div class="form-group">
-                        <label>Placa *</label>
-                        <input type="text" id="placa" name="placa" class="input-lg" placeholder="ABC-1234" oninput="gerarIDUnico()" style="text-transform: uppercase;" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Modelo</label>
-                        <input type="text" id="modelo" name="modelo" placeholder="Ex: Fiat Uno">
-                    </div>
-                    <div class="form-group">
-                        <label>Chassi</label>
-                        <input type="text" id="chassi" name="chassi" placeholder="Final Chassi">
-                    </div>
-                    <div class="form-group">
-                        <label>KM Entrada</label>
-                        <input type="number" id="km_entrada" name="km_entrada" placeholder="00000">
-                    </div>
-                </div>
-
-                <div class="grid-row four">
-                    <div class="form-group">
-                        <label>Data Entrada</label>
-                        <input type="date" id="data_entrada">
-                    </div>
-                    <div class="form-group">
-                        <label>Hora Entrada</label>
-                        <input type="time" id="hora_entrada">
-                    </div>
-                    <div class="form-group">
-                        <label>Nível Combustível</label>
-                        <select id="combustivel_nivel" name="combustivel_nivel">
-                            <option value="">Selecione...</option>
-                            <option value="Cheio">Cheio</option>
-                            <option value="Meio">Meio</option>
-                            <option value="1/4">1/4</option>
-                            <option value="Reserva">Reserva</option>
-                            <option value="Vazio">Vazio</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>KM Saída (Prevista)</label>
-                        <input type="number" id="km_saida" name="km_saida" placeholder="---">
-                    </div>
-                </div>
-
-                <div class="step-footer">
-                    <button type="button" class="btn btn-next" onclick="nextStep(2)">Próximo Passo ➝</button>
+                <div class="form-group">
+                    <label>Data de Entrada *</label>
+                    <input type="datetime-local" id="data_entrada">
                 </div>
             </div>
-
-            <!-- PASSO 2: CHECKLIST DETALHADO -->
-            <div class="wizard-step" id="step-2">
-                <div class="section-header">
-                    <h2>🚗 CARACTERÍSTICAS E INSPEÇÃO</h2>
-                    <p>Marque os itens presentes ou avariados</p>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Nome do Cliente *</label>
+                    <input type="text" id="cliente" placeholder="Ex: João Silva">
                 </div>
-
-                <div class="checklist-grid">
-                    <!-- Grupo: Acessórios Obrigatórios -->
-                    <div class="check-card">
-                        <h3>🔧 ACESSÓRIOS OBRIGATÓRIOS</h3>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Estepe"> Estepe</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Macaco"> Macaco</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Chave de Roda"> Chave de Roda</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Triângulo"> Triângulo</label>
-                    </div>
-
-                    <!-- Grupo: Tipo Combustível -->
-                    <div class="check-card">
-                        <h3>⛽ TIPO COMBUSTÍVEL</h3>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Gasolina"> Gasolina</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Etanol"> Etanol</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="GNV"> GNV</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Diesel"> Diesel</label>
-                    </div>
-
-                    <!-- Grupo: Eletrônicos -->
-                    <div class="check-card">
-                        <h3>🔊 ELETRÔNICOS</h3>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Rádio / Multimídia"> Rádio / Multimídia</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Alarme / Corta Corrente"> Alarme / Corta Corrente</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Antena"> Antena</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Acendedor/Tomada 12V"> Tomada 12V</label>
-                    </div>
-
-                    <!-- Grupo: Elétricos -->
-                    <div class="check-card">
-                        <h3>⚡ ELÉTRICOS</h3>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Vidro Elétrico"> Vidro Elétrico</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Trava Elétrica"> Trava Elétrica</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Buzina"> Buzina</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Bateria"> Bateria</label>
-                    </div>
-
-                    <!-- Grupo: Rodas e Pára-Brisas -->
-                    <div class="check-card">
-                        <h3>🛞 RODAS & PÁRA-BRISAS</h3>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Calotas"> Calotas</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Rodas de Liga"> Rodas de Liga</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Roda de Ferro"> Roda de Ferro</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Pára-brisa Trincado" style="color:red; font-weight:bold;"> Pára-brisa Trincado</label>
-                    </div>
-
-                    <!-- Grupo: Demais Acessórios -->
-                    <div class="check-card">
-                        <h3>📦 DEMAIS ACESSÓRIOS</h3>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Extintor"> Extintor</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Protetor de Carter"> Protetor de Carter</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Chave Segredo (Roda)"> Chave Segredo (Roda)</label>
-                        <label class="check-item"><input type="checkbox" name="check_item" value="Tapetes"> Tapetes</label>
-                    </div>
-
-                    <!-- Grupo: Equipamentos Principais (AR, ABS, Câmbio) -->
-                    <div class="check-card full-width-card">
-                        <h3>⭐ EQUIPAMENTOS PRINCIPAIS</h3>
-                        <div class="equip-options">
-                            <label class="check-pill"><input type="checkbox" name="check_item" value="AR Condicionado"> AR</label>
-                            <label class="check-pill"><input type="checkbox" name="check_item" value="Freios ABS"> ABS</label>
-                            <label class="check-pill"><input type="checkbox" name="check_item" value="Air Bag"> Air Bag</label>
-                        </div>
-                        
-                        <div class="equip-group" style="margin-top:15px;">
-                            <strong>Câmbio:</strong>
-                            <label class="radio-inline"><input type="radio" name="cambio" value="Automático"> Automático</label>
-                            <label class="radio-inline"><input type="radio" name="cambio" value="Manual"> Manual</label>
-                        </div>
-
-                        <div class="equip-group" style="margin-top:10px;">
-                            <strong>Tração:</strong>
-                            <label class="radio-inline"><input type="radio" name="tracao" value="4x2"> 4x2</label>
-                            <label class="radio-inline"><input type="radio" name="tracao" value="4x4"> 4x4</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="step-footer">
-                    <button type="button" class="btn btn-outline" onclick="prevStep(1)">⬅ Voltar</button>
-                    <button type="button" class="btn btn-next" onclick="nextStep(3)">Próximo Passo ➝</button>
+                <div class="form-group">
+                    <label>Telefone/WhatsApp</label>
+                    <input type="tel" id="telefone" placeholder="(31) 9XXXX-XXXX">
                 </div>
             </div>
-
-            <!-- PASSO 3: CLIENTE, SERVIÇOS E ORÇAMENTO -->
-            <div class="wizard-step" id="step-3">
-                <div class="section-header">
-                    <h2>👤 DADOS DO CLIENTE & SERVIÇOS</h2>
-                    <p>Detalhes finais e fechamento</p>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Marca e Modelo *</label>
+                    <input type="text" id="marca_modelo" placeholder="Ex: Fiat/Uno">
                 </div>
-
-                <!-- Dados do Cliente -->
-                <div class="grid-row two">
-                    <div class="form-group">
-                        <label>Nome *</label>
-                        <input type="text" id="nome_cliente" placeholder="Nome Completo">
-                    </div>
-                    <div class="form-group">
-                        <label>CPF / CNPJ</label>
-                        <input type="text" id="cpf_cnpj" placeholder="000.000.000-00">
-                    </div>
-                </div>
-                <div class="grid-row full">
-                    <div class="form-group">
-                        <label>Endereço Completo</label>
-                        <input type="text" id="endereco_cliente" placeholder="Rua, Número, Bairro, Cidade - UF">
-                    </div>
-                </div>
-                <div class="grid-row two">
-                    <div class="form-group">
-                        <label>Celular / WhatsApp *</label>
-                        <input type="tel" id="celular_cliente" placeholder="(00) 00000-0000">
-                    </div>
-                    <div class="form-group">
-                        <label>Telefone 2 (Opcional)</label>
-                        <input type="tel" id="telefone2" placeholder="(00) 0000-0000">
-                    </div>
-                </div>
-
-                <hr class="divider">
-
-                <!-- Serviços Solicitados -->
-                <div class="section-header" style="border:none; margin-bottom:10px;">
-                    <h2>🔧 SERVIÇOS SOLICITADOS</h2>
-                </div>
-                <div class="form-group full">
-                    <textarea id="servicos_solicitados" rows="4" placeholder="Descreva os serviços solicitados pelo cliente..."></textarea>
-                </div>
-
-                <hr class="divider">
-
-                <!-- Orçamento (Extra) -->
-                <div class="section-header" style="border:none; margin-bottom:10px;">
-                    <h2>💰 PRÉ-ORÇAMENTO (Opcional)</h2>
-                </div>
-                <div class="budget-panel">
-                    <div class="budget-inputs">
-                        <input type="text" id="item_desc" placeholder="Peça ou Serviço" style="flex: 2;">
-                        <input type="number" id="item_qtd" placeholder="Qtd" style="width: 70px;" value="1">
-                        <input type="number" id="item_valor" placeholder="Valor Unit." style="width: 100px;">
-                        <button type="button" class="btn btn-add" onclick="adicionarItem()">+ Add</button>
-                    </div>
-
-                    <table class="budget-table">
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th width="50">Qtd</th>
-                                <th width="90">Total</th>
-                                <th width="40"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-itens"></tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2" style="text-align: right;"><strong>TOTAL:</strong></td>
-                                <td colspan="2" class="total-final" id="total-geral">R$ 0,00</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-                <!-- Assinatura -->
-                <div class="signature-section">
-                    <label>✍️ Assinatura do Cliente</label>
-                    <div class="signature-pad-wrapper">
-                        <canvas id="signature-pad" width="500" height="150"></canvas>
-                    </div>
-                    <button type="button" class="btn-link" onclick="limparAssinatura()">Limpar Assinatura</button>
-                </div>
-
-                <div class="step-footer">
-                    <button type="button" class="btn btn-outline" onclick="prevStep(2)">⬅ Voltar</button>
-                    <button type="button" class="btn btn-success" onclick="gerarPDF()">📄 IMPRIMIR ORDEM DE SERVIÇO</button>
+                <div class="form-group">
+                    <label>Ano</label>
+                    <input type="number" id="ano" placeholder="2020" min="1990" max="2099">
                 </div>
             </div>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Km do Odômetro</label>
+                    <input type="number" id="km" placeholder="45000">
+                </div>
+                <div class="form-group">
+                    <label>Combustível</label>
+                    <select id="combustivel">
+                        <option value="">Selecione...</option>
+                        <option value="Gasolina">Gasolina</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Álcool">Álcool</option>
+                        <option value="Flex">Flex</option>
+                        <option value="Híbrido">Híbrido</option>
+                        <option value="Elétrico">Elétrico</option>
+                    </select>
 
-        </form>
+<div class="grid-3">
+    <div class="form-group">
+        <label>Responsável pela Inspeção *</label>
+        <input type="text" id="responsavel" placeholder="Ex: João Silva - Mecânico">
     </div>
-
-    <!-- SCRIPT LÓGICO COMPLETO -->
+    <div class="form-group">
+        
+   
+    </div>
+</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Observações Gerais</label>
+                <textarea id="obs_gerais" placeholder="Descreva problemas ou observações gerais..." rows="3"></textarea>
+            </div>
+            
+            <div class="step-footer">
+                <button class="btn btn-secondary" onclick="loadSample()">📊 Carregar Amostra</button>
+                <button class="btn btn-primary" onclick="validateAndNext(1)">Próximo: Inspeção →</button>
+            </div>
+        </div>
+        
+        <!-- STEP 2: INSPEÇÃO VEICULAR -->
+        <div class="wizard-step" id="step-2">
+            <div class="section-header">
+                <h2>🔍 Checklist de Inspeção Veicular</h2>
+                <p>Marque os itens encontrados durante a inspeção</p>
+            </div>
+            
+            <div class="grid-4">
+                <!-- Motor e Transmissão -->
+                <div class="check-card">
+                    <h3>🔧 Motor</h3>
+                    <div class="check-item">
+                        <input type="checkbox" id="motor_ok" value="motor_ok">
+                        <label for="motor_ok">Motor OK ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="motor_ruido" value="motor_ruido">
+                        <label for="motor_ruido">Motor c/ Ruído ⚠</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="motor_vazamento" value="motor_vazamento">
+                        <label for="motor_vazamento">Vazamento ✗</label>
+                    </div>
+                </div>
+                
+                <!-- Transmissão -->
+                <div class="check-card">
+                    <h3>⚙️ Transmissão</h3>
+                    <div class="check-item">
+                        <input type="checkbox" id="transmissao_ok" value="transmissao_ok">
+                        <label for="transmissao_ok">Transmissão OK ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="transmissao_ruido" value="transmissao_ruido">
+                        <label for="transmissao_ruido">Ruído/Falha ⚠</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="transmissao_vazamento" value="transmissao_vazamento">
+                        <label for="transmissao_vazamento">Vazamento ✗</label>
+                    </div>
+                </div>
+                
+                <!-- Suspensão -->
+                <div class="check-card">
+                    <h3>🚗 Suspensão</h3>
+                    <div class="check-item">
+                        <input type="checkbox" id="suspensao_ok" value="suspensao_ok">
+                        <label for="suspensao_ok">Suspensão OK ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="suspensao_barulhenta" value="suspensao_barulhenta">
+                        <label for="suspensao_barulhenta">Barulhenta ⚠</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="suspensao_problema" value="suspensao_problema">
+                        <label for="suspensao_problema">Problema Sério ✗</label>
+                    </div>
+                </div>
+                
+                <!-- Freios -->
+                <div class="check-card">
+                    <h3>🛑 Freios</h3>
+                    <div class="check-item">
+                        <input type="checkbox" id="freios_ok" value="freios_ok">
+                        <label for="freios_ok">Freios OK ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="freios_gasto" value="freios_gasto">
+                        <label for="freios_gasto">Pastilha Gasta ⚠</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="freios_problema" value="freios_problema">
+                        <label for="freios_problema">Problema Sério ✗</label>
+                    </div>
+                </div>
+                
+                <!-- Sistema Elétrico -->
+                <div class="check-card">
+                    <h3>⚡ Elétrica</h3>
+                    <div class="check-item">
+                        <input type="checkbox" id="bateria_ok" value="bateria_ok">
+                        <label for="bateria_ok">Bateria OK ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="iluminacao_ok" value="iluminacao_ok">
+                        <label for="iluminacao_ok">Iluminação OK ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="eletrica_problema" value="eletrica_problema">
+                        <label for="eletrica_problema">Problema ✗</label>
+                    </div>
+                </div>
+                
+                <!-- Pneus e Rodas -->
+                <div class="check-card">
+                    <h3>🛞 Pneus/Rodas</h3>
+                    <div class="check-item">
+                        <input type="checkbox" id="pneus_ok" value="pneus_ok">
+                        <label for="pneus_ok">Pneus Bom Estado ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="pneus_gasto" value="pneus_gasto">
+                        <label for="pneus_gasto">Pneus Gastos ⚠</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="rodas_danificada" value="rodas_danificada">
+                        <label for="rodas_danificada">Rodas Danificadas ✗</label>
+                    </div>
+                </div>
+                
+                <!-- Carroceria -->
+                <div class="check-card">
+                    <h3>🎨 Carroceria</h3>
+                    <div class="check-item">
+                        <input type="checkbox" id="lataria_ok" value="lataria_ok">
+                        <label for="lataria_ok">Lataria Íntegra ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="amassado" value="amassado">
+                        <label for="amassado">Amassado/Risco ⚠</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="ferrugem" value="ferrugem">
+                        <label for="ferrugem">Ferrugem ✗</label>
+                    </div>
+                </div>
+                
+                <!-- Vidros e Espelhos -->
+                <div class="check-card">
+                    <h3>🪟 Vidros</h3>
+                    <div class="check-item">
+                        <input type="checkbox" id="vidros_ok" value="vidros_ok">
+                        <label for="vidros_ok">Vidros Íntegros ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="vidro_trincado" value="vidro_trincado">
+                        <label for="vidro_trincado">Vidro Trincado ⚠</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="vidro_quebrado" value="vidro_quebrado">
+                        <label for="vidro_quebrado">Vidro Quebrado ✗</label>
+                    </div>
+                </div>
+                
+                <!-- Interior -->
+                <div class="check-card">
+                    <h3>🪑 Interior</h3>
+                    <div class="check-item">
+                        <input type="checkbox" id="interior_ok" value="interior_ok">
+                        <label for="interior_ok">Interior OK ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="interior_danificado" value="interior_danificado">
+                        <label for="interior_danificado">Danificado ⚠</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="ar_nao_funciona" value="ar_nao_funciona">
+                        <label for="ar_nao_funciona">Ar Não Funciona ✗</label>
+                    </div>
+                </div>
+                
+                <!-- Acessórios -->
+                <div class="check-card">
+                    <h3>🔌 Acessórios</h3>
+                    <div class="check-item">
+                        <input type="checkbox" id="ar_funcionando" value="ar_funcionando">
+                        <label for="ar_funcionando">Ar Condicionado ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="vidro_eletrico_ok" value="vidro_eletrico_ok">
+                        <label for="vidro_eletrico_ok">Vidro Elétrico ✓</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="som_funcionando" value="som_funcionando">
+                        <label for="som_funcionando">Som/Rádio ✓</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step-footer">
+                <button class="btn btn-secondary" onclick="goToStep(1)">← Voltar: Veículo</button>
+                <button class="btn btn-primary" onclick="goToStep(3)">Próximo: Orçamento →</button>
+            </div>
+        </div>
+        
+        <!-- STEP 3: ORÇAMENTO (Peças + Serviços) -->
+        <div class="wizard-step" id="step-3">
+            <div class="section-header">
+                <h2>💰 Orçamento - Peças e Serviços</h2>
+                <p>Adicione os itens necessários com seus respectivos valores</p>
+            </div>
+            
+            <!-- PEÇAS -->
+            <div class="budget-section">
+                <div class="budget-title">
+                    <span class="budget-icon">📦</span>
+                    <span>Peças Necessárias</span>
+                </div>
+                
+                <div id="pecas-container" class="budget-container">
+                    <p class="empty-message">Nenhuma peça adicionada. Clique em "+ Adicionar Peça" para começar.</p>
+                </div>
+                
+                <button class="btn btn-success btn-add" onclick="addBudgetItem('peca')">
+                    <span>+</span> Adicionar Peça
+                </button>
+            </div>
+            
+            <!-- SERVIÇOS -->
+            <div class="budget-section">
+                <div class="budget-title">
+                    <span class="budget-icon">🔧</span>
+                    <span>Serviços/Mão de Obra</span>
+                </div>
+                
+                <div id="servicos-container" class="budget-container">
+                    <p class="empty-message">Nenhum serviço adicionado. Clique em "+ Adicionar Serviço" para começar.</p>
+                </div>
+                
+                <button class="btn btn-success btn-add" onclick="addBudgetItem('servico')">
+                    <span>+</span> Adicionar Serviço
+                </button>
+            </div>
+            
+            <!-- RESUMO TOTAIS -->
+            <div class="budget-summary">
+                <div class="summary-row">
+                    <span class="summary-label">Total Peças:</span>
+                    <span id="total-pecas-value" class="summary-value">R$ 0,00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Total Serviços:</span>
+                    <span id="total-servicos-value" class="summary-value">R$ 0,00</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span class="summary-label">TOTAL GERAL:</span>
+                    <span id="total-geral-value" class="summary-value-total">R$ 0,00</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Observações do Orçamento</label>
+                <textarea id="obs_orcamento" placeholder="Observações, recomendações ou notas importantes..." rows="3"></textarea>
+            </div>
+            
+            <div class="step-footer">
+                <button class="btn btn-secondary" onclick="goToStep(2)">← Voltar: Inspeção</button>
+                <button class="btn btn-primary" onclick="goToStep(4)">Próximo: Documento →</button>
+            </div>
+        </div>
+        
+        <!-- STEP 4: DOCUMENTO FINAL -->
+        <div class="wizard-step" id="step-4">
+            <div class="section-header">
+                <h2>📄 Revisão e Assinatura</h2>
+                <p>Revise todos os dados antes de gerar o documento oficial</p>
+            </div>
+            
+            <div class="form-group">
+                <label>✍️ Espaço para Assinatura Física (Impressão)</label>
+                <div class="signature-preview">
+                    <p style="font-size: 12px; color: var(--secondary); margin-bottom: 10px;">O espaço abaixo será reservado para assinatura manuscrita ao imprimir o documento.</p>
+                    <div class="signature-area-print">
+                        <div style="height: 100px; border: 2px dashed var(--border); border-radius: 6px; background: #F8FAFC; display: flex; align-items: center; justify-content: center; color: var(--secondary); font-size: 13px;">
+                            [Espaço para Assinatura do Cliente]
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h3>📋 Resumo do Checklist</h3>
+                <div id="preview-resume" style="background: #F8FAFC; padding: 15px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; line-height: 1.6;"></div>
+            </div>
+            
+            <div class="step-footer">
+                <button class="btn btn-secondary" onclick="goToStep(3)">← Voltar: Orçamento</button>
+                <button class="btn btn-success" onclick="generateDocument()">📥 Gerar Documento Oficial A4</button>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- DOCUMENTO A4 OCULTO (Para impressão/PDF) -->
+    <div id="document-container" class="document-view"></div>
+    
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="app.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const now = new Date();
-            document.getElementById('data_entrada').valueAsDate = now;
-            document.getElementById('hora_entrada').value = now.toTimeString().slice(0,5);
-            
-            if(typeof OFICINA_CONFIG !== 'undefined') {
-                document.getElementById('nome-oficina').innerText = OFICINA_CONFIG.nome || "Centro Automotivo";
-            }
-            initSignature();
-        });
-
-        // --- NAVEGAÇÃO WIZARD ---
-        function nextStep(step) {
-            if(step === 2 && document.getElementById('placa').value === '') {
-                alert("Por favor, preencha a PLACA antes de continuar.");
-                return;
-            }
-            document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.step-indicator').forEach(el => el.classList.remove('active'));
-            document.getElementById(`step-${step}`).classList.add('active');
-            for(let i=1; i<=step; i++) document.getElementById(`ind-${i}`).classList.add('active');
-            window.scrollTo(0,0);
-        }
-
-        function prevStep(step) {
-            document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
-            document.getElementById(`step-${step}`).classList.add('active');
-            for(let i=step+1; i<=3; i++) document.getElementById(`ind-${i}`).classList.remove('active');
-            window.scrollTo(0,0);
-        }
-
-        // --- ID ÚNICO ---
-        function gerarIDUnico() {
-            const placa = document.getElementById('placa').value.toUpperCase();
-            if(placa.length > 3) {
-                const now = new Date();
-                const id = `${placa}-${now.getDate()}${now.getMonth()+1}${now.getFullYear().toString().substr(-2)}`;
-                document.getElementById('display-id-unico').innerText = id;
-            }
-        }
-
-        // --- ORÇAMENTO ---
-        let itensOrcamento = [];
-        function adicionarItem() {
-            const desc = document.getElementById('item_desc').value;
-            const qtd = parseFloat(document.getElementById('item_qtd').value) || 1;
-            const val = parseFloat(document.getElementById('item_valor').value) || 0;
-
-            if(!desc) { alert("Digite a descrição"); return; }
-            itensOrcamento.push({ desc, qtd, val, total: qtd * val });
-            document.getElementById('item_desc').value = '';
-            document.getElementById('item_valor').value = '';
-            renderizarTabela();
-        }
-
-        function renderizarTabela() {
-            const tbody = document.getElementById('lista-itens');
-            tbody.innerHTML = '';
-            let total = 0;
-            itensOrcamento.forEach((i, idx) => {
-                total += i.total;
-                tbody.innerHTML += `<tr><td>${i.desc}</td><td>${i.qtd}</td><td>R$ ${i.total.toFixed(2)}</td><td><span class="btn-remove" onclick="removerItem(${idx})">×</span></td></tr>`;
-            });
-            document.getElementById('total-geral').innerText = `R$ ${total.toFixed(2)}`;
-        }
-        function removerItem(idx) { itensOrcamento.splice(idx, 1); renderizarTabela(); }
-
-        // --- ASSINATURA ---
-        let canvas, ctx, isDrawing=false;
-        function initSignature() {
-            canvas = document.getElementById('signature-pad');
-            ctx = canvas.getContext('2d');
-            ctx.strokeStyle = "#00008B";
-            ctx.lineWidth = 2;
-            
-            // Eventos Mouse e Touch
-            ['mousedown', 'touchstart'].forEach(evt => 
-                canvas.addEventListener(evt, (e) => { 
-                    isDrawing=true; 
-                    const p = getPos(e); 
-                    ctx.beginPath(); 
-                    ctx.moveTo(p.x, p.y); 
-                    e.preventDefault();
-                }, {passive:false})
-            );
-            ['mousemove', 'touchmove'].forEach(evt => 
-                canvas.addEventListener(evt, (e) => { 
-                    if(!isDrawing) return; 
-                    const p = getPos(e); 
-                    ctx.lineTo(p.x, p.y); 
-                    ctx.stroke(); 
-                    e.preventDefault();
-                }, {passive:false})
-            );
-            ['mouseup', 'touchend'].forEach(evt => canvas.addEventListener(evt, () => isDrawing=false));
-        }
-        function getPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: clientX - rect.left, y: clientY - rect.top };
-        }
-        function limparAssinatura() { ctx.clearRect(0,0,canvas.width,canvas.height); }
-
-        // --- GERAÇÃO PDF ---
-        function gerarPDF() {
-            // Coleta Dados
-            const id = document.getElementById('display-id-unico').innerText;
-            const placa = document.getElementById('placa').value.toUpperCase();
-            const modelo = document.getElementById('modelo').value;
-            const cliente = document.getElementById('nome_cliente').value;
-            const servicos = document.getElementById('servicos_solicitados').value;
-            
-            // Itens Marcados
-            let checks = "";
-            document.querySelectorAll('input[type="checkbox"]:checked').forEach(c => checks += `<li>${c.value}</li>`);
-            
-            // Câmbio/Tração
-            const cambio = document.querySelector('input[name="cambio"]:checked')?.value || "-";
-            const tracao = document.querySelector('input[name="tracao"]:checked')?.value || "-";
-
-            // Tabela Orçamento
-            let linhasTab = itensOrcamento.map(i => `<tr><td>${i.desc}</td><td>${i.qtd}</td><td>R$ ${i.total.toFixed(2)}</td></tr>`).join('');
-
-            // Assinatura
-            const signImg = canvas.toDataURL();
-
-            const html = `
-            <div style="font-family:Arial; padding:20px;">
-                <div style="border-bottom:2px solid #000; padding-bottom:10px; display:flex; justify-content:space-between;">
-                    <div>
-                        <h2>${document.getElementById('nome-oficina').innerText}</h2>
-                        <small>Ordem de Serviço / Checklist</small>
-                    </div>
-                    <div style="text-align:right;">
-                        <h3>${id}</h3>
-                        <small>${new Date().toLocaleString()}</small>
-                    </div>
-                </div>
-
-                <div style="margin-top:20px; display:flex; gap:20px;">
-                    <div style="flex:1; border:1px solid #ccc; padding:10px;">
-                        <strong>VEÍCULO</strong><br>
-                        Placa: ${placa}<br>
-                        Modelo: ${modelo}<br>
-                        KM: ${document.getElementById('km_entrada').value} | Comb: ${document.getElementById('combustivel_nivel').value}
-                    </div>
-                    <div style="flex:1; border:1px solid #ccc; padding:10px;">
-                        <strong>CLIENTE</strong><br>
-                        Nome: ${cliente}<br>
-                        Tel: ${document.getElementById('celular_cliente').value}<br>
-                        End: ${document.getElementById('endereco_cliente').value}
-                    </div>
-                </div>
-
-                <div style="margin-top:20px;">
-                    <h4 style="background:#eee; padding:5px;">SERVIÇOS SOLICITADOS</h4>
-                    <p style="border:1px solid #ccc; padding:10px; min-height:50px;">${servicos || 'Nenhum serviço descrito.'}</p>
-                </div>
-
-                <div style="margin-top:20px;">
-                    <h4 style="background:#eee; padding:5px;">INSPEÇÃO & ACESSÓRIOS</h4>
-                    <div style="font-size:12px; columns:3;">
-                        <ul>${checks || '<li>Nenhum item marcado.</li>'}</ul>
-                    </div>
-                    <p style="font-size:12px; margin-top:5px;"><strong>Câmbio:</strong> ${cambio} | <strong>Tração:</strong> ${tracao}</p>
-                </div>
-
-                ${itensOrcamento.length > 0 ? `
-                <div style="margin-top:20px;">
-                    <h4 style="background:#eee; padding:5px;">ORÇAMENTO</h4>
-                    <table style="width:100%; border-collapse:collapse; font-size:12px;">
-                        <tr style="background:#f9f9f9; text-align:left;"><th>Descrição</th><th>Qtd</th><th>Total</th></tr>
-                        ${linhasTab}
-                        <tr><td colspan="2" align="right"><strong>TOTAL:</strong></td><td><strong>${document.getElementById('total-geral').innerText}</strong></td></tr>
-                    </table>
-                </div>` : ''}
-
-                <div style="margin-top:50px; display:flex; justify-content:space-between; text-align:center;">
-                    <div style="width:40%;">
-                        <img src="${signImg}" style="height:40px; display:block; margin:0 auto;">
-                        <hr> Assinatura Cliente
-                    </div>
-                    <div style="width:40%;">
-                        <br><br><hr> Responsável Técnico
-                    </div>
-                </div>
-            </div>`;
-
-            const win = window.open('', '', 'width=800,height=600');
-            win.document.write(html);
-            win.document.close();
-            win.focus();
-            setTimeout(() => { win.print(); win.close(); }, 500);
+        // Registrar Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js').catch(err => console.log('SW registration failed:', err));
         }
     </script>
 </body>
