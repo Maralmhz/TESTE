@@ -9,227 +9,226 @@ if (typeof html2pdf === 'undefined') {
     console.log('📦 Carregando html2pdf...');
 }
 
-window.emitirOS = function() {
-    console.clear();
-    console.log('='.repeat(60));
-    console.log('INICIANDO GERAÇÃO DE O.S. v8.0...');
-    console.log('='.repeat(60));
-    
+// ✅ VERSÃO DEFINITIVA CORRIGIDA (SEM CABEÇALHO NO RODAPÉ)
+window.emitirOS = async function() {
+    console.log("🚀 Iniciando geração de PDF corrigida...");
+
+    // 1. HELPER PARA LOGO (Evita imagem quebrada)
+    const getBase64ImageFromUrl = async (imageUrl) => {
+        try {
+            const res = await fetch(imageUrl);
+            const blob = await res.blob();
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => resolve(null);
+                reader.readAsDataURL(blob);
+            });
+        } catch (e) { return null; }
+    };
+
     try {
-        // PASSO 1: Coletar dados
-        console.log('📋 Passo 1: Coletando dados...');
-        
-        const placa = (document.getElementById('placa')?.value || 'N/I').toUpperCase();
-        const modelo = (document.getElementById('modelo')?.value || 'N/I').toUpperCase();
-        const chassis = (document.getElementById('chassis')?.value || 'N/I').toUpperCase();
-        const kmEntrada = document.getElementById('km_entrada')?.value || '-';
-        const dataEntrada = document.getElementById('data')?.value || '-';
-        const horaEntrada = document.getElementById('hora')?.value || '-';
-        const combustivel = document.getElementById('combustivel')?.value || '-';
-        
-        const cliente = (document.getElementById('nome_cliente')?.value || 'N/I').toUpperCase();
-        const cpf = document.getElementById('cpf_cliente')?.value || '-';
-        const endereco = document.getElementById('endereco_cliente')?.value || '-';
-        const telefone = document.getElementById('celular_cliente')?.value || '-';
-        
-        const servicos = document.getElementById('servicos')?.value || '';
-        
-        console.log('OK - Veículo:', placa, modelo);
-        console.log('OK - Cliente:', cliente);
+        // 2. COLETAR DADOS (COM PROTEÇÃO CONTRA NULOS)
+        const getValue = (id) => document.getElementById(id)?.value || '';
+        const getText = (id) => document.getElementById(id)?.innerText || '';
+        const getChecked = (id) => document.getElementById(id)?.checked || false;
 
-        // PASSO 2: Checklist
-        console.log('📋 Passo 2: Coletando checklist...');
-        const checklist = [];
-        document.querySelectorAll('input[type="checkbox"]').forEach(el => {
-            if (el.checked && el.value) {
-                checklist.push(el.value.toUpperCase().trim());
-            }
-        });
-        console.log('OK -', checklist.length, 'itens marcados');
+        const dados = {
+            placa: getValue('placa').toUpperCase() || 'SEM PLACA',
+            modelo: getValue('modelo').toUpperCase() || 'NÃO INFORMADO',
+            chassi: getValue('chassis').toUpperCase() || '-',
+            km: getValue('km_entrada') || '-',
+            data: getValue('data') || new Date().toLocaleDateString('pt-BR'),
+            hora: getValue('hora') || '-',
+            cliente: getValue('nome_cliente').toUpperCase() || 'CONSUMIDOR',
+            doc: getValue('cpf_cliente') || '-',
+            tel: getValue('celular_cliente') || '-',
+            endereco: getValue('endereco_cliente') || '-',
+            servicosTxt: getValue('servicos') || '',
+            oficina: getText('nome-oficina') || 'OFICINA MECÂNICA',
+            subtitulo: getText('subtitulo-oficina') || '',
+            telOficina: getText('telefone-oficina') || '',
+            endOficina: getText('endereco-oficina') || ''
+        };
 
-        // PASSO 3: Peças
-        console.log('📋 Passo 3: Coletando peças...');
-        const pecas = [];
-        let totalPecas = 0;
-        const tabelaPecas = document.getElementById('tabelaPecas');
-        if (tabelaPecas) {
-            tabelaPecas.querySelectorAll('tbody tr').forEach(tr => {
-                const cels = tr.querySelectorAll('td');
-                if (cels.length >= 2) {
-                    const desc = (cels[0]?.textContent || '').trim();
-                    const valor = (cels[1]?.textContent || '').trim();
-                    if (desc && valor && desc !== 'Descrição') {
-                        pecas.push({desc, valor});
-                        const num = parseFloat(valor.replace(/[^\d,]/g, '').replace(',', '.'));
-                        if (!isNaN(num)) totalPecas += num;
+        // 3. PEGAR LOGO
+        let logoSrc = '';
+        const imgElement = document.getElementById('logo-oficina');
+        if (imgElement && imgElement.src) {
+            logoSrc = await getBase64ImageFromUrl(imgElement.src);
+        }
+
+        // 4. MONTAR ITENS (PEÇAS E SERVIÇOS)
+        // Se usar array global 'itensOrcamento', usa ele. Se não, tenta pegar da tabela HTML.
+        let htmlItens = '';
+        let total = 0;
+        
+        // Tenta pegar do array global se existir
+        if (typeof itensOrcamento !== 'undefined' && Array.isArray(itensOrcamento) && itensOrcamento.length > 0) {
+            itensOrcamento.forEach(item => {
+                htmlItens += `
+                    <tr>
+                        <td style="padding: 5px; border-bottom: 1px solid #eee;">${item.descricao}</td>
+                        <td style="padding: 5px; border-bottom: 1px solid #eee; text-align: center;">${item.tipo === 'peca' ? 'PEÇA' : 'SERV'}</td>
+                        <td style="padding: 5px; border-bottom: 1px solid #eee; text-align: right;">R$ ${parseFloat(item.valor).toFixed(2)}</td>
+                    </tr>
+                `;
+                total += parseFloat(item.valor || 0);
+            });
+        } else {
+            // Fallback: tenta ler da tabela HTML se o array estiver vazio
+            const linhas = document.querySelectorAll('#tabelaPecas tr, #tabelaServicos tr');
+            linhas.forEach(tr => {
+                const cols = tr.querySelectorAll('td');
+                if(cols.length >= 2) {
+                    const desc = cols[0].innerText;
+                    const val = cols[1].innerText.replace('R$', '').replace(',', '.').trim();
+                    if(desc && val) {
+                         htmlItens += `
+                            <tr>
+                                <td style="padding: 5px; border-bottom: 1px solid #eee;">${desc}</td>
+                                <td style="padding: 5px; border-bottom: 1px solid #eee; text-align: center;">-</td>
+                                <td style="padding: 5px; border-bottom: 1px solid #eee; text-align: right;">R$ ${val}</td>
+                            </tr>
+                        `;
+                        total += parseFloat(val || 0);
                     }
                 }
             });
         }
-        console.log('OK -', pecas.length, 'peças');
 
-        // PASSO 4: Serviços
-        console.log('📋 Passo 4: Coletando serviços...');
-        const servicosLista = [];
-        let totalServicos = 0;
-        const tabelaServicos = document.getElementById('tabelaServicos');
-        if (tabelaServicos) {
-            tabelaServicos.querySelectorAll('tbody tr').forEach(tr => {
-                const cels = tr.querySelectorAll('td');
-                if (cels.length >= 2) {
-                    const desc = (cels[0]?.textContent || '').trim();
-                    const valor = (cels[1]?.textContent || '').trim();
-                    if (desc && valor && desc !== 'Descrição') {
-                        servicosLista.push({desc, valor});
-                        const num = parseFloat(valor.replace(/[^\d,]/g, '').replace(',', '.'));
-                        if (!isNaN(num)) totalServicos += num;
-                    }
-                }
-            });
+        if (!htmlItens) {
+            htmlItens = '<tr><td colspan="3" style="text-align:center; padding:15px; color:#999;">Nenhum item lançado.</td></tr>';
         }
-        console.log('OK -', servicosLista.length, 'serviços');
 
-        const totalGeral = totalPecas + totalServicos;
-        const numeroOS = 'OS-' + Math.floor(Math.random() * 1000000);
-        
-        console.log('OK - Total geral: R$', totalGeral.toFixed(2));
+        // 5. HTML DO PDF (FIXO E LIMPO PARA A4)
+        // Importante: width: 210mm garante que cabe na folha sem esticar
+        const htmlFinal = `
+            <div style="font-family: Arial, sans-serif; width: 210mm; background: #fff; padding: 10mm; box-sizing: border-box; color: #333; line-height: 1.3;">
+                
+                <!-- CABEÇALHO -->
+                <div style="display: flex; align-items: center; border-bottom: 3px solid #cc0000; padding-bottom: 15px; margin-bottom: 15px;">
+                    <div style="width: 80px; height: 80px; margin-right: 15px; display: flex; align-items: center; justify-content: center;">
+                        ${logoSrc ? `<img src="${logoSrc}" style="max-width: 100%; max-height: 100%;">` : ''}
+                    </div>
+                    <div style="flex: 1;">
+                        <h1 style="margin: 0; color: #cc0000; font-size: 22px; text-transform: uppercase;">${dados.oficina}</h1>
+                        <p style="margin: 3px 0; font-size: 11px; color: #555;">${dados.subtitulo}</p>
+                        <p style="margin: 3px 0; font-size: 11px;"><b>${dados.telOficina}</b> | ${dados.endOficina}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="background: #cc0000; color: white; padding: 5px 10px; font-weight: bold; border-radius: 4px; font-size: 14px;">
+                            O.S. #${Math.floor(Math.random() * 100000)}
+                        </div>
+                    </div>
+                </div>
 
-        // PASSO 5: Montar HTML (SEM template literals complexos)
-        console.log('📄 Passo 5: Montando HTML do PDF...');
-        
-        let html = '';
-        html += '<html><head>';
-        html += '<meta charset="UTF-8">';
-        html += '<style>';
-        html += 'body { font-family: Arial, sans-serif; font-size: 12px; color: #333; margin: 0; padding: 20px; }';
-        html += 'h1 { color: #e41616; font-size: 20px; margin: 0 0 5px 0; }';
-        html += 'h2 { color: #e41616; font-size: 14px; border-bottom: 2px solid #e41616; padding-bottom: 5px; margin-top: 15px; margin-bottom: 10px; }';
-        html += 'table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }';
-        html += 'td, th { padding: 6px; border: 1px solid #ddd; text-align: left; }';
-        html += 'th { background: #f5f5f5; font-weight: bold; }';
-        html += '.total { font-weight: bold; background: #fafafa; }';
-        html += '.os-num { background: #e41616; color: white; padding: 10px; text-align: center; font-size: 16px; font-weight: bold; margin: 15px 0; }';
-        html += '.checklist { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }';
-        html += '.check-item { border: 1px solid #ddd; padding: 5px; background: #fafafa; }';
-        html += '.total-final { background: #e41616; color: white; padding: 10px; font-size: 16px; font-weight: bold; text-align: right; margin: 15px 0; }';
-        html += '.sig { display: flex; justify-content: space-between; margin-top: 40px; }';
-        html += '.sig-box { width: 40%; text-align: center; }';
-        html += '.sig-line { border-top: 1px solid #000; margin-top: 30px; padding-top: 5px; }';
-        html += '</style></head><body>';
-        
-        // Cabeçalho
-        html += '<h1>FAST CAR CENTRO AUTOMOTIVO</h1>';
-        html += '<p style="margin: 0; font-size: 10px;">Checklist de Entrada e Inspeccao Veicular<br>';
-        html += '(31) 2342-1699 | Av. Regulus, 248 - Contagem/MG</p>';
-        
-        // O.S.
-        html += '<div class="os-num">ORDEM DE SERVICO - ' + numeroOS + '</div>';
-        
-        // Veículo
-        html += '<h2>INFORMACOES DO VEICULO</h2>';
-        html += '<table>';
-        html += '<tr><td><b>Placa</b></td><td>' + placa + '</td><td><b>Modelo</b></td><td>' + modelo + '</td></tr>';
-        html += '<tr><td><b>Chassis</b></td><td>' + chassis + '</td><td><b>KM</b></td><td>' + kmEntrada + '</td></tr>';
-        html += '<tr><td><b>Data</b></td><td>' + dataEntrada + '</td><td><b>Hora</b></td><td>' + horaEntrada + '</td></tr>';
-        html += '<tr><td colspan="4"><b>Combustivel:</b> ' + combustivel + '</td></tr>';
-        html += '</table>';
-        
-        // Características
-        if (checklist.length > 0) {
-            html += '<h2>CARACTERISTICAS DO VEICULO</h2>';
-            html += '<div class="checklist">';
-            checklist.forEach(item => {
-                html += '<div class="check-item">(X) ' + item + '</div>';
-            });
-            html += '</div>';
-        }
-        
-        // Cliente
-        html += '<h2>DADOS DO CLIENTE</h2>';
-        html += '<table>';
-        html += '<tr><td><b>Nome</b></td><td colspan="3">' + cliente + '</td></tr>';
-        html += '<tr><td><b>CPF</b></td><td>' + cpf + '</td><td><b>Telefone</b></td><td>' + telefone + '</td></tr>';
-        html += '<tr><td><b>Endereco</b></td><td colspan="3">' + endereco + '</td></tr>';
-        html += '</table>';
-        
-        // Peças
-        if (pecas.length > 0) {
-            html += '<h2>PECAS</h2>';
-            html += '<table>';
-            html += '<tr><th>Descricao</th><th style="width: 100px;">Valor</th></tr>';
-            pecas.forEach(p => {
-                html += '<tr><td>' + p.desc + '</td><td style="text-align: right;">' + p.valor + '</td></tr>';
-            });
-            html += '<tr class="total"><td style="text-align: right;">Total Pecas:</td><td style="text-align: right;">R$ ' + totalPecas.toFixed(2).replace('.', ',') + '</td></tr>';
-            html += '</table>';
-        }
-        
-        // Serviços
-        if (servicosLista.length > 0) {
-            html += '<h2>SERVICOS</h2>';
-            html += '<table>';
-            html += '<tr><th>Descricao</th><th style="width: 100px;">Valor</th></tr>';
-            servicosLista.forEach(s => {
-                html += '<tr><td>' + s.desc + '</td><td style="text-align: right;">' + s.valor + '</td></tr>';
-            });
-            html += '<tr class="total"><td style="text-align: right;">Total Servicos:</td><td style="text-align: right;">R$ ' + totalServicos.toFixed(2).replace('.', ',') + '</td></tr>';
-            html += '</table>';
-        }
-        
-        // Observações
-        if (servicos.trim()) {
-            html += '<h2>SERVICOS SOLICITADOS</h2>';
-            html += '<p style="border: 1px solid #ddd; padding: 10px; background: #fafafa;">' + servicos.replace(/\n/g, '<br>') + '</p>';
-        }
-        
-        // Total geral
-        html += '<div class="total-final">TOTAL GERAL: R$ ' + totalGeral.toFixed(2).replace('.', ',') + '</div>';
-        
-        // Assinaturas
-        html += '<div class="sig">';
-        html += '<div class="sig-box"><b>Assinatura Cliente</b><div class="sig-line"></div></div>';
-        html += '<div class="sig-box"><b>Responsavel Oficina</b><div class="sig-line"></div></div>';
-        html += '</div>';
-        
-        html += '<p style="text-align: center; font-size: 9px; color: #999; margin-top: 20px;">';
-        html += 'Gerado em ' + new Date().toLocaleString('pt-BR') + ' | Fast Car Centro Automotivo';
-        html += '</p>';
-        
-        html += '</body></html>';
-        
-        console.log('OK - HTML pronto:', html.length, 'caracteres');
+                <!-- DADOS GERAIS -->
+                <div style="display: flex; gap: 20px; margin-bottom: 15px;">
+                    <!-- CLIENTE -->
+                    <div style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 4px;">
+                        <h3 style="margin-top: 0; color: #cc0000; font-size: 12px; border-bottom: 1px solid #eee; padding-bottom: 5px;">DADOS DO CLIENTE</h3>
+                        <div style="font-size: 11px;">
+                            <p style="margin: 3px 0;"><b>Nome:</b> ${dados.cliente}</p>
+                            <p style="margin: 3px 0;"><b>CPF/CNPJ:</b> ${dados.doc}</p>
+                            <p style="margin: 3px 0;"><b>Telefone:</b> ${dados.tel}</p>
+                            <p style="margin: 3px 0;"><b>Endereço:</b> ${dados.endereco}</p>
+                        </div>
+                    </div>
+                    <!-- VEICULO -->
+                    <div style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 4px;">
+                        <h3 style="margin-top: 0; color: #cc0000; font-size: 12px; border-bottom: 1px solid #eee; padding-bottom: 5px;">DADOS DO VEÍCULO</h3>
+                        <div style="font-size: 11px;">
+                            <p style="margin: 3px 0;"><b>Veículo:</b> ${dados.modelo}</p>
+                            <p style="margin: 3px 0;"><b>Placa:</b> ${dados.placa}</p>
+                            <p style="margin: 3px 0;"><b>KM:</b> ${dados.km} | <b>Chassis:</b> ${dados.chassi}</p>
+                            <p style="margin: 3px 0;"><b>Entrada:</b> ${dados.data} às ${dados.hora}</p>
+                        </div>
+                    </div>
+                </div>
 
-        // PASSO 6: Converter para PDF
-        console.log('PDF Passo 6: Convertendo para PDF...');
-        
+                <!-- SERVIÇOS SOLICITADOS -->
+                <div style="margin-bottom: 15px;">
+                    <h3 style="font-size: 12px; background: #eee; padding: 5px; margin-bottom: 0; border: 1px solid #ddd; border-bottom: none;">SERVIÇOS SOLICITADOS / OBSERVAÇÕES</h3>
+                    <div style="border: 1px solid #ddd; padding: 10px; font-size: 11px; min-height: 40px;">
+                        ${dados.servicosTxt ? dados.servicosTxt.replace(/\n/g, '<br>') : 'Nenhuma observação registrada.'}
+                    </div>
+                </div>
+
+                <!-- TABELA DE ITENS -->
+                <div style="margin-bottom: 20px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                        <thead>
+                            <tr style="background: #333; color: white;">
+                                <th style="padding: 8px; text-align: left;">DESCRIÇÃO</th>
+                                <th style="padding: 8px; text-align: center; width: 60px;">TIPO</th>
+                                <th style="padding: 8px; text-align: right; width: 100px;">VALOR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${htmlItens}
+                        </tbody>
+                        <tfoot>
+                            <tr style="background: #f5f5f5; font-weight: bold; font-size: 13px;">
+                                <td colspan="2" style="padding: 10px; text-align: right;">TOTAL GERAL:</td>
+                                <td style="padding: 10px; text-align: right; color: #cc0000;">R$ ${total.toFixed(2)}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- ASSINATURAS -->
+                <div style="margin-top: 40px; display: flex; justify-content: space-between;">
+                    <div style="width: 40%; text-align: center;">
+                        <div style="border-bottom: 1px solid #000; margin-bottom: 5px;"></div>
+                        <p style="font-size: 10px;">ASSINATURA DO TÉCNICO</p>
+                    </div>
+                    <div style="width: 40%; text-align: center;">
+                        <div style="border-bottom: 1px solid #000; margin-bottom: 5px;"></div>
+                        <p style="font-size: 10px;">ASSINATURA DO CLIENTE</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; font-size: 9px; color: #999; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px;">
+                    Documento gerado em ${new Date().toLocaleString('pt-BR')}
+                </div>
+            </div>
+        `;
+
+        // 6. TRUQUE DO ELEMENTO INVISÍVEL (CORRIGE O BUG DO BRANCO/POSIÇÃO)
+        // Criamos um elemento temporário fora da visão do usuário, mas visível pro gerador PDF
         const element = document.createElement('div');
-        element.innerHTML = html;
+        element.innerHTML = htmlFinal;
         
+        // Estilos essenciais para não bugar
+        element.style.position = 'absolute';
+        element.style.top = '0';
+        element.style.left = '0';
+        element.style.zIndex = '-9999'; // Fica atrás de tudo
+        document.body.appendChild(element);
+
+        // 7. GERAR O PDF
         const opt = {
-            margin: 5,
-            filename: numeroOS + '_' + placa + '.pdf',
+            margin: 0,
+            filename: `OS_${dados.placa}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, logging: false, useCORS: true, allowTaint: false },
+            html2canvas: { 
+                scale: 2, 
+                useCORS: true, 
+                scrollY: 0, // Ignora o scroll da tela atual
+                windowWidth: 800 // Força largura desktop
+            },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
-        
-        html2pdf().set(opt).from(element).save().then(() => {
-            console.log('');
-            console.log('='.repeat(60));
-            console.log('SUCESSO! PDF GERADO!');
-            console.log('Arquivo: ' + numeroOS + '_' + placa + '.pdf');
-            console.log('='.repeat(60));
-            alert('SUCESSO!\n\nO.S.: ' + numeroOS + '\nArquivo: ' + numeroOS + '_' + placa + '.pdf');
-        }).catch(err => {
-            console.error('ERRO:', err.message);
-            alert('ERRO ao gerar PDF:\n' + err.message);
-        });
 
-    } catch (e) {
-        console.error('ERRO CRITICO:', e.message);
-        console.error('Stack:', e.stack);
-        alert('ERRO CRITICO:\n' + e.message);
+        await html2pdf().set(opt).from(element).save();
+
+        // 8. LIMPEZA
+        document.body.removeChild(element);
+        console.log("✅ PDF Gerado com sucesso!");
+
+    } catch (err) {
+        console.error("❌ Erro ao gerar PDF:", err);
+        alert("Erro ao gerar PDF: " + err.message);
     }
 };
-
-console.log('OK - PDF Generator v8.0 carregado');
