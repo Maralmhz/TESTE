@@ -1968,12 +1968,34 @@ if (valor) {
         }
     });
 }
-
+// PEÇAS/SERVIÇOS ESPECÍFICO (já funcionando)
+const descricaoItem = document.getElementById('descricaoItem');
+const valorItem = document.getElementById('valorItem');
+if (descricaoItem && !descricaoItem.dataset.enterSetup) {
+    descricaoItem.dataset.enterSetup = 'true';
+    descricaoItem.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            valorItem.focus();
+        }
+    });
+}
+if (valorItem && !valorItem.dataset.enterSetup) {
+    valorItem.dataset.enterSetup = 'true';
+    valorItem.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('btnAdicionarItem').click();
+            setTimeout(() => descricaoItem.focus(), 100);
+        }
+    });
+}
 </script>
 
 
 
 </body>
 </html>
+
 
 
