@@ -1917,11 +1917,21 @@ camposMonitorados.forEach(id => {
 
 // 3. Roda uma vez agora pra garantir
 setTimeout(atualizarResumoVeiculo, 500);
+
+                elemento.addEventListener('change', atualizarResumoVeiculo);
+        elemento.addEventListener('blur', atualizarResumoVeiculo);
+    }
+});
+
+// 3. Roda uma vez agora pra garantir
+setTimeout(atualizarResumoVeiculo, 500);
+    
 </script>
 
 
 
 </body>
 </html>
+
 
 
