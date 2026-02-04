@@ -384,6 +384,49 @@
                     <div class="veiculo-resumo-pill">Complexidade: <strong id="resumoComplexidade">-</strong></div>
                 </div>
 
+                <!-- TIPOS PECA/SERVICO + INPUTS -->
+<div class="form-row">
+    <div class="form-group">
+        <label>Tipo:</label>
+        <div class="checkbox-group">
+            <label><input type="radio" name="tipoItem" value="peca" checked> Peça</label>
+            <label><input type="radio" name="tipoItem" value="servico"> Serviço</label>
+        </div>
+    </div>
+</div>
+<div class="form-row two">
+    <div class="form-group">
+        <label>Descrição:</label>
+        <textarea id="descricaoItem" rows="1" placeholder="Ex: Pastilha freio..."></textarea>
+    </div>
+    <div class="form-group">
+        <label>Valor R$:</label>
+        <input type="number" id="valorItem" step="0.01" min="0" placeholder="0,00">
+    </div>
+</div>
+<button type="button" class="btn-primary" id="btnAdicionarItem">Adicionar</button>
+
+<!-- TABELAS SEPARADAS -->
+<h4 style="border-bottom:2px solid #e41616;">Peças</h4>
+<table style="width:100%;border-collapse:collapse;">
+    <thead><tr><th>Descrição</th><th style="width:100px;">Valor</th><th style="width:50px;">Ações</th></tr></thead>
+    <tbody id="tabelaPecas"></tbody>
+    <tfoot><tr><td>Total Peças</td><td id="totalPecas" style="color:#e41616;font-weight:bold;">R$ 0,00</td><td></td></tr></tfoot>
+</table>
+
+<h4 style="border-bottom:2px solid #0056b3;margin-top:25px;">Serviços</h4>
+<table style="width:100%;border-collapse:collapse;">
+    <thead><tr><th>Descrição</th><th style="width:100px;">Valor</th><th style="width:50px;">Ações</th></tr></thead>
+    <tbody id="tabelaServicos"></tbody>
+    <tfoot><tr><td>Total Serviços</td><td id="totalServicos" style="color:#0056b3;font-weight:bold;">R$ 0,00</td><td></td></tr></tfoot>
+</table>
+
+<div style="background:#eee;padding:15px;border-radius:8px;margin-top:20px;text-align:right;">
+    <span style="font-weight:bold;">TOTAL GERAL: </span>
+    <div id="totalGeralFinal" style="font-size:24px;font-weight:bold;color:#28a745;">R$ 0,00</div>
+</div>
+
+
                 <!-- COMPLEXIDADE -->
                 <div class="form-row">
                     <div class="form-group">
@@ -779,6 +822,10 @@ function salvarChecklist() {
 // ✅ SALVA PEÇAS E SERVIÇOS
 formData.itensOrcamento = itensOrcamento || [];
 formData.complexidade = document.getElementById('complexidade')?.value || '';
+
+            // SALVA PEÇAS/SERVIÇOS
+formData.itensOrcamento = itensOrcamento;
+
 
 checklist.itensOrcamento = itensOrcamento || [];
             
@@ -1700,6 +1747,32 @@ if (document.getElementById('rObsInspecao')) {
         destinoServicos.innerHTML = '<tr><td colspan="2" style="color:#999; text-align:center;">-</td></tr>';
     }
 
+    // TABELAS ORÇAMENTO NA IMPRESSÃO
+const origemPecas = document.getElementById('tabelaPecas');
+const destinoPecas = document.getElementById('rTabelaPecas');
+destinoPecas.innerHTML = '';
+if (origemPecas) {
+    Array.from(origemPecas.rows).forEach(row => {
+        const desc = row.cells[0].textContent;
+        const val = row.cells[1].textContent;
+        destinoPecas.innerHTML += `<tr><td>${desc}</td><td style="text-align:right;">${val}</td></tr>`;
+    });
+}
+
+const origemServ = document.getElementById('tabelaServicos');
+const destinoServ = document.getElementById('rTabelaServicos');
+destinoServ.innerHTML = '';
+if (origemServ) {
+    Array.from(origemServ.rows).forEach(row => {
+        const desc = row.cells[0].textContent;
+        const val = row.cells[1].textContent;
+        destinoServ.innerHTML += `<tr><td>${desc}</td><td style="text-align:right;">${val}</td></tr>`;
+    });
+}
+
+document.getElementById('rTotalGeral').textContent = document.getElementById('totalGeralFinal').textContent;
+
+
     // TOTAL GERAL
     const totalGeral = document.getElementById('totalGeralFinal');
     document.getElementById('rTotalGeral').textContent = totalGeral ? totalGeral.textContent : 'R$ 0,00';
@@ -1918,79 +1991,86 @@ camposMonitorados.forEach(id => {
 // 3. Roda uma vez agora pra garantir
 setTimeout(atualizarResumoVeiculo, 500);
 
-        // === ENTER PULA CAMPOS VEÍCULO + CLIENTE ===
+        // ENTER PULA: Placa→Chassi→Modelo→KM→Data→Cliente→Serviços
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        const campo = e.target;
-        if (campo.tagName !== 'INPUT' && campo.tagName !== 'TEXTAREA' && campo.tagName !== 'SELECT') return;
-        
+    if (e.key === 'Enter' && !e.shiftKey && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
         e.preventDefault();
-        
-        // ORDEM EXATA DOS CAMPOS
-        const ordem = [
-            'placa', 'chassi', 'modelo', 'kmentrada', 'data', 'hora', 
-            'combustivel', 'kmsaida', 'nomecliente', 'cpfcnpj', 
-            'celularcliente', 'telefone2', 'enderecocliente', 'servicos'
-        ];
-        
-        const idAtual = campo.id;
+        const ordem = ['placa', 'chassi', 'modelo', 'kmentrada', 'data', 'nomecliente', 'cpfcnpj', 'celularcliente', 'servicos'];
+        const idAtual = e.target.id;
         const index = ordem.indexOf(idAtual);
-        
         if (index !== -1 && index < ordem.length - 1) {
             const proximoId = ordem[index + 1];
-            const proximo = document.getElementById(proximoId);
-            if (proximo) {
-                proximo.focus();
-                if (proximo.type !== 'date' && proximo.type !== 'time') proximo.select();
-                atualizarResumoVeiculo(); // Atualiza resumos na hora
-            }
+            document.getElementById(proximoId)?.focus();
+            atualizarResumoVeiculo(); // Atualiza resumos
         }
     }
 });
 
-// === PEÇAS/SERVIÇOS ENTER (se ainda não tem) ===
-const descricao = document.getElementById('descricaoItem');
-const valor = document.getElementById('valorItem');
-if (descricao) {
-    descricao.addEventListener('keydown', e => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            valor.focus();
+   let itensOrcamento = [];
+
+// Adicionar item
+document.getElementById('btnAdicionarItem').onclick = function() {
+    const tipo = document.querySelector('input[name="tipoItem"]:checked').value;
+    const desc = document.getElementById('descricaoItem').value.trim();
+    const val = parseFloat(document.getElementById('valorItem').value) || 0;
+    
+    if (!desc) return alert('Digite descrição!');
+    itensOrcamento.push({id: Date.now(), tipo, descricao: desc, valor: val});
+    renderizarTabela();
+    document.getElementById('descricaoItem').value = '';
+    document.getElementById('valorItem').value = '';
+    document.getElementById('descricaoItem').focus();
+};
+
+// Enter Descrição → Valor | Valor → Adiciona + volta Descrição
+document.getElementById('descricaoItem').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        document.getElementById('valorItem').focus();
+    }
+});
+document.getElementById('valorItem').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('btnAdicionarItem').click();
+    }
+});
+
+// Renderiza tabelas + totais
+function renderizarTabela() {
+    const tbodyPecas = document.getElementById('tabelaPecas');
+    const tbodyServ = document.getElementById('tabelaServicos');
+    tbodyPecas.innerHTML = ''; tbodyServ.innerHTML = '';
+    
+    let totalPecas = 0, totalServ = 0;
+    itensOrcamento.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="padding:6px;">${item.descricao}</td>
+            <td style="padding:6px;text-align:right;">R$ ${item.valor.toFixed(2)}</td>
+            <td style="padding:6px;text-align:center;">
+                <button onclick="removerItem(${item.id})" style="background:red;color:white;border:none;padding:2px 6px;border-radius:3px;">X</button>
+            </td>
+        `;
+        if (item.tipo === 'servico') {
+            totalServ += item.valor;
+            tbodyServ.appendChild(tr);
+        } else {
+            totalPecas += item.valor;
+            tbodyPecas.appendChild(tr);
         }
     });
-}
-if (valor) {
-    valor.addEventListener('keydown', e => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            document.getElementById('btnAdicionarItem').click();
-            setTimeout(() => descricao.focus(), 100);
-        }
-    });
-}
-    // Na aba Peças/Serviços: Enter na descrição → valor, Enter no valor → adiciona item e volta pra descrição
-    const descricaoItem = document.getElementById('descricaoItem');
-    const valorItem = document.getElementById('valorItem');
-    const btnAdicionarItem = document.getElementById('btnAdicionarItem');
     
-    if (descricaoItem) {
-        descricaoItem.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                valorItem.focus();
-            }
-        });
-    }
-    
-    if (valorItem) {
-        valorItem.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                if (btnAdicionarItem) btnAdicionarItem.click();
-                setTimeout(() => descricaoItem.focus(), 100); // Volta pra descrição
-            }
-        });
-    }
+    document.getElementById('totalPecas').textContent = `R$ ${totalPecas.toFixed(2)}`;
+    document.getElementById('totalServicos').textContent = `R$ ${totalServ.toFixed(2)}`;
+    document.getElementById('totalGeralFinal').textContent = `R$ ${(totalPecas + totalServ).toFixed(2)}`;
+}
+
+function removerItem(id) {
+    itensOrcamento = itensOrcamento.filter(i => i.id !== id);
+    renderizarTabela();
+}
+     
         
 </script>
 
@@ -1998,7 +2078,5 @@ if (valor) {
 
 </body>
 </html>
-
-
 
 
