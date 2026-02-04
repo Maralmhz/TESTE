@@ -1918,77 +1918,62 @@ camposMonitorados.forEach(id => {
 // 3. Roda uma vez agora pra garantir
 setTimeout(atualizarResumoVeiculo, 500);
 
-                elemento.addEventListener('change', atualizarResumoVeiculo);
-        elemento.addEventListener('blur', atualizarResumoVeiculo);
-    }
-});
-
-// 3. Roda uma vez agora pra garantir
-setTimeout(atualizarResumoVeiculo, 500);
-        
-// === ENTER GLOBAL - VERSÃO FINAL QUE FUNCIONA EM TUDO ===
-function pularProximoCampo(campoAtual) {
-    const todosCampos = Array.from(document.querySelectorAll('input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=button]):not([type=submit]), textarea, select'));
-    const index = todosCampos.indexOf(campoAtual);
-    if (index > -1 && index < todosCampos.length - 1) {
-        const proximo = todosCampos[index + 1];
-        proximo.focus();
-        if (proximo.tagName === 'INPUT' || proximo.tagName === 'TEXTAREA') proximo.select();
-        return true;
-    }
-    return false;
-}
-
-// Listener GLOBAL pra TODOS CAMPOS
+        // === ENTER PULA CAMPOS VEÍCULO + CLIENTE ===
 document.addEventListener('keydown', function(e) {
-    const campo = e.target;
-    if (campo.tagName === 'INPUT' || campo.tagName === 'TEXTAREA' || campo.tagName === 'SELECT') {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            
-            // ESPECIAL: ABA PEÇAS/SERVIÇOS
-            if (campo.id === 'descricaoItem') {
-                document.getElementById('valorItem').focus();
-                return;
+    if (e.key === 'Enter' && !e.shiftKey) {
+        const campo = e.target;
+        if (campo.tagName !== 'INPUT' && campo.tagName !== 'TEXTAREA' && campo.tagName !== 'SELECT') return;
+        
+        e.preventDefault();
+        
+        // ORDEM EXATA DOS CAMPOS
+        const ordem = [
+            'placa', 'chassi', 'modelo', 'kmentrada', 'data', 'hora', 
+            'combustivel', 'kmsaida', 'nomecliente', 'cpfcnpj', 
+            'celularcliente', 'telefone2', 'enderecocliente', 'servicos'
+        ];
+        
+        const idAtual = campo.id;
+        const index = ordem.indexOf(idAtual);
+        
+        if (index !== -1 && index < ordem.length - 1) {
+            const proximoId = ordem[index + 1];
+            const proximo = document.getElementById(proximoId);
+            if (proximo) {
+                proximo.focus();
+                if (proximo.type !== 'date' && proximo.type !== 'time') proximo.select();
+                atualizarResumoVeiculo(); // Atualiza resumos na hora
             }
-            if (campo.id === 'valorItem') {
-                document.getElementById('btnAdicionarItem').click();
-                setTimeout(() => document.getElementById('descricaoItem').focus(), 150);
-                return;
-            }
-            
-            // PULA NORMAL pros outros
-            pularProximoCampo(campo);
         }
     }
 });
 
-// FORÇA ATUALIZAR RESUMOS (corrige Placa/Modelo/Chassi etc.)
-function forcarAtualizarResumos() {
-    if (typeof atualizarResumoVeiculo === 'function') atualizarResumoVeiculo();
-    const resumos = document.querySelectorAll('[id*="resumo"]');
-    resumos.forEach(el => {
-        if (el.textContent.includes('-')) el.textContent = el.textContent.replace(/-$/, '');
+// === PEÇAS/SERVIÇOS ENTER (se ainda não tem) ===
+const descricao = document.getElementById('descricaoItem');
+const valor = document.getElementById('valorItem');
+if (descricao) {
+    descricao.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            valor.focus();
+        }
+    });
+}
+if (valor) {
+    valor.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('btnAdicionarItem').click();
+            setTimeout(() => descricao.focus(), 100);
+        }
     });
 }
 
-// APLICA RESUMOS A CADA ENTER E MUDA DE CAMPO
-const observerCampos = new MutationObserver(forcarAtualizarResumos);
-observerCampos.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['value'] });
-
-// RODA UMA VEZ
-forcarAtualizarResumos();
-setTimeout(forcarAtualizarResumos, 1000);
-
-    
 </script>
 
 
 
 </body>
 </html>
-
-
-
 
 
