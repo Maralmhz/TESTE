@@ -1925,6 +1925,81 @@ setTimeout(atualizarResumoVeiculo, 500);
 
 // 3. Roda uma vez agora pra garantir
 setTimeout(atualizarResumoVeiculo, 500);
+        
+// === ENTER PULA CAMPO EM TODO O APP - VERSÃO CORRIGIDA ===
+function setupEnterNavigation() {
+    const editaveis = document.querySelectorAll('input[type="text"], input[type="tel"], input[type="number"], input[type="date"], input[type="time"], textarea, select');
+    editaveis.forEach(campo => {
+        // Remove listeners antigos pra evitar duplicatas
+        campo.removeEventListener('keydown', handleEnter);
+        campo.addEventListener('keydown', handleEnter);
+    });
+}
+
+function handleEnter(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const todosEditaveis = Array.from(document.querySelectorAll('input[type="text"], input[type="tel"], input[type="number"], input[type="date"], input[type="time"], textarea, select'));
+        const indexAtual = todosEditaveis.indexOf(e.target);
+        if (indexAtual < todosEditaveis.length - 1) {
+            const proximo = todosEditaveis[indexAtual + 1];
+            proximo.focus();
+            proximo.select();
+        }
+    }
+}
+
+// PEÇAS/SERVIÇOS ESPECÍFICO (já funcionando)
+const descricaoItem = document.getElementById('descricaoItem');
+const valorItem = document.getElementById('valorItem');
+if (descricaoItem && !descricaoItem.dataset.enterSetup) {
+    descricaoItem.dataset.enterSetup = 'true';
+    descricaoItem.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            valorItem.focus();
+        }
+    });
+}
+if (valorItem && !valorItem.dataset.enterSetup) {
+    valorItem.dataset.enterSetup = 'true';
+    valorItem.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('btnAdicionarItem').click();
+            setTimeout(() => descricaoItem.focus(), 100);
+        }
+    });
+}
+
+// APLICA EM TODOS OS TABS E PASSOS
+function aplicarEnterEmTudo() {
+    setupEnterNavigation();
+    
+    // Wizard steps (veículo, inspeção, cliente)
+    document.querySelectorAll('.wizard-step').forEach(step => {
+        const observer = new MutationObserver(setupEnterNavigation);
+        observer.observe(step, { childList: true, subtree: true });
+    });
+    
+    // Tabs
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.addEventListener('click', setupEnterNavigation);
+    });
+    
+    // Wizard next/prev (ativa quando muda passo)
+    window.nextStep2 = window.nextStep2 || function() {};
+    window.nextStep3 = window.nextStep3 || function() {};
+    window.prevStep1 = window.prevStep1 || function() {};
+    const originalNext2 = window.nextStep2;
+    window.nextStep2 = function() { originalNext2(); setTimeout(setupEnterNavigation, 100); };
+    // Repita para outras funções next/prev se existirem...
+}
+
+// RODA IMEDIATAMENTE E SEMPRE
+aplicarEnterEmTudo();
+setInterval(setupEnterNavigation, 2000); // Backup pra tabs dinâmicos
+        
     
 </script>
 
@@ -1932,6 +2007,7 @@ setTimeout(atualizarResumoVeiculo, 500);
 
 </body>
 </html>
+
 
 
 
