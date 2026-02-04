@@ -2070,6 +2070,25 @@ function removerItem(id) {
     itensOrcamento = itensOrcamento.filter(i => i.id !== id);
     renderizarTabela();
 }
+
+        // === CORREÇÃO FINAL ERRO nextStep ===
+window.nextStep2 = function() {
+    document.querySelector('.wizard-step.active').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+};
+window.nextStep3 = function() {
+    document.querySelector('.wizard-step.active').classList.remove('active');
+    document.getElementById('step3').classList.add('active');
+};
+window.prevStep1 = function() {
+    document.querySelector('.wizard-step.active').classList.remove('active');
+    document.getElementById('step1').classList.add('active');
+};
+
+// Chama funções originais se existirem
+if (typeof originalNextStep2 === 'function') window.nextStep2 = originalNextStep2;
+if (typeof originalNextStep3 === 'function') window.nextStep3 = originalNextStep3;
+
      
         
 </script>
@@ -2078,5 +2097,6 @@ function removerItem(id) {
 
 </body>
 </html>
+
 
 
