@@ -401,9 +401,6 @@
                     </div>
                 </div>
 
-              <!-- DENTRO DA DIV #orcamento -->
-
-<!-- 1. Adicione a seleção de Tipo (Peça ou Serviço) no formulário -->
 <div class="form-row">
     <div class="form-group">
         <label>Tipo do Item:</label>
@@ -440,11 +437,8 @@
     </div>
 </div>
 
-<!-- 2. Substitua a tabela antiga por DUAS tabelas novas -->
-<!-- CORES INVERTIDAS: Peças = Azul (#0056b3), Serviços = Vermelho (#e41616) -->
 <div style="margin-top:20px;">
     
-    <!-- SEÇÃO DE PEÇAS (AZUL) -->
     <h4 style="border-bottom: 2px solid #0056b3; padding-bottom: 5px; color: #333;">🔩 Peças</h4>
     <table style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom: 10px;">
         <thead>
@@ -464,7 +458,6 @@
         </tfoot>
     </table>
 
-    <!-- SEÇÃO DE SERVIÇOS (VERMELHO) -->
     <h4 style="border-bottom: 2px solid #e41616; padding-bottom: 5px; color: #333; margin-top: 25px;">🔧 Serviços</h4>
     <table style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom: 10px;">
         <thead>
@@ -484,7 +477,6 @@
         </tfoot>
     </table>
 
-    <!-- TOTAL GERAL (SOMA DOS DOIS) -->
     <div style="background: #eee; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: right;">
         <span style="font-size: 14px; font-weight: bold; color: #555;">TOTAL GERAL (Peças + Serviços):</span>
         <div id="totalGeralFinal" style="font-size: 24px; font-weight: bold; color: #28a745;">R$ 0,00</div>
@@ -496,12 +488,10 @@
                 </div>
             </div>
         </div>
-<!-- ABA FOTOS - ATUALIZADA COM AVISO E GEOLOCALIZAÇÃO -->
 <div id="fotos" class="tab-content">
     <div class="content">
         <div class="section-title">📸 FOTOS DO VEÍCULO</div>
 
-        <!-- AVISO DE BACKUP LOCAL -->
         <div style="
             background-color: #fff3cd; 
             border: 1px solid #ffeeba; 
@@ -516,7 +506,6 @@
             Para backup, envie para o <strong>WhatsApp</strong> ou salve no <strong>Google Drive</strong>.
         </div>
         
-        <!-- RESUMO VEÍCULO -->
         <div class="veiculo-resumo" id="resumoVeiculoFotos">
             <div class="veiculo-resumo-pill">Placa: <strong id="resumoPlaca3">-</strong></div>
             <div class="veiculo-resumo-pill">Modelo: <strong id="resumoModelo3">-</strong></div>
@@ -524,7 +513,6 @@
             <div class="veiculo-resumo-pill">KM: <strong id="resumoKmFotos">-</strong></div>
         </div>
 
-        <!-- BOTÕES -->
         <div class="form-row">
             <div class="form-group">
                 <button type="button" class="btn-primary" onclick="iniciarCamera()">📷 Tirar Foto</button>
@@ -535,7 +523,6 @@
             </div>
         </div>
 
-        <!-- CÂMERA -->
         <div class="camera-container" style="display:none;">
             <video id="cameraPreview" autoplay playsinline style="width:100%; max-width:400px; height:300px; border-radius:12px; border:3px solid #e41616; background:#000;"></video>
             <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
@@ -544,7 +531,6 @@
             </div>
         </div>
 
-        <!-- GALERIA -->
         <div class="section-title">Galeria de Fotos (Máx 15)</div>
         <div id="galeriaFotos" class="fotos-grid"></div>
 
@@ -556,16 +542,11 @@
 </div>
 
     </div>
-<!-- ========================================== -->
-<!-- NOVA ABA: RESUMO (DOCUMENTO DE IMPRESSÃO) -->
-<!-- ========================================== -->
 <div id="resumo" class="tab-content">
   <div class="content">
     
-    <!-- ÁREA QUE SERÁ IMPRESSA (A FOLHA) -->
     <div id="resumoContainer" class="os-paper">
       
-      <!-- CABEÇALHO -->
       <div id="template-cabecalho" class="os-header">
         <div class="os-header-left">
           <img id="logoResumo" src="" alt="Logo" class="os-logo">
@@ -585,7 +566,6 @@
         </div>
       </div>
 
-      <!-- DADOS CLIENTE E VEÍCULO (LADO A LADO) -->
       <div class="os-grid-2">
         <div class="os-box">
           <div class="os-box-title">CLIENTE</div>
@@ -602,33 +582,27 @@
         </div>
       </div>
 
-      <!-- SERVIÇOS SOLICITADOS -->
       <div class="os-box mt-10">
         <div class="os-box-title">SERVIÇOS SOLICITADOS</div>
         <div id="rServicos" class="os-text-area"></div>
       </div>
 
-      <!-- INSPEÇÃO (CHECKLIST) - SÓ O QUE MARCOU -->
       <div class="os-box mt-10">
         <div class="os-box-title">INSPEÇÃO DE ENTRADA</div>
         <div id="rChecklistBadges" class="os-badges-area">
-          <!-- O Javascript vai preencher aqui -->
         </div>
       </div>
         
-<!-- OBSERVAÇÕES DA INSPEÇÃO -->
 <div class="os-box mt-10">
     <div class="os-box-title">OBSERVAÇÕES DA INSPEÇÃO</div>
     <div id="rObsInspecao" class="os-text-area">-</div>
 </div>
 
-       <!-- ASSINATURAS -->
-      <div id="template-assinaturas" class="os-assinaturas">
+       <div id="template-assinaturas" class="os-assinaturas">
         <div class="os-assina-box">Assinatura do Cliente</div>
         <div class="os-assina-box">Assinatura do Técnico</div>
       </div>
 
-   <!-- RODAPÉ PÁGINA 1 -->
 <div class="os-footer">
     <span id="rodape-texto-1">Carregando...</span>
 </div>
@@ -636,38 +610,30 @@
 <div class="force-page-break"></div>
 
 
-<!-- CABEÇALHO REPETIDO NA PÁGINA 2 -->
 <div class="os-header" id="header-pag2">
-    <!-- Copiado via JS -->
 </div>
 
-      <!-- TABELAS DE ORÇAMENTO COM PAGINAÇÃO INTELIGENTE -->
 <div id="containerTabelasOrcamento">
-    <!-- O Javascript vai gerar as tabelas aqui dividindo em páginas se necessário -->
 </div>
 
-      <!-- TOTAL GERAL -->
       <div class="os-total-row">
         <span>TOTAL GERAL:</span>
         <span id="rTotalGeral" class="os-total-value">R$ 0,00</span>
       </div>
         
- <!-- ASSINATURAS PÁGINA 2 (Repetido via JS se precisar) -->
 <div class="os-assinaturas" id="assinaturas-pag2">
     <div class="os-assina-box">Assinatura do Cliente</div>
     <div class="os-assina-box">Assinatura do Técnico</div>
 </div>
 
-        <!-- RODAPÉ PÁGINA 2 -->
 <div class="os-footer">
     <span id="rodape-texto-2">Carregando...</span>
 </div>
 
 
 
-    </div> <!-- FIM DA FOLHA -->
+    </div>
 
-    <!-- BOTÕES DE AÇÃO DA ABA RESUMO -->
 <div class="action-buttons no-pdf">
       <button type="button" class="btn-success" onclick="gerarPDFResumo()">📥 Baixar PDF</button>
        <button type="button" class="btn-primary" onclick="salvarChecklist()" style="background: #27ae60 !important;">💾 Salvar Completo</button>
@@ -676,1320 +642,13 @@
   </div>
 </div>
 
-    <script>
-// FUNÇÃO QUE CARREGA O MÓDULO FIREBASE DINAMICAMENTE
-async function salvarComFirebase(checklistData) {
-    try {
-        const modulo = await import('./firebase_app.js');
-        if (modulo && modulo.salvarNoFirebase) {
-            await modulo.salvarNoFirebase(checklistData);
-            console.log("Salvo no Firebase!");
-        }
-    } catch (e) {
-        console.error("Erro ao carregar Firebase:", e);
-    }
-}
-
-async function sincronizarChecklists() {
-    const btn = document.getElementById('btnSync');
-    btn.textContent = '⏳ Baixando...';
-    btn.disabled = true;
-
-    try {
-        const modulo = await import('./firebase_app.js');
-        if (modulo && modulo.buscarChecklistsNuvem) {
-            const dadosNuvem = await modulo.buscarChecklistsNuvem();
-            if (dadosNuvem.length > 0) {
-                // Mesclar com local (evitando duplicatas pelo ID)
-                let local = JSON.parse(localStorage.getItem('checklists') || '[]');
-                const idsLocais = new Set(local.map(c => c.id));
-                
-                let novos = 0;
-                dadosNuvem.forEach(item => {
-                    if (!idsLocais.has(item.id)) {
-                        local.push(item);
-                        novos++;
-                    }
-                });
-
-                localStorage.setItem('checklists', JSON.stringify(local));
-                carregarHistorico();
-                alert(`✅ Sincronização concluída! ${novos} novos checklists baixados.`);
-            } else {
-                alert("📭 Nenhum checklist encontrado na nuvem para esta oficina.");
-            }
-        }
-    } catch (e) {
-        console.error("Erro sync:", e);
-        alert("❌ Erro ao sincronizar. Verifique sua internet.");
-    } finally {
-        btn.textContent = '🔄 Sincronizar Nuvem';
-        btn.disabled = false;
-    }
-}
-
-function salvarChecklist() {
-
-    const dados = {};
-
-    document.querySelectorAll('input, select, textarea').forEach(el => {
-
-        if (!el.name && !el.id) return;
-
-        let chave = el.name || el.id;
-
-        // NORMALIZAÇÃO NA RAIZ - SEMPRE SALVA COMO 'nomecliente'
-        if (chave === 'nomecliente') {
-            chave = 'nomecliente'; // Garante o nome correto
-        }
-
-        if (el.type === 'checkbox') {
-            dados[chave] = el.checked;
-        } else if (el.type === 'radio') {
-            if (el.checked) dados[chave] = el.value;
-        } else {
-            dados[chave] = el.value;
-        }
-    });
-
-
-    // peças adicionadas dinamicamente
-    dados.pecas = [];
-    document.querySelectorAll('.linha-peca').forEach(linha => {
-        const peca = {};
-        linha.querySelectorAll('input, select').forEach(campo => {
-            peca[campo.name || campo.className] = campo.value;
-        });
-        dados.pecas.push(peca);
-    });
-
-    // fotos
-    dados.fotos = [];
-    document.querySelectorAll('#previewFotos img').forEach(img => {
-        dados.fotos.push(img.src);
-    });
-
-    // salvar local
-    localStorage.setItem('checklistSalvo', JSON.stringify(dados));
-
-    alert('Checklist salvo com sucesso.');
-}
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                if (btn.getAttribute('onclick').includes(tabId)) btn.classList.add('active');
-            });
-
-            if (tabId === 'historico') carregarHistorico();
-            if (tabId === 'relatorios') atualizarRelatorios();
-            if (tabId === 'orcamento') atualizarResumoVeiculo(); // garante resumo atualizado ao abrir Peças
-        }
-         
-        function salvarChecklist() {
-            const placa = document.getElementById('placa').value;
-            if (!placa) {
-                alert("Por favor, preencha pelo menos a PLACA para salvar.");
-                return;
-            }
-
-            const formData = {};
-            const elements = document.getElementById('checklistForm').elements;
-
-            for (let i = 0; i < elements.length; i++) {
-                const item = elements[i];
-                if (item.name) {
-                    if (item.type === 'checkbox') {
-                        if (item.checked) {
-                            if (!formData[item.name]) formData[item.name] = [];
-                            formData[item.name].push(item.value);
-                        }
-                    } else if (item.type !== 'button') {
-                        formData[item.name] = item.value;
-                    }
-                }
-            }
-
-            const checklist = {
-                id: Date.now(),
-                data_criacao: new Date().toISOString(),
-                ...formData
-            };
-            
-// ✅ SALVA PEÇAS E SERVIÇOS
-formData.itensOrcamento = itensOrcamento || [];
-formData.complexidade = document.getElementById('complexidade')?.value || '';
-
-checklist.itensOrcamento = itensOrcamento || [];
-            
-            let checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-            checklists.push(checklist);
-            localStorage.setItem('checklists', JSON.stringify(checklists));
-            
-            // 🔥 INTEGRAÇÃO FIREBASE AQUI
-            salvarComFirebase(checklist);
-
-             // ✅ LIMPA PEÇAS/SERVIÇOS após salvar
-    itensOrcamento = [];
-    renderizarTabela();
-
-            alert("✅ Checklist salvo com sucesso no Histórico e Nuvem!");
-            document.getElementById('checklistForm').reset();
-            atualizarResumoVeiculo();
-            switchTab('historico');
-        }
-
-        function carregarHistorico() {
-            const listaDiv = document.getElementById('checklistsList');
-            const emptyMsg = document.getElementById('emptyMessage');
-            const checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-
-            listaDiv.innerHTML = '';
-
-            if (checklists.length === 0) {
-                emptyMsg.style.display = 'block';
-                return;
-            } else {
-                emptyMsg.style.display = 'none';
-            }
-
-            checklists.slice().reverse().forEach(item => {
-                const dataFormatada = new Date(item.data_criacao).toLocaleDateString('pt-BR');
-                const horaFormatada = new Date(item.data_criacao).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-
-                const card = document.createElement('div');
-                card.className = 'checklist-item';
-                card.innerHTML = `
-                    <div class="checklist-info">
-                        <h4>${(item.placa || '').toUpperCase()} - ${item.modelo || 'Modelo não inf.'}</h4>
-                        <p>📅 ${dataFormatada} às ${horaFormatada} | 👤 ${item.nome_cliente || 'Cliente não inf.'}</p>
-                    </div>
-                    <div class="checklist-actions">
-                        <button class="btn-small btn-secondary" onclick="carregarChecklist(${item.id})">✏️ Editar</button>
-                        <button class="btn-small btn-danger" onclick="excluirChecklist(${item.id})">🗑️</button>
-                    </div>
-                `;
-                listaDiv.appendChild(card);
-            });
-        }
-
- function carregarChecklist(id) {
-    const checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-    const item = checklists.find(c => c.id === id);
-
-    if (!item) return;
-
-    switchTab('novo-checklist');
-
-    // Garante que temos sempre "nomecliente" dentro do objeto
-    if (item.nome_cliente && !item.nomecliente) {
-        item.nomecliente = item.nome_cliente;
-    }
-
-    // Preenche campos principais pelo ID
-    if (document.getElementById('nomecliente')) {
-        document.getElementById('nomecliente').value = item.nomecliente || '';
-    }
-    if (document.getElementById('cpfcnpj')) {
-        document.getElementById('cpfcnpj').value = item.cpf_cnpj || item.cpfcnpj || '';
-    }
-    if (document.getElementById('celularcliente')) {
-        document.getElementById('celularcliente').value = item.telefone || item.contato || item.celularcliente || '';
-    }
-    if (document.getElementById('placa')) {
-        document.getElementById('placa').value = item.placa || '';
-    }
-    if (document.getElementById('modelo')) {
-        document.getElementById('modelo').value = item.modelo || '';
-    }
-
-    // Preenche o resto de forma genérica
-    for (const key in item) {
-        const el = document.getElementsByName(key)[0];
-        if (el && el.type !== 'checkbox' && el.type !== 'file' && el.type !== 'radio') {
-            el.value = item[key];
-        }
-    }
-
-    // Checkboxes
-    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-
-    if (item.equipamentos) item.equipamentos.forEach(val => marcarCheckbox('equipamentos', val));
-    if (item.caracteristicas) item.caracteristicas.forEach(val => marcarCheckbox('caracteristicas', val));
-    if (item.cambio) item.cambio.forEach(val => marcarCheckbox('cambio', val));
-    if (item.tracao) item.tracao.forEach(val => marcarCheckbox('tracao', val));
-         // ✅ CARREGA PEÇAS/SERVIÇOS
-    itensOrcamento = item.itensOrcamento || [];
-    document.getElementById('complexidade').value = item.complexidade || '';
-    renderizarTabela();
-    
-    atualizarResumoVeiculo();
-     itensOrcamento = item.itensOrcamento || [];
-}
-
-
-
-
-        function marcarCheckbox(name, value) {
-            const els = document.getElementsByName(name);
-            els.forEach(el => { if (el.value === value) el.checked = true; });
-        }
-
-        function excluirChecklist(id) {
-            if (confirm("Tem certeza que deseja excluir este checklist?")) {
-                let checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-                checklists = checklists.filter(c => c.id !== id);
-                localStorage.setItem('checklists', JSON.stringify(checklists));
-                carregarHistorico();
-            }
-        }
-
-        function filtrarChecklists() {
-            const termo = document.getElementById('searchInput').value.toLowerCase();
-            const checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-            const listaDiv = document.getElementById('checklistsList');
-            const emptyMsg = document.getElementById('emptyMessage');
-
-            listaDiv.innerHTML = '';
-
-            const filtrados = checklists.filter(item => {
-                const texto = ((item.placa || '') + ' ' + (item.modelo || '') + ' ' + (item.nome_cliente || '')).toLowerCase();
-                return texto.includes(termo);
-            });
-
-            if (!filtrados.length) {
-                emptyMsg.style.display = 'block';
-                return;
-            } else {
-                emptyMsg.style.display = 'none';
-            }
-
-            filtrados.slice().reverse().forEach(item => {
-                const dataFormatada = new Date(item.data_criacao).toLocaleDateString('pt-BR');
-                const horaFormatada = new Date(item.data_criacao).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-
-                const card = document.createElement('div');
-                card.className = 'checklist-item';
-                card.innerHTML = `
-                    <div class="checklist-info">
-                        <h4>${(item.placa || '').toUpperCase()} - ${item.modelo || 'Modelo não inf.'}</h4>
-                        <p>📅 ${dataFormatada} às ${horaFormatada} | 👤 ${item.nome_cliente || 'Cliente não inf.'}</p>
-                    </div>
-                    <div class="checklist-actions">
-                        <button class="btn-small btn-secondary" onclick="carregarChecklist(${item.id})">✏️ Editar</button>
-                        <button class="btn-small btn-danger" onclick="excluirChecklist(${item.id})">🗑️</button>
-                    </div>
-                `;
-                listaDiv.appendChild(card);
-            });
-        }
-
-        function ordenarChecklists() {
-            const checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
-            checklists.sort((a, b) => {
-                const placaA = (a.placa || '').toUpperCase();
-                const placaB = (b.placa || '').toUpperCase();
-                if (placaA < placaB) return -1;
-                if (placaA > placaB) return 1;
-                return 0;
-            });
-            localStorage.setItem('checklists', JSON.stringify(checklists));
-            carregarHistorico();
-        }
-
-        function gerarPDF() {
-            const elemento = document.querySelector('.container');
-
-            const originalBodyOverflow = document.body.style.overflow;
-            const originalBodyPadding = document.body.style.padding;
-            const originalContainerMargin = elemento.style.margin;
-            const originalContainerBoxShadow = elemento.style.boxShadow;
-
-            window.scrollTo(0, 0);
-            document.body.style.overflow = 'visible';
-            document.body.style.padding = '0';
-            elemento.style.margin = '0 auto';
-            elemento.style.boxShadow = 'none';
-
-            const botoes = document.querySelectorAll('button, .tabs, .header-badge, .action-buttons');
-            botoes.forEach(btn => btn.style.display = 'none');
-            
-             // === FIX RODAPÉ ===
-    const rodape = document.querySelector('.os-footer');
-    const rodapeVisible = rodape.style.display;  // Salva estado atual
-    rodape.style.display = 'block !important';   // Força visível no PDF
-    // === FIM FIX ===
-
-            const opt = {
-    margin: [10, 15, 10, 15],  // ✅ MARGEM adequada
-    filename: 'Checklist-' + document.getElementById('placa').value + '.pdf',
-    image: { type: 'jpeg', quality: 0.95 },
-    html2canvas: {
-        scale: 1.5,  // ✅ Reduzido para mais conteúdo por página
-        useCORS: true,
-        letterRendering: true,  // ✅ Melhora texto
-        allowTaint: true,
-        width: 794,  // ✅ Largura A4 em pixels (595pt * scale)
-        height: 1123 // ✅ Altura A4 em pixels
-    },
-    jsPDF: { 
-        unit: 'pt', 
-        format: 'a4', 
-        orientation: 'portrait' 
-    },
-    pagebreak: {  // ✅ QUEBRA AUTOMÁTICA
-        mode: ['avoid-all', 'css', 'legacy']
-    }
-};
-
-
-            html2pdf().set(opt).from(elemento).save().then(() => {
-                botoes.forEach(btn => btn.style.display = '');
-                document.querySelector('.tabs').style.display = 'flex';
-                document.querySelector('.header-badge').style.display = 'block';
-                document.querySelectorAll('.action-buttons').forEach(ab => ab.style.display = 'flex');
-
-                document.body.style.overflow = originalBodyOverflow;
-                document.body.style.padding = originalBodyPadding;
-                elemento.style.margin = originalContainerMargin;
-                elemento.style.boxShadow = originalContainerBoxShadow;
-            }).catch(err => {
-                console.error(err);
-                alert("Erro ao gerar PDF.");
-                botoes.forEach(btn => btn.style.display = '');
-                document.querySelector('.tabs').style.display = 'flex';
-                document.querySelector('.header-badge').style.display = 'block';
-                document.querySelectorAll('.action-buttons').forEach(ab => ab.style.display = 'flex');
-                document.body.style.overflow = originalBodyOverflow;
-                document.body.style.padding = originalBodyPadding;
-            });
-        }
-
-        function limparFormulario() {
-            if (confirm("Limpar todos os campos do formulário?")) {
-                document.getElementById('checklistForm').reset();
-                atualizarResumoVeiculo();
-            }
-        }
-
-        function exportarDados() {
-            const db = JSON.parse(localStorage.getItem('checklists') || '[]');
-            if (!db.length) {
-                alert("Não há dados para exportar.");
-                return;
-            }
-            const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'checklists.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function limparTodosDados() {
-            if (confirm("Deseja apagar TODO o histórico?")) {
-                localStorage.removeItem('checklists');
-                carregarHistorico();
-                alert("Histórico limpo.");
-            }
-        }
-
-        function atualizarRelatorios() {
-            const db = JSON.parse(localStorage.getItem('checklists') || '[]');
-
-            document.getElementById('totalChecklists').textContent = db.length;
-
-            const hoje = new Date();
-            const mesAtual = hoje.getMonth();
-            const anoAtual = hoje.getFullYear();
-
-            const doMes = db.filter(item => {
-                if (!item.data_criacao) return false;
-                const dataItem = new Date(item.data_criacao);
-                return dataItem.getMonth() === mesAtual && dataItem.getFullYear() === anoAtual;
-            });
-            document.getElementById('checklistsMes').textContent = doMes.length;
-
-            const marcas = {};
-            db.forEach(item => {
-                const modeloTexto = item.modelo || 'Não Informado';
-                const m = modeloTexto.split(' ')[0].toUpperCase();
-                marcas[m] = (marcas[m] || 0) + 1;
-            });
-
-            const sortedMarcas = Object.entries(marcas).sort((a,b) => b[1] - a[1]).slice(0, 5);
-            let htmlGrafico = '';
-            sortedMarcas.forEach(([marca, qtd]) => {
-                const pct = (qtd / db.length) * 100;
-                htmlGrafico += `
-                    <div style="margin-bottom: 10px;">
-                        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:2px;">
-                            <strong>${marca}</strong>
-                            <span>${qtd}</span>
-                        </div>
-                        <div style="background:#eee; height:8px; border-radius:4px; overflow:hidden;">
-                            <div style="background:var(--color-primary); width:${pct}%; height:100%;"></div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            if (!sortedMarcas.length) {
-                htmlGrafico = '<p style="text-align:center; color:#999; font-size:12px;">Sem dados suficientes.</p>';
-            }
-
-            document.getElementById('graficoMarcas').innerHTML = htmlGrafico;
-        }
-
-// ORÇAMENTO - PEÇAS & SERVIÇOS - SEPARADOS
-let itensOrcamento = [];
-
-function adicionarItemManual() {
-  const descricaoInput = document.getElementById("descricaoItem");
-  const valorInput = document.getElementById("valorItem");
-  const tipo = document.querySelector('input[name="tipoItem"]:checked').value;
-
-  const descricao = (descricaoInput.value || "").trim();
-
-  // ✅ Se não digitar nada, considera 0
-  const valorBruto = (valorInput.value || "").toString().trim();
-  const valor = valorBruto === "" ? 0 : parseFloat(valorBruto);
-
-  if (!descricao) {
-    alert("Informe a descrição do item.");
-    descricaoInput.focus();
-    return;
-  }
-
-  // ✅ Aceita 0, só bloqueia se for NaN ou negativo
-  if (isNaN(valor) || valor < 0) {
-    alert("Informe um valor válido (0 ou maior).");
-    valorInput.focus();
-    return;
-  }
-
-  const item = {
-    id: Date.now(),
-    descricao,
-    valor,
-    tipo,
-  };
-
-  itensOrcamento.push(item);
-  renderizarTabela();
-
-  descricaoInput.value = "";
-  valorInput.value = "";
-  descricaoInput.focus();
-}
-
-
-function removerItem(id) {
-    itensOrcamento = itensOrcamento.filter(i => i.id !== id);
-    renderizarTabela();
-}
-
-function renderizarTabela() {
-  const tbodyPecas = document.getElementById("tabelaPecas");
-  const tbodyServicos = document.getElementById("tabelaServicos");
-
-  const elTotalPecas = document.getElementById("totalPecas");
-  const elTotalServicos = document.getElementById("totalServicos");
-  const elTotalGeral = document.getElementById("totalGeralFinal");
-
-  if (tbodyPecas) tbodyPecas.innerHTML = "";
-  if (tbodyServicos) tbodyServicos.innerHTML = "";
-
-  let somaPecas = 0;
-  let somaServicos = 0;
-
-  itensOrcamento.forEach((item) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td style="border: 1px solid #ddd; padding: 6px;">${item.descricao}</td>
-      <td style="border: 1px solid #ddd; padding: 6px; text-align: right;">R$ ${Number(item.valor || 0).toFixed(2)}</td>
-      <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">
-        <button class="btn-small btn-warning" onclick="editarItem(${item.id})" title="Editar">✏️</button>
-        <button class="btn-small btn-danger" onclick="removerItem(${item.id})" title="Apagar">🗑️</button>
-      </td>
-    `;
-
-    if (item.tipo === "servico") {
-      somaServicos += Number(item.valor || 0);
-      if (tbodyServicos) tbodyServicos.appendChild(tr);
-    } else {
-      somaPecas += Number(item.valor || 0);
-      if (tbodyPecas) tbodyPecas.appendChild(tr);
-    }
-  });
-
-  const somaTotal = somaPecas + somaServicos;
-
-  if (elTotalPecas) elTotalPecas.textContent = `R$ ${somaPecas.toFixed(2)}`;
-  if (elTotalServicos) elTotalServicos.textContent = `R$ ${somaServicos.toFixed(2)}`;
-  if (elTotalGeral) elTotalGeral.textContent = `R$ ${somaTotal.toFixed(2)}`;
-
-  // (Opcional) Se você usa o resumo com totais separados:
-  const rTotalPecas = document.getElementById("rTotalPecas");
-  const rTotalServicos = document.getElementById("rTotalServicos");
-  const rTotalGeral = document.getElementById("rTotalGeral");
-  if (rTotalPecas) rTotalPecas.textContent = `R$ ${somaPecas.toFixed(2)}`;
-  if (rTotalServicos) rTotalServicos.textContent = `R$ ${somaServicos.toFixed(2)}`;
-  if (rTotalGeral) rTotalGeral.textContent = `R$ ${somaTotal.toFixed(2)}`;
-}
-
-        function atualizarResumoVeiculo() {
-            const placa = document.getElementById('placa').value || '-';
-            const modelo = document.getElementById('modelo').value || '-';
-            const chassi = document.getElementById('chassi').value || '-';
-            const kmEntrada = document.getElementById('km_entrada').value || '-';
-            const data = document.getElementById('data').value || '-';
-            const hora = document.getElementById('hora').value || '-';
-            const combustivel = document.getElementById('combustivel').value || '-';
-            const complexidade = document.getElementById('complexidade').value || '-';
-
-            document.getElementById('resumoPlaca').textContent = placa;
-            document.getElementById('resumoModelo').textContent = modelo;
-            document.getElementById('resumoChassi').textContent = chassi;
-            document.getElementById('resumoKmEntrada').textContent = kmEntrada;
-            document.getElementById('resumoData').textContent = data;
-            document.getElementById('resumoHora').textContent = hora;
-            document.getElementById('resumoCombustivel').textContent = combustivel;
-
-            document.getElementById('resumoPlaca2').textContent = placa;
-            document.getElementById('resumoModelo2').textContent = modelo;
-            document.getElementById('resumoChassi2').textContent = chassi;
-            document.getElementById('resumoKmEntrada2').textContent = kmEntrada;
-            document.getElementById('resumoComplexidade').textContent = complexidade || '-';
-// FOTOS
-const resumoPlaca3 = document.getElementById('resumoPlaca3');
-const resumoModelo3 = document.getElementById('resumoModelo3');
-const resumoChassi3 = document.getElementById('resumoChassi3');
-const resumoKmFotos = document.getElementById('resumoKmFotos');
-if (resumoPlaca3) resumoPlaca3.textContent = placa;
-if (resumoModelo3) resumoModelo3.textContent = modelo;
-if (resumoChassi3) resumoChassi3.textContent = chassi;
-if (resumoKmFotos) resumoKmFotos.textContent = kmEntrada;
-
-        }
-// ========================================
-// FOTOS - 100% FUNCIONAL
-// ========================================
-let streamCamera = null;
-let fotosVeiculo = JSON.parse(localStorage.getItem('fotosVeiculo') || '[]');
-
-function iniciarCamera() {
-    const video = document.getElementById('cameraPreview');
-    const btnTirar = document.getElementById('btnTirarFoto');
-    const container = document.querySelector('.camera-container');
-    
-    // Pede localização ao iniciar a câmera
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(() => {}, () => {}); 
-    }
-
-    navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
-    }).then(stream => {
-        streamCamera = stream;
-        video.srcObject = stream;
-        container.style.display = 'block';
-        btnTirar.style.display = 'inline-block';
-        video.play();
-    }).catch(err => {
-        alert('Erro câmera: ' + err.message + '\\nUse "Galeria"');
-    });
-}
-
-function tirarFoto() {
-    const video = document.getElementById('cameraPreview');
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    
-    // Desenha a imagem
-    ctx.drawImage(video, 0, 0);
-    
-    // Adiciona MARCA D'ÁGUA (Data e Local)
-    adicionarMarcaDagua(canvas, () => {
-        const foto = {
-            id: Date.now(),
-            dataURL: canvas.toDataURL('image/jpeg', 0.8),
-            data: new Date().toLocaleString('pt-BR'),
-            legenda: '' // Nova propriedade para legenda editável
-        };
-        
-        fotosVeiculo.unshift(foto);
-        if (fotosVeiculo.length > 15) fotosVeiculo = fotosVeiculo.slice(0, 15);
-        localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
-        renderizarGaleria();
-        pararCamera();
-    });
-}
-
-// Função auxiliar para carimbar data e local
-function adicionarMarcaDagua(canvas, callback) {
-    const ctx = canvas.getContext('2d');
-    const dataHora = new Date().toLocaleString('pt-BR');
-    
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            const lat = pos.coords.latitude.toFixed(4);
-            const lng = pos.coords.longitude.toFixed(4);
-            desenharTexto(ctx, canvas.width, canvas.height, `${dataHora} | Loc: ${lat}, ${lng}`);
-            callback();
-        }, () => {
-            // Se der erro ou negar, salva só data
-            desenharTexto(ctx, canvas.width, canvas.height, `${dataHora}`);
-            callback();
-        });
-    } else {
-        desenharTexto(ctx, canvas.width, canvas.height, `${dataHora}`);
-        callback();
-    }
-}
-
-function desenharTexto(ctx, w, h, texto) {
-    const fontSize = Math.floor(h * 0.04); // 4% da altura
-    ctx.font = `bold ${fontSize}px Arial`;
-    ctx.fillStyle = "white";
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 3;
-    ctx.textAlign = "right";
-    
-    // Sombra do texto para leitura
-    ctx.strokeText(texto, w - 20, h - 20);
-    ctx.fillText(texto, w - 20, h - 20);
-}
-
-function pararCamera() {
-    if (streamCamera) {
-        streamCamera.getTracks().forEach(track => track.stop());
-        streamCamera = null;
-    }
-    document.querySelector('.camera-container').style.display = 'none';
-    document.getElementById('btnTirarFoto').style.display = 'none';
-}
-
-function adicionarFotos(event) {
-    const files = Array.from(event.target.files);
-    
-    // Processa uma por uma para garantir marca d'água
-    const processarArquivo = (index) => {
-        if (index >= files.length) return;
-        
-        const file = files[index];
-        const reader = new FileReader();
-        reader.onload = e => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
-                
-                adicionarMarcaDagua(canvas, () => {
-                   fotosVeiculo.unshift({
-                        id: Date.now() + Math.random(),
-                        dataURL: canvas.toDataURL('image/jpeg', 0.8),
-                        data: new Date().toLocaleString('pt-BR'),
-                        legenda: ''
-                    });
-                    if (fotosVeiculo.length > 15) fotosVeiculo = fotosVeiculo.slice(0, 15);
-                    localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
-                    renderizarGaleria();
-                    
-                    // Processa a próxima
-                    processarArquivo(index + 1);
-                });
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    };
-    
-    processarArquivo(0);
-    event.target.value = '';
-}
-
-function renderizarGaleria() {
-    const galeria = document.getElementById('galeriaFotos');
-    if (!galeria) return;
-    galeria.innerHTML = '';
-    
-    if (fotosVeiculo.length === 0) {
-        galeria.innerHTML = '<p style="text-align:center;color:#999;padding:40px">📭 Nenhuma foto</p>';
-        return;
-    }
-    
-    fotosVeiculo.slice(0, 15).forEach((foto, index) => {
-        const div = document.createElement('div');
-        div.className = 'foto-item';
-        // Input para editar legenda
-        div.innerHTML = `
-            <img src="${foto.dataURL}" alt="Foto ${index + 1}" loading="lazy">
-            <input type="text" class="foto-legenda" value="${foto.legenda || ''}" placeholder="Escreva uma legenda..." onchange="salvarLegenda(${foto.id}, this.value)">
-            <div class="foto-overlay"><span style="color:white;font-size:10px">${foto.data}</span></div>
-            <div class="foto-actions">
-                <button class="btn-foto btn-warning foto-zoom" data-url="${foto.dataURL}">🔍</button>
-                <button class="btn-foto btn-danger foto-delete" data-id="${foto.id}">🗑️</button>
-            </div>
-        `;
-        galeria.appendChild(div);
-    });
-    
-    // EVENTOS DELEGADOS
-    galeria.querySelectorAll('.foto-zoom').forEach(btn => {
-        btn.addEventListener('click', () => abrirFotoGrande(btn.dataset.url));
-    });
-    galeria.querySelectorAll('.foto-delete').forEach(btn => {
-        btn.addEventListener('click', () => removerFoto(parseInt(btn.dataset.id)));
-    });
-}
-
-function salvarLegenda(id, texto) {
-    const foto = fotosVeiculo.find(f => f.id === id);
-    if (foto) {
-        foto.legenda = texto;
-        localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
-    }
-}
-
-function removerFoto(id) {
-    fotosVeiculo = fotosVeiculo.filter(f => f.id !== id);
-    localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
-    renderizarGaleria();
-    mostrarAlerta('success', '✅ Foto removida!');
-}
-
-function limparFotos() {
-    if (confirm('🗑️ Limpar TODAS as fotos?')) {
-        fotosVeiculo = [];
-        localStorage.removeItem('fotosVeiculo');
-        renderizarGaleria();
-        mostrarAlerta('success', '✅ Fotos limpas!');
-    }
-}
-
-function abrirFotoGrande(dataURL) {
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        position:fixed; top:0; left:0; width:100vw; height:100vh; 
-        background:rgba(0,0,0,0.95); z-index:9999; display:flex; 
-        align-items:center; justify-content:center; padding:20px;
-    `;
-    modal.innerHTML = `
-        <img src="${dataURL}" style="max-width:95%; max-height:95%; border-radius:8px; box-shadow:0 0 50px rgba(255,255,255,0.3);">
-        <button onclick="this.parentElement.remove()" style="
-            position:absolute; top:20px; right:20px; background:#e41616; 
-            color:white; border:none; border-radius:50%; width:50px; 
-            height:50px; font-size:20px; cursor:pointer;
-        ">✕</button>
-    `;
-    document.body.appendChild(modal);
-    modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-}
-
-function gerarPDFFotos() {
-    if (!fotosVeiculo || fotosVeiculo.length === 0) {
-        alert('📭 Sem fotos para gerar PDF');
-        return;
-    }
-
-    const placa  = document.getElementById('placa')?.value  || 'SEM_PLACA';
-    const modelo = document.getElementById('modelo')?.value || 'SEM_MODELO';
-    const chassi = document.getElementById('chassi')?.value || 'SEM_CHASSI';
-
-    const MAXFOTOS = 16;
-    const fotosUsar = fotosVeiculo.slice(0, MAXFOTOS);
-
-    let html = '';
-
-    // Cada grupo de 4 fotos = 1 página (2x2)
-    for (let i = 0; i < fotosUsar.length; i += 4) {
-        const isLastGroup = i + 4 >= fotosUsar.length;
-
-        html += `
-            <div style="
-                width: 100%;
-                min-height: 100vh;
-                box-sizing: border-box;
-                padding: 20px;
-                font-family: Arial, sans-serif;
-                ${isLastGroup ? '' : 'page-break-after: always;'}
-            ">
-                <!-- CABEÇALHO COM DADOS DO CARRO -->
-                <div style="
-                    background: #f5f5f5;
-                    border: 2px solid #e41616;
-                    border-radius: 6px;
-                    padding: 10px 15px;
-                    margin-bottom: 15px;
-                    font-size: 11px;
-                    line-height: 1.5;
-                ">
-                    <div style="font-weight: bold; color: #e41616; font-size: 12px; margin-bottom: 5px;">- INSPEÇÃO DE FOTOS</div>
-                    <div><strong>Placa:</strong> ${placa}</div>
-                    <div><strong>Modelo:</strong> ${modelo}</div>
-                    <div><strong>Chassi:</strong> ${chassi}</div>
-                </div>
-
-                <!-- GRADE DE 4 FOTOS 2x2 -->
-                <div style="
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 15px;
-                ">
-        `;
-
-        for (let j = 0; j < 4 && (i + j) < fotosUsar.length; j++) {
-            const foto = fotosUsar[i + j];
-            const num = i + j + 1;
-
-            html += `
-                <div style="text-align: center;">
-                    <img src="${foto.dataURL}"
-                         style="
-                             width: 100%;
-                             max-width: 260px;
-                             max-height: 260px;
-                             height: auto;
-                             border-radius: 6px;
-                             border: 1px solid #e41616;
-                         ">
-                    <div style="
-                        font-size: 9px;
-                        margin-top: 5px;
-                        color: #555;
-                    ">
-                        Foto ${num} - ${foto.legenda || foto.data}
-                    </div>
-                </div>
-            `;
-        }
-
-        html += `
-                </div>
-            </div>
-        `;
-    }
-
-    html2pdf().set({
-        filename: `Fotos-${placa}.pdf`,
-        margin: 0,
-        image: { type: 'jpeg', quality: 0.9 },
-        html2canvas: {
-            scale: 2,
-            useCORS: true,
-            scrollY: 0
-        },
-        jsPDF: {
-            format: 'a4',
-            orientation: 'portrait',
-            unit: 'pt'
-        }
-    }).from(html).save();
-
-    mostrarAlerta('success', `✅ PDF gerado com ${fotosUsar.length} fotos (máximo 16)`);
-}
-
-// INICIALIZAR FOTOS + ATALHOS PEÇAS/SERVIÇOS
-document.addEventListener('DOMContentLoaded', () => {
-  renderizarGaleria();
-
-  const descricaoItem = document.getElementById("descricaoItem");
-  const valorItem = document.getElementById("valorItem");
-
-  if (descricaoItem) {
-    descricaoItem.addEventListener("keydown", function (event) {
-      if (event.key !== "Enter") return;
-      if (event.shiftKey) return; // Shift+Enter quebra linha normal
-      event.preventDefault();     // Enter simples: vai para o preço
-      if (valorItem) valorItem.focus();
-    });
-  }
-
-  if (valorItem) {
-    valorItem.addEventListener("keydown", function (event) {
-      if (event.key !== "Enter") return;
-      event.preventDefault();     // Enter no preço: adiciona
-      adicionarItemManual();
-      setTimeout(() => descricaoItem && descricaoItem.focus(), 0);
-    });
-  }
-});
-
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:application/javascript;base64,CmNvbnN0IENBQ0hFX05BTUUgPSAnY2hlY2tsaXN0LXYzLWNhY2hlJzsKY29uc3QgVVJMU19UT19DQUNIRSA9IFsKICAnLycsCiAgJy9pbmRleC5odG1sJwpdOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgKGV2ZW50KSA9PiB7CiAgY29uc3QgY2FjaGVPcGVuID0gY2FjaGVzLm9wZW4oQ0FDSEVfTkFNRSkudGhlbigY2xpZW50KSA9PiB7CiAgICByZXR1cm4gY2xpZW50LmFkZEFsbChVUkxzX1RPX0NBQ0hFKTsKICB9KTsKICBldmVudC53YWl0VW50aWwoKGNhY2hlT3Blbik7Cn0pOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIChldmVudCkgPT4gewogIGV2ZW50LnJlc3BvbmRXaXRoKAogICAgY2FjaGVzLm1hdGNoKGV2ZW50LnJlcXVlc3QpLnRoZW4oKHJlc3BvbnNlKSA9PiB7CiAgICAgIGlmIChyZXNwb25zZSkgewogICAgICAgIHJldHVybiByZXNwb25zZTsKICAgICAgfQogICAgICByZXR1cm4gZmV0Y2goZXZlbnQucmVxdWVzdCk7CiAgICB9KQogICk7Cn0pOwo=');
-        }
-// ==========================================
-// FUNÇÕES DA NOVA ABA RESUMO (COLE NO FINAL DO SCRIPT)
-// ==========================================
-
-function gerarNumeroOS() {
-    // Pega a placa
-    const placa = (document.getElementById('placa')?.value || 'OS').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-    
-    // Pega a data (se vazia, usa hoje)
-    let dataRaw = document.getElementById('data')?.value;
-    let dataObj = dataRaw ? new Date(dataRaw + 'T00:00:00') : new Date();
-    
-    // Formata ddmmyyyy
-    const dia = String(dataObj.getDate()).padStart(2, '0');
-    const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
-    // Ano curto (2026 -> 26)
-    const ano = String(dataObj.getFullYear()).slice(-2);
-    
-    // FORMATO NOVO: PLACA-DIA-MES-ANO
-    return `${placa}-${dia}-${mes}-${ano}`;
-}
-        // ATUALIZA A BARRA FIXA SEMPRE QUE MUDAR PLACA OU DATA
-document.addEventListener('input', function(e) {
-    if (e.target.id === 'placa' || e.target.id === 'data') {
-        atualizarBarraOS();
-    }
-});
-
-function atualizarBarraOS() {
-    const os = gerarNumeroOS(); // Usa sua função existente
-    const el = document.getElementById('barraFixaOS');
-    if (el) el.textContent = os;
-}
-
-// Chama uma vez ao carregar
-atualizarBarraOS();
-
-
-function atualizarResumoOS() {
-    // === 1. CABEÇALHO E DADOS BÁSICOS ===
-    // Logo e Empresa
-    const logoSrc = document.getElementById('logo-oficina')?.src;
-    if (logoSrc) document.getElementById('logoResumo').src = logoSrc;
-    
-    document.getElementById('nomeOficinaResumo').textContent = document.getElementById('nome-oficina')?.textContent || 'OFICINA';
-    document.getElementById('enderecoOficinaResumo').textContent = document.getElementById('endereco-oficina')?.textContent || '';
-    document.getElementById('telefoneOficinaResumo').textContent = document.getElementById('telefone-oficina')?.textContent || '';
-    document.getElementById('cnpjOficinaResumo').textContent = document.getElementById('cnpj-oficina')?.textContent || 'CNPJ da oficina';
-    
-    // Número da OS
-    document.getElementById('osNumero').textContent = gerarNumeroOS();
-
-    // DAQUI PARA BAIXO CONTINUA O CÓDIGO QUE JÁ EXISTE (CLIENTE/VEÍCULO)
-    
-    // Cliente
-    document.getElementById('rNomeCliente').textContent = document.getElementById('nome_cliente')?.value || '-';
-    document.getElementById('rCpfCnpj').textContent = document.getElementById('cpf_cnpj')?.value || '-';
-    document.getElementById('rCelular').textContent = document.getElementById('celular_cliente')?.value || '-';
-
-    // Veículo
-    document.getElementById('rModelo').textContent = document.getElementById('modelo')?.value || '-';
-    document.getElementById('rPlaca').textContent = (document.getElementById('placa')?.value || '-').toUpperCase();
-    document.getElementById('rChassi').textContent = document.getElementById('chassi')?.value || '-';
-    document.getElementById('rKmEntrada').textContent = (document.getElementById('km_entrada')?.value || '') + ' km';
-    
-    // Combustível
-    let combSelect = document.getElementById('combustivel');
-    let combTexto = combSelect && combSelect.selectedIndex >= 0 ? combSelect.options[combSelect.selectedIndex].text : '-';
-    document.getElementById('rCombustivel').textContent = combTexto;
-
-    // Data/Hora
-    let dataVal = document.getElementById('data')?.value;
-    let horaVal = document.getElementById('hora')?.value;
-    let dataFmt = dataVal ? dataVal.split('-').reverse().join('/') : '--/--/----';
-    document.getElementById('rEntradaDataHora').textContent = `${dataFmt} às ${horaVal || '--:--'}`;
-
-    // Serviços Solicitados
-    document.getElementById('rServicos').textContent = document.getElementById('servicos')?.value || '-';
-
-    // Observações da Inspeção
-    const obs = document.getElementById('obsInspecao')?.value || '-';
-    if (document.getElementById('rObsInspecao')) {
-        document.getElementById('rObsInspecao').textContent = obs;
-    }
-
-    // === 2. INSPEÇÃO (CHECKBOXES) ===
-    const areaBadges = document.getElementById('rChecklistBadges');
-    areaBadges.innerHTML = ''; 
-
-    const checkboxesMarcados = document.querySelectorAll('#checklistForm input[type="checkbox"]:checked');
-
-    if (checkboxesMarcados.length === 0) {
-        areaBadges.innerHTML = '<span style="color:#999; font-size:11px;">Nenhum item inspecionado/marcado.</span>';
-    } else {
-        checkboxesMarcados.forEach(cb => {
-            let textoLabel = cb.value;
-            let labelTag = document.querySelector(`label[for="${cb.id}"]`);
-            if (labelTag) {
-                textoLabel = labelTag.textContent;
-            } else if (cb.nextElementSibling && cb.nextElementSibling.tagName === 'LABEL') {
-                textoLabel = cb.nextElementSibling.textContent;
-            }
-            textoLabel = textoLabel.trim();
-
-            let span = document.createElement('span');
-            const palavrasRuim = ['TRINCADO', 'AMASSADO', 'RISCADO', 'QUEBRADO', 'DANIFICADO', 'FALTANDO', 'RUIM'];
-            const ehRuim = palavrasRuim.some(p => textoLabel.toUpperCase().includes(p));
-
-            span.className = ehRuim ? 'os-badge no' : 'os-badge ok';
-            span.innerHTML = ehRuim ? `⚠️ ${textoLabel}` : `✅ ${textoLabel}`;
-            
-            areaBadges.appendChild(span);
-        });
-    }
-
-    // === 3. TABELAS DE ORÇAMENTO (PAGINAÇÃO AUTOMÁTICA) ===
-    const containerTabelas = document.getElementById('containerTabelasOrcamento');
-    containerTabelas.innerHTML = ''; // Limpa
-
-    // Divide em grupos de 30 itens
-    const LIMIT = 30;
-    const totalItens = Math.max(itensOrcamento.length, 1); // Pelo menos 1 pra mostrar vazio
-    
-    // Separa itens por tipo
-    const pecasTodas = itensOrcamento.filter(i => i.tipo !== 'servico');
-    const servicosTodos = itensOrcamento.filter(i => i.tipo === 'servico');
-    
-    // Renderiza tabelas lado a lado
-    // OBS: Se passar de 30 itens, a lógica de "lado a lado" quebra. 
-    // Para 30 linhas FIXAS como pedido, vamos forçar uma estrutura única.
-    
-    const divGrid = document.createElement('div');
-    divGrid.className = 'os-grid-2 mt-10';
-    divGrid.style.gap = '18px';
-    
-    // Coluna Peças
-    const divPecas = document.createElement('div');
-    divPecas.innerHTML = `
-        <div class="os-table-header" style="border-bottom: 2px solid #0056b3">PEÇAS</div>
-        <table class="os-table" style="border: 2px solid #0056b3; border-radius: 6px; width:100%; border-collapse:collapse;">
-            <thead>
-                <tr>
-                    <th style="text-align:left;border-bottom:2px solid #0056b3;padding:6px;font-size:11px;">DESCRIÇÃO</th>
-                    <th style="text-align:right;border-bottom:2px solid #0056b3;padding:6px;font-size:11px;width:90px;">VALOR</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${pecasTodas.length ? pecasTodas.map(p => `
-                    <tr>
-                        <td style="padding:4px 6px;border-bottom:1px solid #eee;font-size:10px;">${p.descricao}</td>
-                        <td style="padding:4px 6px;border-bottom:1px solid #eee;text-align:right;font-size:10px;">R$ ${p.valor.toFixed(2)}</td>
-                    </tr>
-                `).join('') : '<tr><td colspan="2" style="text-align:center;color:#999;padding:10px">-</td></tr>'}
-            </tbody>
-        </table>
-        <div style="display:flex;justify-content:space-between;margin-top:8px;padding:8px 10px;border:1px solid #0056b3;border-radius:6px;">
-            <strong style="color:#0056b3;">TOTAL PEÇAS</strong>
-            <span style="font-weight:700;color:#0056b3;">R$ ${pecasTodas.reduce((a,b)=>a+b.valor,0).toFixed(2)}</span>
-        </div>
-    `;
-
-    // Coluna Serviços
-    const divServicos = document.createElement('div');
-    divServicos.innerHTML = `
-        <div class="os-table-header" style="border-bottom: 2px solid #e41616">SERVIÇOS</div>
-        <table class="os-table" style="border: 2px solid #e41616; border-radius: 6px; width:100%; border-collapse:collapse;">
-            <thead>
-                <tr>
-                    <th style="text-align:left;border-bottom:2px solid #e41616;padding:6px;font-size:11px;">DESCRIÇÃO</th>
-                    <th style="text-align:right;border-bottom:2px solid #e41616;padding:6px;font-size:11px;width:90px;">VALOR</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${servicosTodos.length ? servicosTodos.map(s => `
-                    <tr>
-                        <td style="padding:4px 6px;border-bottom:1px solid #eee;font-size:10px;">${s.descricao}</td>
-                        <td style="padding:4px 6px;border-bottom:1px solid #eee;text-align:right;font-size:10px;">R$ ${s.valor.toFixed(2)}</td>
-                    </tr>
-                `).join('') : '<tr><td colspan="2" style="text-align:center;color:#999;padding:10px">-</td></tr>'}
-            </tbody>
-        </table>
-        <div style="display:flex;justify-content:space-between;margin-top:8px;padding:8px 10px;border:1px solid #e41616;border-radius:6px;">
-            <strong style="color:#e41616;">TOTAL SERVIÇOS</strong>
-            <span style="font-weight:700;color:#e41616;">R$ ${servicosTodos.reduce((a,b)=>a+b.valor,0).toFixed(2)}</span>
-        </div>
-    `;
-
-    divGrid.appendChild(divPecas);
-    divGrid.appendChild(divServicos);
-    containerTabelas.appendChild(divGrid);
-
-    // Se tiver muitos itens (>30), avisa que é complemento
-    if (pecasTodas.length > 30 || servicosTodos.length > 30) {
-        const aviso = document.createElement('div');
-        aviso.style.cssText = "text-align:center; color:#e41616; font-size:10px; margin-top:5px; font-style:italic;";
-        aviso.textContent = "* Lista extensa. Alguns itens podem continuar na próxima página se o espaço acabar.";
-        containerTabelas.appendChild(aviso);
-    }
-
-
-    // TOTAL GERAL
-    const totalGeral = document.getElementById('totalGeralFinal');
-    document.getElementById('rTotalGeral').textContent = totalGeral ? totalGeral.textContent : 'R$ 0,00';
-    
-    // RODAPÉ
-    const textoRodape = `Checklist gerado por ${document.getElementById('nome-oficina')?.textContent || 'Oficina'} CNPJ ${document.getElementById('cnpj-oficina')?.textContent || ''} - ${new Date().toLocaleString('pt-BR')}`;
-
-    const rod1 = document.getElementById('rodape-texto-1');
-    const rod2 = document.getElementById('rodape-texto-2');
-
-    if (rod1) rod1.textContent = textoRodape;
-    if (rod2) rod2.textContent = textoRodape;
-    
-    // REPLICA CABEÇALHO PAGINA 2
-    const headerPag2 = document.getElementById('header-pag2');
-    if(headerPag2) {
-        headerPag2.innerHTML = document.getElementById('template-cabecalho').innerHTML;
-    }
-}
-
-function gerarPDFResumo() {
-  atualizarResumoOS();
-
-  document.querySelectorAll('.no-pdf').forEach(el => el.style.display = 'none');
-  const elemento = document.getElementById('resumoContainer');
-
-  const opt = {
-    margin: [10, 10, 10, 10],
-    filename: `OS-${(document.getElementById('placa')?.value || '').toUpperCase()}_CHECKLIST.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, scrollY: 0, backgroundColor: '#ffffff' },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['css', 'legacy'] }
-  };
-
-  html2pdf().set(opt).from(elemento).save()
-    .then(() => {
-      document.querySelectorAll('.no-pdf').forEach(el => el.style.display = '');
-    })
-    .catch(() => {
-      document.querySelectorAll('.no-pdf').forEach(el => el.style.display = '');
-    });
-}
-
-
-
-        function editarItem(id) {
-    const item = itensOrcamento.find(i => i.id === id);
-    if (!item) return;
-    
-    // Preenche os campos pra editar
-    document.getElementById('descricaoItem').value = item.descricao;
-    document.getElementById('valorItem').value = item.valor;
-    document.querySelector(`input[name="tipoItem"][value="${item.tipo}"]`).checked = true;
-    
-    // Remove o antigo (vai adicionar novo clicando "Adicionar")
-    removerItem(id);
-    
-    alert('Item carregado para edição. Altere e clique ➕ Adicionar!');
-}
-
-        function editarItem(id) {
-    const item = itensOrcamento.find(i => i.id === id);
-    document.getElementById('descricaoItem').value = item.descricao;
-    document.getElementById('valorItem').value = item.valor;
-    document.querySelector(`input[name="tipoItem"][value="${item.tipo}"]`).checked = true;
-    removerItem(id);
-}
-
-// ========================
-// CONTROLE DO WIZARD (PASSO A PASSO)
-// ========================
-
-function showStep(stepNumber) {
-    // 1. Esconde todos os passos
-    document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
-    
-    // 2. Mostra o passo atual
-    document.getElementById('step' + stepNumber).classList.add('active');
-    
-    // 3. Atualiza a barra de topo (bolinhas)
-    document.querySelectorAll('.step-indicator').forEach(el => {
-        el.classList.remove('active');
-        if (el.dataset.step == stepNumber) el.classList.add('active');
-    });
-
-    // Rola para o topo suavemente para o usuário ver o início do formulário
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function nextStep(step) {
-    // Validação Opcional: Obrigar digitar placa no passo 1
-    if (step === 2) {
-        const placa = document.getElementById('placa').value;
-        if (!placa) {
-            alert('⚠️ Por favor, digite a PLACA antes de continuar.');
-            document.getElementById('placa').focus();
-            return;
-        }
-    }
-    showStep(step);
-}
-
-function prevStep(step) {
-    showStep(step);
-}
-
-    </script>
-    
-</button>
+<!-- CARREGA TODA A LÓGICA DO ARQUIVO EXTERNO -->
 <script src="config.js"></script>
-<script src="app.js"></script>
+<script src="checklist.js"></script>
     
-    <!-- RODAPÉ FIXO -->
 <div class="os-footer" id="rRodape" style="position: fixed; bottom: 0; left: 0; right: 0; width: 100%; text-align: center; font-size: 10px; background: #f8f9fa; padding: 8px 12px; border-top: 2px solid var(--color-primary); z-index: 9999; box-sizing: border-box; font-family: Arial, sans-serif;">
     <span id="rodape-texto">Developed by Hallz Branding 3199676-6963</span>
 </div>
-
-    
-
-    <script>
-/* --- SCRIPT FALTANTE PARA ATUALIZAR ABA PEÇAS --- */
-
-// 1. Cria a função que copia os dados de uma aba para outra
-function atualizarResumoVeiculo() {
-    // Pega os dados digitados
-    const vPlaca = document.getElementById('placa')?.value || '-';
-    const vModelo = document.getElementById('modelo')?.value || '-';
-    const vChassi = document.getElementById('chassi')?.value || '-';
-    const vKm = document.getElementById('km_entrada')?.value || '-';
-    const vComplex = document.getElementById('complexidade')?.value || '-';
-
-    // Joga nos campos do resumo da Aba 1
-    if(document.getElementById('resumoPlaca')) document.getElementById('resumoPlaca').textContent = vPlaca;
-    if(document.getElementById('resumoModelo')) document.getElementById('resumoModelo').textContent = vModelo;
-    if(document.getElementById('resumoKmEntrada')) document.getElementById('resumoKmEntrada').textContent = vKm;
-
-    // Joga nos campos da Aba 2 (Peças) - AQUI É O PULO DO GATO
-    if(document.getElementById('resumoPlaca2')) document.getElementById('resumoPlaca2').textContent = vPlaca;
-    if(document.getElementById('resumoModelo2')) document.getElementById('resumoModelo2').textContent = vModelo;
-    if(document.getElementById('resumoChassi2')) document.getElementById('resumoChassi2').textContent = vChassi;
-    if(document.getElementById('resumoKmEntrada2')) document.getElementById('resumoKmEntrada2').textContent = vKm;
-    if(document.getElementById('resumoComplexidade')) document.getElementById('resumoComplexidade').textContent = vComplex;
-}
-
-// 2. Avisa o sistema para rodar essa função sempre que você digitar
-const camposMonitorados = ['placa', 'modelo', 'chassi', 'km_entrada', 'complexidade'];
-
-camposMonitorados.forEach(id => {
-    const elemento = document.getElementById(id);
-    if (elemento) {
-        elemento.addEventListener('input', atualizarResumoVeiculo);
-        elemento.addEventListener('change', atualizarResumoVeiculo);
-        elemento.addEventListener('blur', atualizarResumoVeiculo);
-    }
-});
-
-// 3. Roda uma vez agora pra garantir
-setTimeout(atualizarResumoVeiculo, 500);
-</script>
-
-
 
 </body>
 </html>
