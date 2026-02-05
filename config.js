@@ -1,20 +1,26 @@
-// config.js - Fast Car Centro Automotivo
-// Configuração completa para Checklist Veicular
+// config.js - Arquivo de Configuração da Oficina
+// Edite este arquivo para personalizar o App para cada cliente.
 
 window.OFICINA_CONFIG = {
-    nome: "FAST CAR CENTRO AUTOMOTIVO",
-    subtitulo: "CHECKLIST DE ENTRADA E INSPEÇÃO VEICULAR",
-    cnpj: "03.713.506/0001-36",
-    logo: "logo.png",
-    corPrimaria: "#c32421",
-    endereco: "Av. Régulus, 248 - Jardim Riacho das Pedras, Contagem - MG, 32241-210",
-    telefone: "(31) 2342-1699",
-    whatsapp: "(31) 99457-9274"
-};
+    // IDENTIDADE (Importante para o Banco de Dados)
+    id: "oficina-modelo-01", // ID único (sem espaços, minúsculo). Ex: fast-car, auto-center-silva
 
-// Configuração Nuvem (GitHub Gist)
-window.CLOUD_CONFIG = {
-    TOKEN: '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',
-    GIST_ID: '4d103ce60b15e3d0511a4fb4dc6e109f',
-    FILENAME: 'backup_fastcar.json'
+    // DADOS VISUAIS E DE CONTATO
+    nome: "NOME DA OFICINA",
+    subtitulo: "CHECKLIST DE ENTRADA E INSPEÇÃO VEICULAR",
+    cnpj: "00.000.000/0001-00",
+    
+    // LOGO: Certifique-se que o arquivo existe na pasta
+    logo: "logo.png", 
+
+    // TEMA (Cores)
+    // corPrimaria: Usado em botões principais, títulos e bordas do PDF
+    corPrimaria: "#e41616", 
+    // corSecundaria: Usado em botões de ação secundária e serviços (opcional)
+    corSecundaria: "#0056b3",
+
+    // ENDEREÇO E CONTATO
+    endereco: "Endereço Completo da Oficina, Cidade - UF",
+    telefone: "(00) 0000-0000",
+    whatsapp: "(00) 90000-0000"
 };
