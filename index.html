@@ -1665,38 +1665,51 @@ if (document.getElementById('rObsInspecao')) {
         });
     }
 
-    // === 3. TABELAS DE ORÇAMENTO (Clona o HTML da aba Orçamento) ===
-    // PEÇAS
-    const origemPecas = document.getElementById('tabelaPecas'); // Tbody original
-    const destinoPecas = document.getElementById('rTabelaPecas'); // Tabela no resumo
-    destinoPecas.innerHTML = ''; 
+ // === 3. TABELAS DE ORÇAMENTO (versão robusta para PDF) ===
+const origemPecas = document.getElementById('tabelaPecas');       // tbody
+const origemServicos = document.getElementById('tabelaServicos'); // tbody
 
-    if (origemPecas && origemPecas.rows.length > 0) {
-        // Copia linha por linha, mas remove o botão de excluir
-        Array.from(origemPecas.rows).forEach(row => {
-            let desc = row.cells[0].textContent;
-            let valor = row.cells[1].textContent;
-            // Cria nova linha limpa
-            destinoPecas.innerHTML += `<tr><td>${desc}</td><td style="text-align:right;">${valor}</td></tr>`;
-        });
-    } else {
-        destinoPecas.innerHTML = '<tr><td colspan="2" style="color:#999; text-align:center;">-</td></tr>';
-    }
+const destinoPecas = document.getElementById('rTabelaPecas');       // table
+const destinoServicos = document.getElementById('rTabelaServicos'); // table
 
-    // SERVIÇOS
-    const origemServicos = document.getElementById('tabelaServicos');
-    const destinoServicos = document.getElementById('rTabelaServicos');
-    destinoServicos.innerHTML = '';
+function montarTabelaResumo(destinoTable, origemTbody) {
+  if (!destinoTable) return;
 
-    if (origemServicos && origemServicos.rows.length > 0) {
-        Array.from(origemServicos.rows).forEach(row => {
-            let desc = row.cells[0].textContent;
-            let valor = row.cells[1].textContent;
-            destinoServicos.innerHTML += `<tr><td>${desc}</td><td style="text-align:right;">${valor}</td></tr>`;
-        });
-    } else {
-        destinoServicos.innerHTML = '<tr><td colspan="2" style="color:#999; text-align:center;">-</td></tr>';
-    }
+  destinoTable.innerHTML = `
+    <thead>
+      <tr>
+        <th style="text-align:left;border-bottom:1px solid #ccc;padding:6px;">Descrição</th>
+        <th style="text-align:right;border-bottom:1px solid #ccc;padding:6px;width:110px;">Valor</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  `;
+
+  const tbody = destinoTable.querySelector('tbody');
+
+  if (!origemTbody || origemTbody.rows.length === 0) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td colspan="2" style="padding:8px;color:#999;text-align:center;">-</td>`;
+    tbody.appendChild(tr);
+    return;
+  }
+
+  Array.from(origemTbody.rows).forEach(row => {
+    const desc = (row.cells[0]?.textContent || '').trim();
+    const valor = (row.cells[1]?.textContent || '').trim();
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="padding:6px;border-bottom:1px solid #eee;">${desc}</td>
+      <td style="padding:6px;border-bottom:1px solid #eee;text-align:right;">${valor}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+montarTabelaResumo(destinoPecas, origemPecas);
+montarTabelaResumo(destinoServicos, origemServicos);
+
 
     // TOTAL GERAL
     const totalGeral = document.getElementById('totalGeralFinal');
@@ -1899,4 +1912,5 @@ setTimeout(atualizarResumoVeiculo, 500);
 
 </body>
 </html>
+
 
