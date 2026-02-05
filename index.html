@@ -638,21 +638,30 @@
 
       <!-- TABELAS DE ORÇAMENTO -->
 <div class="os-grid-2 mt-10" style="gap:18px;">
-        <!-- PEÇAS -->
-        <div>
-           <div class="os-table-header" style="border-bottom: 2px solid #e41616;">PEÇAS</div>
-           <table class="os-table" id="rTabelaPecas">
-             <!-- O Javascript vai preencher aqui -->
-           </table>
-        </div>
-        <!-- SERVIÇOS -->
-        <div>
-           <div class="os-table-header" style="border-bottom: 2px solid #0056b3;">SERVIÇOS</div>
-           <table class="os-table" id="rTabelaServicos">
-             <!-- O Javascript vai preencher aqui -->
-           </table>
-        </div>
-      </div>
+    
+<!-- PEÇAS -->
+<div>
+  <div class="os-table-header" style="border-bottom: 2px solid #e41616">PEÇAS</div>
+  <table class="os-table" id="rTabelaPecas"></table>
+
+  <div style="display:flex;justify-content:space-between;margin-top:8px;
+              padding:8px 10px;border:1px solid #e41616;border-radius:6px;">
+    <strong style="color:#e41616;">TOTAL PEÇAS</strong>
+    <span id="rTotalPecas" style="font-weight:700;color:#e41616;">R$ 0,00</span>
+  </div>
+</div>
+
+<!-- SERVIÇOS -->
+<div>
+  <div class="os-table-header" style="border-bottom: 2px solid #0056b3">SERVIÇOS</div>
+  <table class="os-table" id="rTabelaServicos"></table>
+
+  <div style="display:flex;justify-content:space-between;margin-top:8px;
+              padding:8px 10px;border:1px solid #0056b3;border-radius:6px;">
+    <strong style="color:#0056b3;">TOTAL SERVIÇOS</strong>
+    <span id="rTotalServicos" style="font-weight:700;color:#0056b3;">R$ 0,00</span>
+  </div>
+</div>
 
       <!-- TOTAL GERAL -->
       <div class="os-total-row">
@@ -1716,6 +1725,34 @@ destinoTable.style.borderRadius = "6px";
 montarTabelaResumo(destinoPecas, origemPecas, "#e41616");
 montarTabelaResumo(destinoServicos, origemServicos, "#0056b3");
 
+    function somarColunaValor(tbody) {
+  if (!tbody || !tbody.rows) return 0;
+  let soma = 0;
+
+  Array.from(tbody.rows).forEach(row => {
+    const texto = (row.cells[1]?.textContent || "")
+      .replace(/\s/g, "")
+      .replace("R$", "")
+      .replace(/\./g, "")
+      .replace(",", ".");
+
+    const n = parseFloat(texto);
+    if (!isNaN(n)) soma += n;
+  });
+
+  return soma;
+}
+
+const totalPecasNum = somarColunaValor(origemPecas);
+const totalServNum  = somarColunaValor(origemServicos);
+
+const elRP = document.getElementById("rTotalPecas");
+const elRS = document.getElementById("rTotalServicos");
+
+if (elRP) elRP.textContent = `R$ ${totalPecasNum.toFixed(2)}`;
+if (elRS) elRS.textContent = `R$ ${totalServNum.toFixed(2)}`;
+
+
 
     // TOTAL GERAL
     const totalGeral = document.getElementById('totalGeralFinal');
@@ -1869,6 +1906,7 @@ setTimeout(atualizarResumoVeiculo, 500);
 
 </body>
 </html>
+
 
 
 
