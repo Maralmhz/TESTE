@@ -41,7 +41,7 @@
                     <span id="syncText">Online</span>
                 </div>
             </div>
-            <div class="header-badge">v3.0 PRO</div>
+            <div class="header-badge">v3.1 PRO</div>
         </div>
 <div class="tabs">
     <button class="tab-button active" onclick="switchTab('novo-checklist')">➕ Novo Checklist</button>
@@ -336,6 +336,8 @@
             <div class="content">
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="🔍 Buscar por placa, modelo ou cliente..." onkeyup="filtrarChecklists()">
+                     <!-- BOTÃO SINCRONIZAR AQUI -->
+                    <button class="btn-primary btn-small" id="btnSync" onclick="sincronizarChecklists()" style="background-color: #27ae60;">🔄 Sincronizar Nuvem</button>
                     <button class="btn-secondary btn-small" onclick="ordenarChecklists()">📊 Ordenar</button>
                 </div>
 
@@ -494,10 +496,25 @@
                 </div>
             </div>
         </div>
-<!-- ABA FOTOS ✅ PERFEITA -->
+<!-- ABA FOTOS - ATUALIZADA COM AVISO E GEOLOCALIZAÇÃO -->
 <div id="fotos" class="tab-content">
     <div class="content">
         <div class="section-title">📸 FOTOS DO VEÍCULO</div>
+
+        <!-- AVISO DE BACKUP LOCAL -->
+        <div style="
+            background-color: #fff3cd; 
+            border: 1px solid #ffeeba; 
+            color: #856404; 
+            padding: 15px; 
+            border-radius: 6px; 
+            margin-bottom: 20px; 
+            text-align: center;
+            font-size: 14px;
+        ">
+            <strong>⚠️ Atenção:</strong> As fotos são salvas <u>apenas neste dispositivo</u>!<br>
+            Para backup, envie para o <strong>WhatsApp</strong> ou salve no <strong>Google Drive</strong>.
+        </div>
         
         <!-- RESUMO VEÍCULO -->
         <div class="veiculo-resumo" id="resumoVeiculoFotos">
@@ -549,7 +566,7 @@
     <div id="resumoContainer" class="os-paper">
       
       <!-- CABEÇALHO -->
-      <div class="os-header">
+      <div id="template-cabecalho" class="os-header">
         <div class="os-header-left">
           <img id="logoResumo" src="" alt="Logo" class="os-logo">
           <div class="os-empresa-dados">
@@ -606,7 +623,7 @@
 </div>
 
        <!-- ASSINATURAS -->
-      <div class="os-assinaturas">
+      <div id="template-assinaturas" class="os-assinaturas">
         <div class="os-assina-box">Assinatura do Cliente</div>
         <div class="os-assina-box">Assinatura do Técnico</div>
       </div>
@@ -620,50 +637,13 @@
 
 
 <!-- CABEÇALHO REPETIDO NA PÁGINA 2 -->
-<div class="os-header">
-    <div class="os-header-left">
-        <img id="logoResumo2" src="" alt="Logo" class="os-logo">
-        <div class="os-empresa-dados">
-            <div id="nomeOficinaResumo2" class="os-oficina-nome">NOME DA OFICINA</div>
-            <div id="enderecoOficinaResumo2" class="os-oficina-sub">Endereço da oficina</div>
-<div class="os-oficina-sub">
-    <img src="whatsapp.png" alt="WhatsApp" class="whatsapp-icon">
-    <span id="telefoneOficinaResumo2">00 00000-0000</span>
-</div>
-            <div id="cnpjOficinaResumo2" class="os-oficina-sub">CNPJ da oficina</div>
-        </div>
-    </div>
-    <div class="os-header-right">
-        <div class="os-label-os">ORDEM DE SERVIÇO</div>
-        <div id="osNumero2" class="os-numero-os">00000000</div>
-    </div>
+<div class="os-header" id="header-pag2">
+    <!-- Copiado via JS -->
 </div>
 
-      <!-- TABELAS DE ORÇAMENTO -->
-<div class="os-grid-2 mt-10" style="gap:18px;">
-    
-<!-- PEÇAS - AZUL NO PDF -->
-<div>
-  <div class="os-table-header" style="border-bottom: 2px solid #0056b3">PEÇAS</div>
-  <table class="os-table" id="rTabelaPecas"></table>
-
-  <div style="display:flex;justify-content:space-between;margin-top:8px;
-              padding:8px 10px;border:1px solid #0056b3;border-radius:6px;">
-    <strong style="color:#0056b3;">TOTAL PEÇAS</strong>
-    <span id="rTotalPecas" style="font-weight:700;color:#0056b3;">R$ 0,00</span>
-  </div>
-</div>
-
-<!-- SERVIÇOS - VERMELHO NO PDF -->
-<div>
-  <div class="os-table-header" style="border-bottom: 2px solid #e41616">SERVIÇOS</div>
-  <table class="os-table" id="rTabelaServicos"></table>
-
-  <div style="display:flex;justify-content:space-between;margin-top:8px;
-              padding:8px 10px;border:1px solid #e41616;border-radius:6px;">
-    <strong style="color:#e41616;">TOTAL SERVIÇOS</strong>
-    <span id="rTotalServicos" style="font-weight:700;color:#e41616;">R$ 0,00</span>
-  </div>
+      <!-- TABELAS DE ORÇAMENTO COM PAGINAÇÃO INTELIGENTE -->
+<div id="containerTabelasOrcamento">
+    <!-- O Javascript vai gerar as tabelas aqui dividindo em páginas se necessário -->
 </div>
 
       <!-- TOTAL GERAL -->
@@ -672,8 +652,8 @@
         <span id="rTotalGeral" class="os-total-value">R$ 0,00</span>
       </div>
         
- <!-- ASSINATURAS PÁGINA 2 -->
-<div class="os-assinaturas">
+ <!-- ASSINATURAS PÁGINA 2 (Repetido via JS se precisar) -->
+<div class="os-assinaturas" id="assinaturas-pag2">
     <div class="os-assina-box">Assinatura do Cliente</div>
     <div class="os-assina-box">Assinatura do Técnico</div>
 </div>
@@ -707,6 +687,44 @@ async function salvarComFirebase(checklistData) {
         }
     } catch (e) {
         console.error("Erro ao carregar Firebase:", e);
+    }
+}
+
+async function sincronizarChecklists() {
+    const btn = document.getElementById('btnSync');
+    btn.textContent = '⏳ Baixando...';
+    btn.disabled = true;
+
+    try {
+        const modulo = await import('./firebase_app.js');
+        if (modulo && modulo.buscarChecklistsNuvem) {
+            const dadosNuvem = await modulo.buscarChecklistsNuvem();
+            if (dadosNuvem.length > 0) {
+                // Mesclar com local (evitando duplicatas pelo ID)
+                let local = JSON.parse(localStorage.getItem('checklists') || '[]');
+                const idsLocais = new Set(local.map(c => c.id));
+                
+                let novos = 0;
+                dadosNuvem.forEach(item => {
+                    if (!idsLocais.has(item.id)) {
+                        local.push(item);
+                        novos++;
+                    }
+                });
+
+                localStorage.setItem('checklists', JSON.stringify(local));
+                carregarHistorico();
+                alert(`✅ Sincronização concluída! ${novos} novos checklists baixados.`);
+            } else {
+                alert("📭 Nenhum checklist encontrado na nuvem para esta oficina.");
+            }
+        }
+    } catch (e) {
+        console.error("Erro sync:", e);
+        alert("❌ Erro ao sincronizar. Verifique sua internet.");
+    } finally {
+        btn.textContent = '🔄 Sincronizar Nuvem';
+        btn.disabled = false;
     }
 }
 
@@ -1268,6 +1286,11 @@ function iniciarCamera() {
     const btnTirar = document.getElementById('btnTirarFoto');
     const container = document.querySelector('.camera-container');
     
+    // Pede localização ao iniciar a câmera
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(() => {}, () => {}); 
+    }
+
     navigator.mediaDevices.getUserMedia({ 
         video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
     }).then(stream => {
@@ -1286,19 +1309,61 @@ function tirarFoto() {
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0);
+    const ctx = canvas.getContext('2d');
     
-    const foto = {
-        id: Date.now(),
-        dataURL: canvas.toDataURL('image/jpeg', 0.8),
-        data: new Date().toLocaleString('pt-BR')
-    };
+    // Desenha a imagem
+    ctx.drawImage(video, 0, 0);
     
-    fotosVeiculo.unshift(foto);
-    if (fotosVeiculo.length > 15) fotosVeiculo = fotosVeiculo.slice(0, 15);
-    localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
-    renderizarGaleria();
-    pararCamera();
+    // Adiciona MARCA D'ÁGUA (Data e Local)
+    adicionarMarcaDagua(canvas, () => {
+        const foto = {
+            id: Date.now(),
+            dataURL: canvas.toDataURL('image/jpeg', 0.8),
+            data: new Date().toLocaleString('pt-BR'),
+            legenda: '' // Nova propriedade para legenda editável
+        };
+        
+        fotosVeiculo.unshift(foto);
+        if (fotosVeiculo.length > 15) fotosVeiculo = fotosVeiculo.slice(0, 15);
+        localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
+        renderizarGaleria();
+        pararCamera();
+    });
+}
+
+// Função auxiliar para carimbar data e local
+function adicionarMarcaDagua(canvas, callback) {
+    const ctx = canvas.getContext('2d');
+    const dataHora = new Date().toLocaleString('pt-BR');
+    
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            const lat = pos.coords.latitude.toFixed(4);
+            const lng = pos.coords.longitude.toFixed(4);
+            desenharTexto(ctx, canvas.width, canvas.height, `${dataHora} | Loc: ${lat}, ${lng}`);
+            callback();
+        }, () => {
+            // Se der erro ou negar, salva só data
+            desenharTexto(ctx, canvas.width, canvas.height, `${dataHora}`);
+            callback();
+        });
+    } else {
+        desenharTexto(ctx, canvas.width, canvas.height, `${dataHora}`);
+        callback();
+    }
+}
+
+function desenharTexto(ctx, w, h, texto) {
+    const fontSize = Math.floor(h * 0.04); // 4% da altura
+    ctx.font = `bold ${fontSize}px Arial`;
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    ctx.textAlign = "right";
+    
+    // Sombra do texto para leitura
+    ctx.strokeText(texto, w - 20, h - 20);
+    ctx.fillText(texto, w - 20, h - 20);
 }
 
 function pararCamera() {
@@ -1312,20 +1377,43 @@ function pararCamera() {
 
 function adicionarFotos(event) {
     const files = Array.from(event.target.files);
-    files.forEach(file => {
+    
+    // Processa uma por uma para garantir marca d'água
+    const processarArquivo = (index) => {
+        if (index >= files.length) return;
+        
+        const file = files[index];
         const reader = new FileReader();
         reader.onload = e => {
-            fotosVeiculo.unshift({
-                id: Date.now() + Math.random(),
-                dataURL: e.target.result,
-                data: new Date().toLocaleString('pt-BR')
-            });
-            if (fotosVeiculo.length > 15) fotosVeiculo = fotosVeiculo.slice(0, 15);
-            localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
-            renderizarGaleria();
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                
+                adicionarMarcaDagua(canvas, () => {
+                   fotosVeiculo.unshift({
+                        id: Date.now() + Math.random(),
+                        dataURL: canvas.toDataURL('image/jpeg', 0.8),
+                        data: new Date().toLocaleString('pt-BR'),
+                        legenda: ''
+                    });
+                    if (fotosVeiculo.length > 15) fotosVeiculo = fotosVeiculo.slice(0, 15);
+                    localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
+                    renderizarGaleria();
+                    
+                    // Processa a próxima
+                    processarArquivo(index + 1);
+                });
+            };
+            img.src = e.target.result;
         };
         reader.readAsDataURL(file);
-    });
+    };
+    
+    processarArquivo(0);
     event.target.value = '';
 }
 
@@ -1342,9 +1430,11 @@ function renderizarGaleria() {
     fotosVeiculo.slice(0, 15).forEach((foto, index) => {
         const div = document.createElement('div');
         div.className = 'foto-item';
+        // Input para editar legenda
         div.innerHTML = `
             <img src="${foto.dataURL}" alt="Foto ${index + 1}" loading="lazy">
-            <div class="foto-overlay"><span style="color:white;font-size:11px">${foto.data}</span></div>
+            <input type="text" class="foto-legenda" value="${foto.legenda || ''}" placeholder="Escreva uma legenda..." onchange="salvarLegenda(${foto.id}, this.value)">
+            <div class="foto-overlay"><span style="color:white;font-size:10px">${foto.data}</span></div>
             <div class="foto-actions">
                 <button class="btn-foto btn-warning foto-zoom" data-url="${foto.dataURL}">🔍</button>
                 <button class="btn-foto btn-danger foto-delete" data-id="${foto.id}">🗑️</button>
@@ -1360,6 +1450,14 @@ function renderizarGaleria() {
     galeria.querySelectorAll('.foto-delete').forEach(btn => {
         btn.addEventListener('click', () => removerFoto(parseInt(btn.dataset.id)));
     });
+}
+
+function salvarLegenda(id, texto) {
+    const foto = fotosVeiculo.find(f => f.id === id);
+    if (foto) {
+        foto.legenda = texto;
+        localStorage.setItem('fotosVeiculo', JSON.stringify(fotosVeiculo));
+    }
 }
 
 function removerFoto(id) {
@@ -1469,7 +1567,7 @@ function gerarPDFFotos() {
                         margin-top: 5px;
                         color: #555;
                     ">
-                        Foto ${num} - ${foto.data || ''}
+                        Foto ${num} - ${foto.legenda || foto.data}
                     </div>
                 </div>
             `;
@@ -1535,7 +1633,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 
 function gerarNumeroOS() {
-    // Pega a placa e remove traços
+    // Pega a placa
     const placa = (document.getElementById('placa')?.value || 'OS').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
     
     // Pega a data (se vazia, usa hoje)
@@ -1545,10 +1643,11 @@ function gerarNumeroOS() {
     // Formata ddmmyyyy
     const dia = String(dataObj.getDate()).padStart(2, '0');
     const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
-    const ano = String(dataObj.getFullYear());
+    // Ano curto (2026 -> 26)
+    const ano = String(dataObj.getFullYear()).slice(-2);
     
-    // Retorna PLACA + DATA (Ex: OOX561229012026)
-    return `${placa}${dia}${mes}${ano}`;
+    // FORMATO NOVO: PLACA-DIA-MES-ANO
+    return `${placa}-${dia}-${mes}-${ano}`;
 }
         // ATUALIZA A BARRA FIXA SEMPRE QUE MUDAR PLACA OU DATA
 document.addEventListener('input', function(e) {
@@ -1581,49 +1680,12 @@ function atualizarResumoOS() {
     // Número da OS
     document.getElementById('osNumero').textContent = gerarNumeroOS();
 
-        // === CABEÇALHO DA PÁGINA 2 (CÓPIA DO PRIMEIRO) ===
-    const logoResumo2 = document.getElementById('logoResumo2');
-    const nomeOficinaResumo2 = document.getElementById('nomeOficinaResumo2');
-    const enderecoOficinaResumo2 = document.getElementById('enderecoOficinaResumo2');
-    const telefoneOficinaResumo2 = document.getElementById('telefoneOficinaResumo2');
-    const cnpjOficinaResumo2 = document.getElementById('cnpjOficinaResumo2');
-    const osNumero2 = document.getElementById('osNumero2');
-
-    if (logoResumo2 && document.getElementById('logoResumo')) {
-        logoResumo2.src = document.getElementById('logoResumo').src;
-    }
-    if (nomeOficinaResumo2 && document.getElementById('nomeOficinaResumo')) {
-        nomeOficinaResumo2.textContent =
-            document.getElementById('nomeOficinaResumo').textContent;
-    }
-    if (enderecoOficinaResumo2 && document.getElementById('enderecoOficinaResumo')) {
-        enderecoOficinaResumo2.textContent =
-            document.getElementById('enderecoOficinaResumo').textContent;
-    }
-    if (telefoneOficinaResumo2 && document.getElementById('telefoneOficinaResumo')) {
-        telefoneOficinaResumo2.textContent =
-            document.getElementById('telefoneOficinaResumo').textContent;
-    }
-    if (cnpjOficinaResumo2 && document.getElementById('cnpjOficinaResumo')) {
-        cnpjOficinaResumo2.textContent =
-            document.getElementById('cnpjOficinaResumo').textContent;
-    }
-    if (osNumero2 && document.getElementById('osNumero')) {
-        osNumero2.textContent =
-            document.getElementById('osNumero').textContent;
-    }
-
     // DAQUI PARA BAIXO CONTINUA O CÓDIGO QUE JÁ EXISTE (CLIENTE/VEÍCULO)
-    // document.getElementById('rNomeCliente').textContent = ...
-
-
-    // Cliente
     
-document.getElementById('rNomeCliente').textContent = document.getElementById('nome_cliente')?.value || '-';
-document.getElementById('rCpfCnpj').textContent = document.getElementById('cpf_cnpj')?.value || '-';
-document.getElementById('rCelular').textContent = document.getElementById('celular_cliente')?.value || '-';
-
-
+    // Cliente
+    document.getElementById('rNomeCliente').textContent = document.getElementById('nome_cliente')?.value || '-';
+    document.getElementById('rCpfCnpj').textContent = document.getElementById('cpf_cnpj')?.value || '-';
+    document.getElementById('rCelular').textContent = document.getElementById('celular_cliente')?.value || '-';
 
     // Veículo
     document.getElementById('rModelo').textContent = document.getElementById('modelo')?.value || '-';
@@ -1631,7 +1693,7 @@ document.getElementById('rCelular').textContent = document.getElementById('celul
     document.getElementById('rChassi').textContent = document.getElementById('chassi')?.value || '-';
     document.getElementById('rKmEntrada').textContent = (document.getElementById('km_entrada')?.value || '') + ' km';
     
-    // Combustível (Select)
+    // Combustível
     let combSelect = document.getElementById('combustivel');
     let combTexto = combSelect && combSelect.selectedIndex >= 0 ? combSelect.options[combSelect.selectedIndex].text : '-';
     document.getElementById('rCombustivel').textContent = combTexto;
@@ -1646,42 +1708,31 @@ document.getElementById('rCelular').textContent = document.getElementById('celul
     document.getElementById('rServicos').textContent = document.getElementById('servicos')?.value || '-';
 
     // Observações da Inspeção
-const obs = document.getElementById('obsInspecao')?.value || '-';
-if (document.getElementById('rObsInspecao')) {
-    document.getElementById('rObsInspecao').textContent = obs;
-}
+    const obs = document.getElementById('obsInspecao')?.value || '-';
+    if (document.getElementById('rObsInspecao')) {
+        document.getElementById('rObsInspecao').textContent = obs;
+    }
 
-
-    // === 2. INSPEÇÃO (CHECKBOXES) - LÓGICA REFORÇADA ===
+    // === 2. INSPEÇÃO (CHECKBOXES) ===
     const areaBadges = document.getElementById('rChecklistBadges');
-    areaBadges.innerHTML = ''; // Limpa tudo antes de começar
+    areaBadges.innerHTML = ''; 
 
-    // Pega todos os checkboxes marcados dentro do formulário
     const checkboxesMarcados = document.querySelectorAll('#checklistForm input[type="checkbox"]:checked');
 
     if (checkboxesMarcados.length === 0) {
         areaBadges.innerHTML = '<span style="color:#999; font-size:11px;">Nenhum item inspecionado/marcado.</span>';
     } else {
         checkboxesMarcados.forEach(cb => {
-            // Tenta achar o texto: 1º no Label 'for', 2º no texto logo depois do input, 3º no value
-            let textoLabel = cb.value; // Valor padrão (ex: ESTEPE)
-            
-            // Tenta pegar o label associado
+            let textoLabel = cb.value;
             let labelTag = document.querySelector(`label[for="${cb.id}"]`);
             if (labelTag) {
                 textoLabel = labelTag.textContent;
             } else if (cb.nextElementSibling && cb.nextElementSibling.tagName === 'LABEL') {
-                // Tenta pegar o próximo elemento se for label
                 textoLabel = cb.nextElementSibling.textContent;
             }
-
-            // Limpa o texto (tira espaços extras)
             textoLabel = textoLabel.trim();
 
-            // Cria o selo colorido
             let span = document.createElement('span');
-            
-            // Palavras chave para pintar de vermelho
             const palavrasRuim = ['TRINCADO', 'AMASSADO', 'RISCADO', 'QUEBRADO', 'DANIFICADO', 'FALTANDO', 'RUIM'];
             const ehRuim = palavrasRuim.some(p => textoLabel.toUpperCase().includes(p));
 
@@ -1692,110 +1743,115 @@ if (document.getElementById('rObsInspecao')) {
         });
     }
 
-// === 3. TABELAS DE ORÇAMENTO (PDF: separado e estável) ===
-const origemPecas = document.getElementById('tabelaPecas');       // tbody
-const origemServicos = document.getElementById('tabelaServicos'); // tbody
+    // === 3. TABELAS DE ORÇAMENTO (PAGINAÇÃO AUTOMÁTICA) ===
+    const containerTabelas = document.getElementById('containerTabelasOrcamento');
+    containerTabelas.innerHTML = ''; // Limpa
 
-const destinoPecas = document.getElementById('rTabelaPecas');       // table
-const destinoServicos = document.getElementById('rTabelaServicos'); // table
-
-function montarTabelaResumo(destinoTable, origemTbody, corBorda) {
-  if (!destinoTable) return;
-
-  destinoTable.style.width = "100%";
-  destinoTable.style.borderCollapse = "collapse";
-  destinoTable.style.tableLayout = "fixed"; // chave para não “misturar” visualmente no PDF
-    destinoTable.style.border = `2px solid ${corBorda}`;
-destinoTable.style.borderRadius = "6px";
-
-
-  destinoTable.innerHTML = `
-    <thead>
-      <tr>
-        <th style="text-align:left;border-bottom:2px solid ${corBorda};padding:6px;font-size:11px;">DESCRIÇÃO</th>
-        <th style="text-align:right;border-bottom:2px solid ${corBorda};padding:6px;font-size:11px;width:90px;">VALOR</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  `;
-
-  const tbody = destinoTable.querySelector('tbody');
-
-  if (!origemTbody || origemTbody.rows.length === 0) {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td colspan="2" style="padding:8px;color:#999;text-align:center;">-</td>`;
-    tbody.appendChild(tr);
-    return;
-  }
-
-  Array.from(origemTbody.rows).forEach(row => {
-    const desc = (row.cells[0]?.textContent || '').trim();
-    const valor = (row.cells[1]?.textContent || '').trim();
-
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="padding:6px;border-bottom:1px solid #eee;font-size:11px;word-wrap:break-word;">${desc}</td>
-      <td style="padding:6px;border-bottom:1px solid #eee;text-align:right;font-size:11px;white-space:nowrap;">${valor}</td>
+    // Divide em grupos de 30 itens
+    const LIMIT = 30;
+    const totalItens = Math.max(itensOrcamento.length, 1); // Pelo menos 1 pra mostrar vazio
+    
+    // Separa itens por tipo
+    const pecasTodas = itensOrcamento.filter(i => i.tipo !== 'servico');
+    const servicosTodos = itensOrcamento.filter(i => i.tipo === 'servico');
+    
+    // Renderiza tabelas lado a lado
+    // OBS: Se passar de 30 itens, a lógica de "lado a lado" quebra. 
+    // Para 30 linhas FIXAS como pedido, vamos forçar uma estrutura única.
+    
+    const divGrid = document.createElement('div');
+    divGrid.className = 'os-grid-2 mt-10';
+    divGrid.style.gap = '18px';
+    
+    // Coluna Peças
+    const divPecas = document.createElement('div');
+    divPecas.innerHTML = `
+        <div class="os-table-header" style="border-bottom: 2px solid #0056b3">PEÇAS</div>
+        <table class="os-table" style="border: 2px solid #0056b3; border-radius: 6px; width:100%; border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th style="text-align:left;border-bottom:2px solid #0056b3;padding:6px;font-size:11px;">DESCRIÇÃO</th>
+                    <th style="text-align:right;border-bottom:2px solid #0056b3;padding:6px;font-size:11px;width:90px;">VALOR</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${pecasTodas.length ? pecasTodas.map(p => `
+                    <tr>
+                        <td style="padding:4px 6px;border-bottom:1px solid #eee;font-size:10px;">${p.descricao}</td>
+                        <td style="padding:4px 6px;border-bottom:1px solid #eee;text-align:right;font-size:10px;">R$ ${p.valor.toFixed(2)}</td>
+                    </tr>
+                `).join('') : '<tr><td colspan="2" style="text-align:center;color:#999;padding:10px">-</td></tr>'}
+            </tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;padding:8px 10px;border:1px solid #0056b3;border-radius:6px;">
+            <strong style="color:#0056b3;">TOTAL PEÇAS</strong>
+            <span style="font-weight:700;color:#0056b3;">R$ ${pecasTodas.reduce((a,b)=>a+b.valor,0).toFixed(2)}</span>
+        </div>
     `;
-    tbody.appendChild(tr);
-  });
-}
 
-// ✅ MUDANÇA DE CORES NO PDF (Peças=Azul, Serviços=Vermelho)
-montarTabelaResumo(destinoPecas, origemPecas, "#0056b3");
-montarTabelaResumo(destinoServicos, origemServicos, "#e41616");
+    // Coluna Serviços
+    const divServicos = document.createElement('div');
+    divServicos.innerHTML = `
+        <div class="os-table-header" style="border-bottom: 2px solid #e41616">SERVIÇOS</div>
+        <table class="os-table" style="border: 2px solid #e41616; border-radius: 6px; width:100%; border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th style="text-align:left;border-bottom:2px solid #e41616;padding:6px;font-size:11px;">DESCRIÇÃO</th>
+                    <th style="text-align:right;border-bottom:2px solid #e41616;padding:6px;font-size:11px;width:90px;">VALOR</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${servicosTodos.length ? servicosTodos.map(s => `
+                    <tr>
+                        <td style="padding:4px 6px;border-bottom:1px solid #eee;font-size:10px;">${s.descricao}</td>
+                        <td style="padding:4px 6px;border-bottom:1px solid #eee;text-align:right;font-size:10px;">R$ ${s.valor.toFixed(2)}</td>
+                    </tr>
+                `).join('') : '<tr><td colspan="2" style="text-align:center;color:#999;padding:10px">-</td></tr>'}
+            </tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;padding:8px 10px;border:1px solid #e41616;border-radius:6px;">
+            <strong style="color:#e41616;">TOTAL SERVIÇOS</strong>
+            <span style="font-weight:700;color:#e41616;">R$ ${servicosTodos.reduce((a,b)=>a+b.valor,0).toFixed(2)}</span>
+        </div>
+    `;
 
-    function somarColunaValor(tbody) {
-  if (!tbody || !tbody.rows) return 0;
-  let soma = 0;
+    divGrid.appendChild(divPecas);
+    divGrid.appendChild(divServicos);
+    containerTabelas.appendChild(divGrid);
 
-  Array.from(tbody.rows).forEach(row => {
-    const texto = (row.cells[1]?.textContent || "")
-      .replace(/\s/g, "")
-      .replace("R$", "")
-      .replace(/\./g, "")
-      .replace(",", ".");
-
-    const n = parseFloat(texto);
-    if (!isNaN(n)) soma += n;
-  });
-
-  return soma;
-}
-
-// Totais (pega direto dos totais já calculados na aba Orçamento)
-const txtTotalPecas = document.getElementById("totalPecas")?.textContent || "R$ 0,00";
-const txtTotalServ  = document.getElementById("totalServicos")?.textContent || "R$ 0,00";
-
-const elRP = document.getElementById("rTotalPecas");
-const elRS = document.getElementById("rTotalServicos");
-
-if (elRP) elRP.textContent = txtTotalPecas;
-if (elRS) elRS.textContent = txtTotalServ;
-
-
+    // Se tiver muitos itens (>30), avisa que é complemento
+    if (pecasTodas.length > 30 || servicosTodos.length > 30) {
+        const aviso = document.createElement('div');
+        aviso.style.cssText = "text-align:center; color:#e41616; font-size:10px; margin-top:5px; font-style:italic;";
+        aviso.textContent = "* Lista extensa. Alguns itens podem continuar na próxima página se o espaço acabar.";
+        containerTabelas.appendChild(aviso);
+    }
 
 
     // TOTAL GERAL
     const totalGeral = document.getElementById('totalGeralFinal');
     document.getElementById('rTotalGeral').textContent = totalGeral ? totalGeral.textContent : 'R$ 0,00';
     
-// RODAPÉ - MESMO TEXTO NAS DUAS PÁGINAS
-const textoRodape = `Checklist gerado por ${document.getElementById('nome-oficina')?.textContent || 'Oficina'} CNPJ ${document.getElementById('cnpj-oficina')?.textContent || ''} - ${new Date().toLocaleString('pt-BR')}`;
+    // RODAPÉ
+    const textoRodape = `Checklist gerado por ${document.getElementById('nome-oficina')?.textContent || 'Oficina'} CNPJ ${document.getElementById('cnpj-oficina')?.textContent || ''} - ${new Date().toLocaleString('pt-BR')}`;
 
-const rod1 = document.getElementById('rodape-texto-1');
-const rod2 = document.getElementById('rodape-texto-2');
+    const rod1 = document.getElementById('rodape-texto-1');
+    const rod2 = document.getElementById('rodape-texto-2');
 
-if (rod1) rod1.textContent = textoRodape;
-if (rod2) rod2.textContent = textoRodape;
+    if (rod1) rod1.textContent = textoRodape;
+    if (rod2) rod2.textContent = textoRodape;
+    
+    // REPLICA CABEÇALHO PAGINA 2
+    const headerPag2 = document.getElementById('header-pag2');
+    if(headerPag2) {
+        headerPag2.innerHTML = document.getElementById('template-cabecalho').innerHTML;
+    }
 }
 
 function gerarPDFResumo() {
   atualizarResumoOS();
 
-  // 1) Esconde os botões só pro PDF
   document.querySelectorAll('.no-pdf').forEach(el => el.style.display = 'none');
-
   const elemento = document.getElementById('resumoContainer');
 
   const opt = {
@@ -1807,7 +1863,6 @@ function gerarPDFResumo() {
     pagebreak: { mode: ['css', 'legacy'] }
   };
 
-  // 2) Gera o PDF e depois mostra os botões de novo
   html2pdf().set(opt).from(elemento).save()
     .then(() => {
       document.querySelectorAll('.no-pdf').forEach(el => el.style.display = '');
