@@ -685,7 +685,7 @@
     </div> <!-- FIM DA FOLHA -->
 
     <!-- BOTÕES DE AÇÃO DA ABA RESUMO -->
-    <div class="action-buttons">
+<div class="action-buttons no-pdf">
       <button type="button" class="btn-success" onclick="gerarPDFResumo()">📥 Baixar PDF</button>
        <button type="button" class="btn-primary" onclick="salvarChecklist()" style="background: #27ae60 !important;">💾 Salvar Completo</button>
     </div>
@@ -1743,14 +1743,16 @@ montarTabelaResumo(destinoServicos, origemServicos, "#0056b3");
   return soma;
 }
 
-const totalPecasNum = somarColunaValor(origemPecas);
-const totalServNum  = somarColunaValor(origemServicos);
+// Totais (pega direto dos totais já calculados na aba Orçamento)
+const txtTotalPecas = document.getElementById("totalPecas")?.textContent || "R$ 0,00";
+const txtTotalServ  = document.getElementById("totalServicos")?.textContent || "R$ 0,00";
 
 const elRP = document.getElementById("rTotalPecas");
 const elRS = document.getElementById("rTotalServicos");
 
-if (elRP) elRP.textContent = `R$ ${totalPecasNum.toFixed(2)}`;
-if (elRS) elRS.textContent = `R$ ${totalServNum.toFixed(2)}`;
+if (elRP) elRP.textContent = txtTotalPecas;
+if (elRS) elRS.textContent = txtTotalServ;
+
 
 
 
@@ -1771,6 +1773,9 @@ if (rod2) rod2.textContent = textoRodape;
 function gerarPDFResumo() {
   atualizarResumoOS();
 
+  // 1) Esconde os botões só pro PDF
+  document.querySelectorAll('.no-pdf').forEach(el => el.style.display = 'none');
+
   const elemento = document.getElementById('resumoContainer');
 
   const opt = {
@@ -1782,7 +1787,14 @@ function gerarPDFResumo() {
     pagebreak: { mode: ['css', 'legacy'] }
   };
 
-  html2pdf().set(opt).from(elemento).save();
+  // 2) Gera o PDF e depois mostra os botões de novo
+  html2pdf().set(opt).from(elemento).save()
+    .then(() => {
+      document.querySelectorAll('.no-pdf').forEach(el => el.style.display = '');
+    })
+    .catch(() => {
+      document.querySelectorAll('.no-pdf').forEach(el => el.style.display = '');
+    });
 }
 
 
@@ -1906,6 +1918,7 @@ setTimeout(atualizarResumoVeiculo, 500);
 
 </body>
 </html>
+
 
 
 
