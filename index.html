@@ -11,6 +11,8 @@
     <link rel="icon" type="image/png" href="logo.png">
    <title id="titulo-pagina">Checklist de Entrada – Oficina</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- MÓDULO FIREBASE -->
+    <script type="module" src="firebase_app.js"></script>
 </head>
 <body>
     <div class="container">
@@ -437,10 +439,11 @@
 </div>
 
 <!-- 2. Substitua a tabela antiga por DUAS tabelas novas -->
+<!-- CORES INVERTIDAS: Peças = Azul (#0056b3), Serviços = Vermelho (#e41616) -->
 <div style="margin-top:20px;">
     
-    <!-- SEÇÃO DE PEÇAS -->
-    <h4 style="border-bottom: 2px solid #e41616; padding-bottom: 5px; color: #333;">🔩 Peças</h4>
+    <!-- SEÇÃO DE PEÇAS (AZUL) -->
+    <h4 style="border-bottom: 2px solid #0056b3; padding-bottom: 5px; color: #333;">🔩 Peças</h4>
     <table style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom: 10px;">
         <thead>
             <tr style="background:#f7f7f7;">
@@ -453,14 +456,14 @@
         <tfoot>
             <tr>
                 <td style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold;">Total Peças:</td>
-                <td id="totalPecas" style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold; color: #e41616;">R$ 0,00</td>
+                <td id="totalPecas" style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold; color: #0056b3;">R$ 0,00</td>
                 <td></td>
             </tr>
         </tfoot>
     </table>
 
-    <!-- SEÇÃO DE SERVIÇOS -->
-    <h4 style="border-bottom: 2px solid #0056b3; padding-bottom: 5px; color: #333; margin-top: 25px;">🔧 Serviços</h4>
+    <!-- SEÇÃO DE SERVIÇOS (VERMELHO) -->
+    <h4 style="border-bottom: 2px solid #e41616; padding-bottom: 5px; color: #333; margin-top: 25px;">🔧 Serviços</h4>
     <table style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom: 10px;">
         <thead>
             <tr style="background:#f7f7f7;">
@@ -473,7 +476,7 @@
         <tfoot>
             <tr>
                 <td style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold;">Total Serviços:</td>
-                <td id="totalServicos" style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold; color: #0056b3;">R$ 0,00</td>
+                <td id="totalServicos" style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold; color: #e41616;">R$ 0,00</td>
                 <td></td>
             </tr>
         </tfoot>
@@ -639,27 +642,27 @@
       <!-- TABELAS DE ORÇAMENTO -->
 <div class="os-grid-2 mt-10" style="gap:18px;">
     
-<!-- PEÇAS -->
+<!-- PEÇAS - AZUL NO PDF -->
 <div>
-  <div class="os-table-header" style="border-bottom: 2px solid #e41616">PEÇAS</div>
+  <div class="os-table-header" style="border-bottom: 2px solid #0056b3">PEÇAS</div>
   <table class="os-table" id="rTabelaPecas"></table>
 
   <div style="display:flex;justify-content:space-between;margin-top:8px;
-              padding:8px 10px;border:1px solid #e41616;border-radius:6px;">
-    <strong style="color:#e41616;">TOTAL PEÇAS</strong>
-    <span id="rTotalPecas" style="font-weight:700;color:#e41616;">R$ 0,00</span>
+              padding:8px 10px;border:1px solid #0056b3;border-radius:6px;">
+    <strong style="color:#0056b3;">TOTAL PEÇAS</strong>
+    <span id="rTotalPecas" style="font-weight:700;color:#0056b3;">R$ 0,00</span>
   </div>
 </div>
 
-<!-- SERVIÇOS -->
+<!-- SERVIÇOS - VERMELHO NO PDF -->
 <div>
-  <div class="os-table-header" style="border-bottom: 2px solid #0056b3">SERVIÇOS</div>
+  <div class="os-table-header" style="border-bottom: 2px solid #e41616">SERVIÇOS</div>
   <table class="os-table" id="rTabelaServicos"></table>
 
   <div style="display:flex;justify-content:space-between;margin-top:8px;
-              padding:8px 10px;border:1px solid #0056b3;border-radius:6px;">
-    <strong style="color:#0056b3;">TOTAL SERVIÇOS</strong>
-    <span id="rTotalServicos" style="font-weight:700;color:#0056b3;">R$ 0,00</span>
+              padding:8px 10px;border:1px solid #e41616;border-radius:6px;">
+    <strong style="color:#e41616;">TOTAL SERVIÇOS</strong>
+    <span id="rTotalServicos" style="font-weight:700;color:#e41616;">R$ 0,00</span>
   </div>
 </div>
 
@@ -694,6 +697,19 @@
 </div>
 
     <script>
+// FUNÇÃO QUE CARREGA O MÓDULO FIREBASE DINAMICAMENTE
+async function salvarComFirebase(checklistData) {
+    try {
+        const modulo = await import('./firebase_app.js');
+        if (modulo && modulo.salvarNoFirebase) {
+            await modulo.salvarNoFirebase(checklistData);
+            console.log("Salvo no Firebase!");
+        }
+    } catch (e) {
+        console.error("Erro ao carregar Firebase:", e);
+    }
+}
+
 function salvarChecklist() {
 
     const dados = {};
@@ -793,12 +809,15 @@ checklist.itensOrcamento = itensOrcamento || [];
             let checklists = JSON.parse(localStorage.getItem('checklists') || '[]');
             checklists.push(checklist);
             localStorage.setItem('checklists', JSON.stringify(checklists));
+            
+            // 🔥 INTEGRAÇÃO FIREBASE AQUI
+            salvarComFirebase(checklist);
 
              // ✅ LIMPA PEÇAS/SERVIÇOS após salvar
     itensOrcamento = [];
     renderizarTabela();
 
-            alert("✅ Checklist salvo com sucesso no Histórico!");
+            alert("✅ Checklist salvo com sucesso no Histórico e Nuvem!");
             document.getElementById('checklistForm').reset();
             atualizarResumoVeiculo();
             switchTab('historico');
@@ -1258,7 +1277,7 @@ function iniciarCamera() {
         btnTirar.style.display = 'inline-block';
         video.play();
     }).catch(err => {
-        alert('Erro câmera: ' + err.message + '\nUse "Galeria"');
+        alert('Erro câmera: ' + err.message + '\\nUse "Galeria"');
     });
 }
 
@@ -1610,7 +1629,7 @@ document.getElementById('rCelular').textContent = document.getElementById('celul
     document.getElementById('rModelo').textContent = document.getElementById('modelo')?.value || '-';
     document.getElementById('rPlaca').textContent = (document.getElementById('placa')?.value || '-').toUpperCase();
     document.getElementById('rChassi').textContent = document.getElementById('chassi')?.value || '-';
-    document.getElementById('rKmEntrada').textContent = (document.getElementById('kmentrada')?.value || '') + ' km';
+    document.getElementById('rKmEntrada').textContent = (document.getElementById('km_entrada')?.value || '') + ' km';
     
     // Combustível (Select)
     let combSelect = document.getElementById('combustivel');
@@ -1722,8 +1741,9 @@ destinoTable.style.borderRadius = "6px";
   });
 }
 
-montarTabelaResumo(destinoPecas, origemPecas, "#e41616");
-montarTabelaResumo(destinoServicos, origemServicos, "#0056b3");
+// ✅ MUDANÇA DE CORES NO PDF (Peças=Azul, Serviços=Vermelho)
+montarTabelaResumo(destinoPecas, origemPecas, "#0056b3");
+montarTabelaResumo(destinoServicos, origemServicos, "#e41616");
 
     function somarColunaValor(tbody) {
   if (!tbody || !tbody.rows) return 0;
@@ -1918,9 +1938,3 @@ setTimeout(atualizarResumoVeiculo, 500);
 
 </body>
 </html>
-
-
-
-
-
-
