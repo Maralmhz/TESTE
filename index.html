@@ -1665,21 +1665,25 @@ if (document.getElementById('rObsInspecao')) {
         });
     }
 
- // === 3. TABELAS DE ORÇAMENTO (versão robusta para PDF) ===
+// === 3. TABELAS DE ORÇAMENTO (PDF: separado e estável) ===
 const origemPecas = document.getElementById('tabelaPecas');       // tbody
 const origemServicos = document.getElementById('tabelaServicos'); // tbody
 
 const destinoPecas = document.getElementById('rTabelaPecas');       // table
 const destinoServicos = document.getElementById('rTabelaServicos'); // table
 
-function montarTabelaResumo(destinoTable, origemTbody) {
+function montarTabelaResumo(destinoTable, origemTbody, corBorda) {
   if (!destinoTable) return;
+
+  destinoTable.style.width = "100%";
+  destinoTable.style.borderCollapse = "collapse";
+  destinoTable.style.tableLayout = "fixed"; // chave para não “misturar” visualmente no PDF
 
   destinoTable.innerHTML = `
     <thead>
       <tr>
-        <th style="text-align:left;border-bottom:1px solid #ccc;padding:6px;">Descrição</th>
-        <th style="text-align:right;border-bottom:1px solid #ccc;padding:6px;width:110px;">Valor</th>
+        <th style="text-align:left;border-bottom:2px solid ${corBorda};padding:6px;font-size:11px;">DESCRIÇÃO</th>
+        <th style="text-align:right;border-bottom:2px solid ${corBorda};padding:6px;font-size:11px;width:90px;">VALOR</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -1700,15 +1704,15 @@ function montarTabelaResumo(destinoTable, origemTbody) {
 
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="padding:6px;border-bottom:1px solid #eee;">${desc}</td>
-      <td style="padding:6px;border-bottom:1px solid #eee;text-align:right;">${valor}</td>
+      <td style="padding:6px;border-bottom:1px solid #eee;font-size:11px;word-wrap:break-word;">${desc}</td>
+      <td style="padding:6px;border-bottom:1px solid #eee;text-align:right;font-size:11px;white-space:nowrap;">${valor}</td>
     `;
     tbody.appendChild(tr);
   });
 }
 
-montarTabelaResumo(destinoPecas, origemPecas);
-montarTabelaResumo(destinoServicos, origemServicos);
+montarTabelaResumo(destinoPecas, origemPecas, "#e41616");
+montarTabelaResumo(destinoServicos, origemServicos, "#0056b3");
 
 
     // TOTAL GERAL
@@ -1912,5 +1916,6 @@ setTimeout(atualizarResumoVeiculo, 500);
 
 </body>
 </html>
+
 
 
